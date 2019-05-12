@@ -10,7 +10,7 @@ def decode_fen_row(i, row):
         if ch.isdigit():
             j += int(ch)
             continue
-        result.append({'piece': ch, 'position': [i, j]})
+        result.append({'code': ch, 'rank': i, 'file': j})
         j += 1
     return result
 
