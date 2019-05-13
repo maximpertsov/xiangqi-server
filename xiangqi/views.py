@@ -28,6 +28,7 @@ def get_game(request, pk):
     return JsonResponse(data, status=200)
 
 
+@allow_cross_origin
 def get_initial_position(request):
     data = load_fixture('api__initial_position.json')
     return JsonResponse(data, status=200)
