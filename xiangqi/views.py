@@ -3,7 +3,7 @@ import json
 from django.http import JsonResponse
 
 
-def get_game(pk):
+def get_game(request, pk):
     data = """
 {
     "players": [
@@ -18,10 +18,10 @@ def get_game(pk):
     ]
 }
     """
-    return Response(json.loads(data), status=200)
+    return JsonResponse(json.loads(data), status=200)
 
 
-def get_initial_positions():
+def get_initial_position(request):
     data = """
 {
   "pieces": [
@@ -188,4 +188,4 @@ def get_initial_positions():
   ]
 }
     """
-    return Response(json.loads(data), status=200)
+    return JsonResponse(json.loads(data), status=200)
