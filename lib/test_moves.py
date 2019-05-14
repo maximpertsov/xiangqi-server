@@ -31,9 +31,24 @@ def empty(slots, slot):
     return slots[slot] is None
 
 
+def in_bounds(slot):
+    return 0 <= slot < RANKS * FILES
+
+
+# Add move with generic checks
+def _add(moves, slots, from_slot, to_slot):
+    if not in_bounds(to_slot):
+        return
+    if from_slot == to_slot:
+        return
+    moves.add(to_slot)
+
+
 # Assumes there is a piece on both s1 and s2
 def same_color(slots, s1, s2):
-    return (s1 in RED_PIECES and s2 in RED_PIECES) or (s1 in BLACK_PIECES and s2 in BLACK_PIECES)
+    return (s1 in RED_PIECES and s2 in RED_PIECES) or (
+        s1 in BLACK_PIECES and s2 in BLACK_PIECES
+    )
 
 
 # Assumes there is a piece on both s1 and s2
@@ -43,15 +58,23 @@ def diff_color(slots, s1, s2):
 
 # WIP
 def legal_moves(slots, slot):
+    code = slots[slot]
     rank, file = get_rank_file(slot)
-    if slots[slot] in ['c', 'C']:
-        pass
+    moves = set()
+    if code in 'Pp':
+        fwd = 1 if code == 'p' else -1  # Black moves down, so ranks go up
+        _add(moves, slots, slot, get_slot(fwd + rank, file))
+        # Pawn across river
+        if (code == 'p' and rank > 4) or (code == 'P' and rank < 5):
+            _add(moves, slots, slot, get_slot(rank, file + 1))
+            _add(moves, slots, slot, get_slot(rank, file - 1))
 
 
 def main():
     # fen = '4kaR2/4a4/3hR4/7H1/9/9/9/9/4Ap1r1/3AK3c'
     # fen = 'rheakaehr/9/2c3c2/p1p1p1p1p/9/9/P1P1P1P1P/2C3C2/9/RHEAKAEHR'
-    fen = 'r7r/9/9/9/9/9/9/9/9/R7R'
+    # fen = 'r7r/9/9/9/9/9/9/9/9/R7R'
+    fen = '4k4/9/9/p1p1p1p1p/9/9/P1P1P1P1P/9/9/4K4'
     print(decode_fen(fen))
 
 
@@ -69,6 +92,10 @@ def test_get_rank():
 def test_get_file():
     assert get_file(0) == 0
     assert get_file(48) == 3
+
+
+# def test_legal_pawn_moves():
+#     fen = '4k4/9/9/p1p1p1p1p/9/9/P1P1P1P1P/9/9/4K4'
 
 
 if __name__ == '__main__':
