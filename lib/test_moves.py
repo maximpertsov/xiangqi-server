@@ -2,7 +2,7 @@ from math import ceil
 
 import pytest
 
-from fen import decode_fen
+from fen import decode_fen, decode_fen2
 
 RANKS = 10
 FILES = 9
@@ -69,6 +69,8 @@ def legal_moves(slots, slot):
             _add(moves, slots, slot, get_slot(rank, file + 1))
             _add(moves, slots, slot, get_slot(rank, file - 1))
 
+    return moves
+
 
 def main():
     # fen = '4kaR2/4a4/3hR4/7H1/9/9/9/9/4Ap1r1/3AK3c'
@@ -94,8 +96,13 @@ def test_get_file():
     assert get_file(48) == 3
 
 
-# def test_legal_pawn_moves():
-#     fen = '4k4/9/9/p1p1p1p1p/9/9/P1P1P1P1P/9/9/4K4'
+def test_legal_pawn_moves():
+    fen = '4k4/9/9/p1p1p1p1p/9/1p7/P1P1P1P1P/9/9/4K4'
+    slots = decode_fen2(fen)
+    assert legal_moves(slots, get_slot(3, 0)) == {get_slot(4, 0)}
+    assert legal_moves(slots, get_slot(5, 1)) == {
+        get_slot(6, 1), get_slot(5, 0), get_slot(5, 2)
+    }
 
 
 if __name__ == '__main__':
