@@ -32,6 +32,7 @@ class Participant(models.Model):
 
 class Piece(models.Model):
     name = models.CharField(max_length=32)
+    code = models.CharField(max_length=1, unique=True)
     starting_position = models.CharField(max_length=32, null=True)
 
 
