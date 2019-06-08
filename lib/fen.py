@@ -1,6 +1,6 @@
 import json
+from itertools import chain, starmap
 from sys import argv
-from itertools import starmap, chain
 
 
 def decode_fen_row(i, row):
@@ -10,7 +10,7 @@ def decode_fen_row(i, row):
         if ch.isdigit():
             j += int(ch)
             continue
-        result.append({'code': ch, 'rank': i, 'file': j})
+        result.append({'name': ch, 'starting_position': '{},{}'.format(i, j)})
         j += 1
     return result
 
@@ -43,7 +43,13 @@ def decode_fen2(fen):
 
 
 if __name__ == '__main__':
-    fen = (argv[1])
-    pieces = decode_fen2(fen)
-    data = {'pieces': pieces}
-    print(json.dumps(data))
+    fen = argv[1]
+    pieces = decode_fen(fen)
+
+    fixtures = [
+        {'model': 'xiangqi.piece', 'pk': i, 'fields': data}
+        for i, data in enumerate(pieces, start=1)
+    ]
+
+    with open('xiangqi/fixtures/pieces.json', 'w') as f:
+        json.dump(fixtures, f)
