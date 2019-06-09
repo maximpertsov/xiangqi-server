@@ -2,6 +2,7 @@ import json
 import os
 from copy import deepcopy
 
+from itertools import groupby
 from django.conf import settings
 from django.core.serializers import serialize
 from django.http import JsonResponse
@@ -50,7 +51,6 @@ class Game(DetailView):
         # TODO: return None if parsing fails?
         return [int(dim.strip()) for dim in position.split(',')]
 
-
     @cached_property
     def game(self):
         return self.get_object()
@@ -88,6 +88,16 @@ class Game(DetailView):
 
         return result
 
+    def fen_rank(self, rank):
+        return ''.join(
+            str(sum(1 for _ in g)) if p is None else p
+            for p, g in groupby(rank)
+        )
+
+    @property
+    def current_position_fen(self):
+        return '/'.join(self.fen_rank(rank) for rank in self.current_position)
+
     @allow_cross_origin
     def get(self, request, pk):
         serialized = json.loads(serialize('json', [self.game]))
@@ -95,7 +105,7 @@ class Game(DetailView):
         del result['board_dimensions']
         result['ranks'] = self.ranks
         result['files'] = self.files
-        result['fen'] = self.current_position
+        result['fen'] = self.current_position_fen
         return JsonResponse(result, status=200)
 
 
