@@ -24,6 +24,7 @@ ptyprocess==0.6.0
 pycodestyle==2.5.0
 pyflakes==2.1.1
 pytest-django==3.5.0
+pytest-factoryboy==2.0.2
 pytest==4.5.0
 python-jsonrpc-server==0.1.2
 python-language-server==0.26.1
