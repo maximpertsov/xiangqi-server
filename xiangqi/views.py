@@ -6,9 +6,8 @@ from itertools import groupby
 from django.conf import settings
 from django.core.serializers import serialize
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView
 
 from xiangqi import models
 
@@ -29,18 +28,6 @@ def allow_cross_origin(f):
         return response
 
     return wrapped
-
-
-@allow_cross_origin
-def get_game(request, pk):
-    data = load_fixture('api__game__{}.json'.format(pk))
-    return JsonResponse(data, status=200)
-
-
-@allow_cross_origin
-def get_initial_position(request):
-    data = load_fixture('api__v3__initial_position.json')
-    return JsonResponse(data, status=200)
 
 
 class Game(DetailView):
@@ -124,13 +111,3 @@ class Game(DetailView):
         result['fen'] = self.current_position_fen
         result['players'] = self.players_data
         return JsonResponse(result, status=200)
-
-
-class Piece(ListView):
-    model = models.Piece
-
-    @allow_cross_origin
-    def get(self, request):
-        serialized = json.loads(serialize('json', self.get_queryset()))
-        pieces = [data['fields'] for data in serialized]
-        return JsonResponse({'pieces': pieces}, status=200)
