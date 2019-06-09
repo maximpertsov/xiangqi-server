@@ -28,6 +28,7 @@ class Participant(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     score = models.DecimalField(max_digits=5, decimal_places=2)
+    role = models.CharField(max_length=32)
 
 
 class Piece(models.Model):

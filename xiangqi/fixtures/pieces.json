@@ -1,0 +1,258 @@
+[
+  {
+    "model": "xiangqi.piece",
+    "pk": 1,
+    "fields": {
+      "name": "r",
+      "starting_position": "0,0"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 2,
+    "fields": {
+      "name": "h",
+      "starting_position": "0,1"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 3,
+    "fields": {
+      "name": "e",
+      "starting_position": "0,2"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 4,
+    "fields": {
+      "name": "a",
+      "starting_position": "0,3"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 5,
+    "fields": {
+      "name": "k",
+      "starting_position": "0,4"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 6,
+    "fields": {
+      "name": "a",
+      "starting_position": "0,5"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 7,
+    "fields": {
+      "name": "e",
+      "starting_position": "0,6"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 8,
+    "fields": {
+      "name": "h",
+      "starting_position": "0,7"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 9,
+    "fields": {
+      "name": "r",
+      "starting_position": "0,8"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 10,
+    "fields": {
+      "name": "c",
+      "starting_position": "2,1"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 11,
+    "fields": {
+      "name": "c",
+      "starting_position": "2,7"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 12,
+    "fields": {
+      "name": "p",
+      "starting_position": "3,0"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 13,
+    "fields": {
+      "name": "p",
+      "starting_position": "3,2"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 14,
+    "fields": {
+      "name": "p",
+      "starting_position": "3,4"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 15,
+    "fields": {
+      "name": "p",
+      "starting_position": "3,6"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 16,
+    "fields": {
+      "name": "p",
+      "starting_position": "3,8"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 17,
+    "fields": {
+      "name": "P",
+      "starting_position": "6,0"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 18,
+    "fields": {
+      "name": "P",
+      "starting_position": "6,2"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 19,
+    "fields": {
+      "name": "P",
+      "starting_position": "6,4"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 20,
+    "fields": {
+      "name": "P",
+      "starting_position": "6,6"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 21,
+    "fields": {
+      "name": "P",
+      "starting_position": "6,8"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 22,
+    "fields": {
+      "name": "C",
+      "starting_position": "7,1"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 23,
+    "fields": {
+      "name": "C",
+      "starting_position": "7,7"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 24,
+    "fields": {
+      "name": "R",
+      "starting_position": "9,0"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 25,
+    "fields": {
+      "name": "H",
+      "starting_position": "9,1"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 26,
+    "fields": {
+      "name": "E",
+      "starting_position": "9,2"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 27,
+    "fields": {
+      "name": "A",
+      "starting_position": "9,3"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 28,
+    "fields": {
+      "name": "K",
+      "starting_position": "9,4"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 29,
+    "fields": {
+      "name": "A",
+      "starting_position": "9,5"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 30,
+    "fields": {
+      "name": "E",
+      "starting_position": "9,6"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 31,
+    "fields": {
+      "name": "H",
+      "starting_position": "9,7"
+    }
+  },
+  {
+    "model": "xiangqi.piece",
+    "pk": 32,
+    "fields": {
+      "name": "R",
+      "starting_position": "9,8"
+    }
+  }
+]

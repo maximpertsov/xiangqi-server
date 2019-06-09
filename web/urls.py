@@ -15,11 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from xiangqi.views import get_game
-from xiangqi.views import get_initial_position
+from xiangqi.views import Game
 
 urlpatterns = [
-    path('api/game/<int:pk>', get_game),
-    path('api/initial-position', get_initial_position),
+    path('api/game/<int:pk>', Game.as_view()),
     path('admin/', admin.site.urls),
 ]
