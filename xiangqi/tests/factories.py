@@ -1,10 +1,10 @@
 from django.contrib.auth import get_user_model
-from factory import Factory, Faker, LazyAttribute, SubFactory
+from factory import DjangoModelFactory, Faker, LazyAttribute, SubFactory
 
 from xiangqi import models
 
 
-class UserFactor(Factory):
+class UserFactory(DjangoModelFactory):
     class Meta:
         model = get_user_model()
         django_get_or_create = ("username",)
@@ -15,22 +15,22 @@ class UserFactor(Factory):
     username = LazyAttribute(lambda f: f.email.split('@')[0])
 
 
-class PlayerFactory(Factory):
+class PlayerFactory(DjangoModelFactory):
     class Meta:
         model = models.Player
 
-    user = SubFactory(UserFactor)
+    user = SubFactory(UserFactory)
     rating = 1500
 
 
-class ResultFactory(Factory):
+class ResultFactory(DjangoModelFactory):
     class Meta:
         model = models.Result
 
     description = Faker('sentence')
 
 
-class GameFactory(Factory):
+class GameFactory(DjangoModelFactory):
     class Meta:
         model = models.Game
 
@@ -44,23 +44,23 @@ class GameFactory(Factory):
     result = None
 
 
-class ParticipantFactory(Factory):
+class ParticipantFactory(DjangoModelFactory):
     class Meta:
         model = models.Participant
 
     score = 0.0
 
 
-class PieceFactory(Factory):
+class PieceFactory(DjangoModelFactory):
     class Meta:
         model = models.Piece
 
 
-class MoveTypeFactory(Factory):
+class MoveTypeFactory(DjangoModelFactory):
     class Meta:
         model = models.MoveType
 
 
-class MoveFactory(Factory):
+class MoveFactory(DjangoModelFactory):
     class Meta:
         model = models.Move
