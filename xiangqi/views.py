@@ -1,8 +1,8 @@
 import json
 import os
 from copy import deepcopy
-
 from itertools import groupby
+
 from django.conf import settings
 from django.core.serializers import serialize
 from django.http import JsonResponse
@@ -90,13 +90,29 @@ class Game(DetailView):
 
     def fen_rank(self, rank):
         return ''.join(
-            str(sum(1 for _ in g)) if p is None else p
-            for p, g in groupby(rank)
+            str(sum(1 for _ in g)) if p is None else p for p, g in groupby(rank)
         )
 
     @property
     def current_position_fen(self):
         return '/'.join(self.fen_rank(rank) for rank in self.current_position)
+
+    @property
+    def participants(self):
+        return self.game.participant_set.select_related('player', 'player__user').all()
+
+    @property
+    def players_data(self):
+        result = []
+        for participant in self.participants:
+            result.append(
+                {
+                    'name': participant.player.user.username,
+                    'color': participant.role,
+                    'score': participant.score,
+                }
+            )
+        return result
 
     @allow_cross_origin
     def get(self, request, pk):
@@ -106,6 +122,7 @@ class Game(DetailView):
         result['ranks'] = self.ranks
         result['files'] = self.files
         result['fen'] = self.current_position_fen
+        result['players'] = self.players_data
         return JsonResponse(result, status=200)
 
 
