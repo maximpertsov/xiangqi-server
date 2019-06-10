@@ -119,10 +119,10 @@ class GameDetailView(DetailView):
         # except jsonschema.ValidationError as e:
         #     return JsonResponse({"error": str(e)}, status=400)
 
-        username = request_data['username']
+        username = request_data['player']
         from_position = request_data['from']
         to_position = request_data['to']
-        piece = request_data['piece']
+        piece_name = request_data['piece']
         move_type = request_data['type']
 
         try:
@@ -135,12 +135,17 @@ class GameDetailView(DetailView):
         ) or participant.role != 'red':
             return JsonResponse({"error": 'Moving out of turn'}, status=400)
 
+        from_rank, from_file = self.parse_position(from_position)
+        to_rank, to_file = self.parse_position(from_position)
+        piece = self.current_position[from_rank][from_file]
+        if piece.name != piece_name:
+            return JsonResponse({"error": 'Invalid move'}, status=400)
+
         models.Move.objects.create(
             game=self.game,
             participant=participant,
-            # TODO: determine which piece to move?
-            piece=models.Piece.objects.filter(name=piece).first(),
-            # BARF
+            piece=piece,
+            # TODO: receiving from client, but maybe this should be generated server-side?
             type=models.MoveType.objects.get_or_create(name=move_type)[0],
             order=self.moves.count() + 1,
             notation='rank,file->rank,file',
