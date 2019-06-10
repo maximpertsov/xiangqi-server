@@ -72,8 +72,7 @@ class GameDetailView(DetailView):
 
     def fen_rank(self, rank):
         return ''.join(
-            str(sum(1 for _ in g)) if p is None else p.name
-            for p, g in groupby(rank)
+            str(sum(1 for _ in g)) if p is None else p.name for p, g in groupby(rank)
         )
 
     @property
