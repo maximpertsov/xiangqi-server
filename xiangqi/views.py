@@ -147,6 +147,7 @@ class GameDetailView(DetailView):
             piece=piece,
             # TODO: receiving from client, but maybe this should be generated server-side?
             type=models.MoveType.objects.get_or_create(name=move_type)[0],
+            # TODO: either order by red + black move, or drop entirely
             order=self.moves.count() + 1,
             notation='rank,file->rank,file',
             from_position=from_position,
