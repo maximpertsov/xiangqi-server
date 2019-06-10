@@ -103,3 +103,41 @@ class GameDetailView(DetailView):
         result['fen'] = self.current_position_fen
         result['players'] = self.players_data
         return JsonResponse(result, status=200)
+
+    @allow_cross_origin
+    def post(self, request, pk):
+        try:
+            request_data = json.loads(request.body.decode("utf-8"))
+            # TODO: validate with jsonschema?
+            # jsonschema.validate(json_request, schema)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": 'Error parsing request'}, status=400)
+        # except jsonschema.ValidationError as e:
+        #     return JsonResponse({"error": str(e)}, status=400)
+
+        username = request_data['username']
+        from_position = request_data['from']
+        to_position = request_data['to']
+        piece = request['piece']
+
+        try:
+            participant = self.participants.get(player__user__username=username)
+        except models.Participant.DoesNotExist:
+            return JsonResponse({"error": 'Invalid player'}, status=400)
+
+        if (
+            not self.moves.exists() and participant.color != 'red'
+        ) or participant == self.moves.last().participant:
+            return JsonResponse({"error": 'Invalid player'}, status=400)
+
+        models.Move.create(
+            game=self.game,
+            participant=participant,
+            piece=models.Piece.objects.get(name=piece),
+            type=models.MoveType.objects.get_or_create(name='Normal'),
+            order=self.moves.count() + 1,
+            notation='rank,file->rank,file',
+            from_position=from_position,
+            to_position=to_position,
+        )
+        return JsonResponse({}, status=201)
