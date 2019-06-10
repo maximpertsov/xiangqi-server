@@ -1,21 +1,13 @@
 import json
-import os
 from copy import deepcopy
 from itertools import groupby
 
-from django.conf import settings
 from django.core.serializers import serialize
 from django.http import JsonResponse
 from django.utils.functional import cached_property
 from django.views.generic import DetailView
 
 from xiangqi import models
-
-
-def load_fixture(fixture):
-    fixture_path = os.path.join(settings.BASE_DIR, 'xiangqi/fixtures', fixture)
-    with open(fixture_path) as f:
-        return json.load(f)
 
 
 def allow_cross_origin(f):
