@@ -129,9 +129,10 @@ class GameDetailView(DetailView):
         except models.Participant.DoesNotExist:
             return JsonResponse({"error": 'Invalid player'}, status=400)
 
-        if (
-            self.moves.exists() and participant == self.moves.last().participant
-        ) or participant.role != 'red':
+        # BARF
+        if (self.moves.exists() and participant == self.moves.last().participant) or (
+            not self.moves.exists() and participant.role != 'red'
+        ):
             return JsonResponse({"error": 'Moving out of turn'}, status=400)
 
         from_rank, from_file = self.parse_position(from_position)
