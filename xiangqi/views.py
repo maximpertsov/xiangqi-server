@@ -4,7 +4,9 @@ from itertools import groupby
 
 from django.core.serializers import serialize
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView
 
 from xiangqi import models
@@ -22,6 +24,7 @@ def allow_cross_origin(f):
     return wrapped
 
 
+@method_decorator(csrf_exempt, name="dispatch")
 class GameDetailView(DetailView):
     model = models.Game
 
@@ -118,7 +121,7 @@ class GameDetailView(DetailView):
         username = request_data['username']
         from_position = request_data['from']
         to_position = request_data['to']
-        piece = request['piece']
+        piece = request_data['piece']
 
         try:
             participant = self.participants.get(player__user__username=username)
@@ -126,15 +129,17 @@ class GameDetailView(DetailView):
             return JsonResponse({"error": 'Invalid player'}, status=400)
 
         if (
-            not self.moves.exists() and participant.color != 'red'
-        ) or participant == self.moves.last().participant:
+            self.moves.exists() and participant == self.moves.last().participant
+        ) or participant.role != 'red':
             return JsonResponse({"error": 'Invalid player'}, status=400)
 
-        models.Move.create(
+        models.Move.objects.create(
             game=self.game,
             participant=participant,
-            piece=models.Piece.objects.get(name=piece),
-            type=models.MoveType.objects.get_or_create(name='Normal'),
+            # TODO: determine which piece to move?
+            piece=models.Piece.objects.filter(name=piece).first(),
+            # BARF
+            type=models.MoveType.objects.get_or_create(name='Normal')[0],
             order=self.moves.count() + 1,
             notation='rank,file->rank,file',
             from_position=from_position,
