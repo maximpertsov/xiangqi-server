@@ -22,7 +22,7 @@ def allow_cross_origin(f):
     return wrapped
 
 
-class Game(DetailView):
+class GameDetailView(DetailView):
     model = models.Game
 
     @staticmethod
