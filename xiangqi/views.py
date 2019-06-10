@@ -122,6 +122,7 @@ class GameDetailView(DetailView):
         from_position = request_data['from']
         to_position = request_data['to']
         piece = request_data['piece']
+        move_type = request_data['type']
 
         try:
             participant = self.participants.get(player__user__username=username)
@@ -139,7 +140,7 @@ class GameDetailView(DetailView):
             # TODO: determine which piece to move?
             piece=models.Piece.objects.filter(name=piece).first(),
             # BARF
-            type=models.MoveType.objects.get_or_create(name='Normal')[0],
+            type=models.MoveType.objects.get_or_create(name=move_type)[0],
             order=self.moves.count() + 1,
             notation='rank,file->rank,file',
             from_position=from_position,
