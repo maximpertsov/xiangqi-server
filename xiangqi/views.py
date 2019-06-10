@@ -56,7 +56,7 @@ class GameDetailView(DetailView):
         result = [[None for _ in range(self.files)] for _ in range(self.ranks)]
         for piece in models.Piece.objects.all():
             rank, file = self.parse_position(piece.starting_position)
-            result[rank][file] = piece.name
+            result[rank][file] = piece
         return result
 
     @property
@@ -66,13 +66,14 @@ class GameDetailView(DetailView):
             from_rank, from_file = self.parse_position(move.from_position)
             to_rank, to_file = self.parse_position(move.to_position)
             result[from_rank][from_file] = None
-            result[to_rank][to_file] = move.piece.name
+            result[to_rank][to_file] = move.piece
 
         return result
 
     def fen_rank(self, rank):
         return ''.join(
-            str(sum(1 for _ in g)) if p is None else p for p, g in groupby(rank)
+            str(sum(1 for _ in g)) if p is None else p.name
+            for p, g in groupby(rank)
         )
 
     @property
