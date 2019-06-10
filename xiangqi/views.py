@@ -132,7 +132,7 @@ class GameDetailView(DetailView):
         if (
             self.moves.exists() and participant == self.moves.last().participant
         ) or participant.role != 'red':
-            return JsonResponse({"error": 'Invalid player'}, status=400)
+            return JsonResponse({"error": 'Moving out of turn'}, status=400)
 
         models.Move.objects.create(
             game=self.game,
