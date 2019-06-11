@@ -116,6 +116,8 @@ class GameDetailView(DetailView):
             return JsonResponse({"error": 'Invalid player'}, status=400)
 
         # BARF
+        print("Move participant", participant.player.user.username)
+        print("Last participant", self.moves.last().participant.player.user.username)
         if (self.moves.exists() and participant == self.moves.last().participant) or (
             not self.moves.exists() and participant.role != 'red'
         ):
