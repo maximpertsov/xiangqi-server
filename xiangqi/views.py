@@ -12,18 +12,6 @@ from django.views.generic import DetailView
 from xiangqi import models
 
 
-def allow_cross_origin(f):
-    def wrapped(*args, **kwargs):
-        response = f(*args, **kwargs)
-        response["Access-Control-Allow-Origin"] = "http://localhost:3000"
-        response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-        response["Access-Control-Max-Age"] = "1000"
-        response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
-        return response
-
-    return wrapped
-
-
 @method_decorator(csrf_exempt, name="dispatch")
 class GameDetailView(DetailView):
     model = models.Game
@@ -96,7 +84,6 @@ class GameDetailView(DetailView):
             )
         return result
 
-    @allow_cross_origin
     def get(self, request, pk):
         serialized = json.loads(serialize('json', [self.game]))
         result = serialized[0]['fields']
@@ -107,7 +94,6 @@ class GameDetailView(DetailView):
         result['players'] = self.players_data
         return JsonResponse(result, status=200)
 
-    @allow_cross_origin
     def post(self, request, pk):
         try:
             request_data = json.loads(request.body.decode("utf-8"))
