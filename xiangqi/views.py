@@ -72,6 +72,12 @@ class GameDetailView(DetailView):
         return self.game.participant_set.select_related('player', 'player__user').all()
 
     @property
+    def active_participant(self):
+        if self.moves.exists():
+            return self.participants.get(pk__ne=self.moves.last().participant.pk)
+        return self.participants.get(role='red')
+
+    @property
     def players_data(self):
         result = []
         for participant in self.participants:
@@ -92,6 +98,7 @@ class GameDetailView(DetailView):
         result['files'] = self.files
         result['fen'] = self.current_position_fen
         result['players'] = self.players_data
+        result['active_color'] = self.active_participant.player.user.username
         return JsonResponse(result, status=200)
 
     def post(self, request, pk):
@@ -115,12 +122,7 @@ class GameDetailView(DetailView):
         except models.Participant.DoesNotExist:
             return JsonResponse({"error": 'Invalid player'}, status=400)
 
-        # BARF
-        print("Move participant", participant.player.user.username)
-        print("Last participant", self.moves.last().participant.player.user.username)
-        if (self.moves.exists() and participant == self.moves.last().participant) or (
-            not self.moves.exists() and participant.role != 'red'
-        ):
+        if self.active_participant != participant:
             return JsonResponse({"error": 'Moving out of turn'}, status=400)
 
         from_rank, from_file = self.parse_position(from_position)
