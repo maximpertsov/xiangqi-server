@@ -74,8 +74,9 @@ class GameDetailView(DetailView):
     @property
     def active_participant(self):
         if self.moves.exists():
-            return self.participants.get(pk__ne=self.moves.last().participant.pk)
-        return self.participants.get(role='red')
+            last_move_participant = self.moves.last().participant
+            return self.participants.exclude(pk=last_move_participant.pk).first()
+        return self.participants.filter(role='red').first()
 
     @property
     def players_data(self):
@@ -98,7 +99,7 @@ class GameDetailView(DetailView):
         result['files'] = self.files
         result['fen'] = self.current_position_fen
         result['players'] = self.players_data
-        result['active_color'] = self.active_participant.player.user.username
+        result['active_color'] = self.active_participant.role
         return JsonResponse(result, status=200)
 
     def post(self, request, pk):
