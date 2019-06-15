@@ -1,0 +1,69 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "jkalltheway",
+      "first_name": "Jason",
+      "last_name": "Kuang"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "username": "bycepto",
+      "first_name": "Max",
+      "last_name": "Pertsov"
+    }
+  },
+  {
+    "model": "xiangqi.player",
+    "pk": 1,
+    "fields": {
+      "user_id": 1,
+      "rating": 1500
+    }
+  },
+  {
+    "model": "xiangqi.player",
+    "pk": 2,
+    "fields": {
+      "user_id": 2,
+      "rating": 1500
+    }
+  },
+  {
+    "model": "xiangqi.game",
+    "pk": 2,
+    "fields": {
+      "start_time": null,
+      "end_time": null,
+      "player_limit": 2,
+      "created_by_id": 2,
+      "board_dimensions": "10,9",
+      "move_time_limit": null,
+      "game_time_limit": null
+    }
+  },
+  {
+    "model": "xiangqi.participant",
+    "pk": 1,
+    "fields": {
+      "player_id": 1,
+      "game_id": 2,
+      "score": 0,
+      "role": "black"
+    }
+  },
+  {
+    "model": "xiangqi.participant",
+    "pk": 2,
+    "fields": {
+      "player_id": 2,
+      "game_id": 2,
+      "score": 0,
+      "role": "red"
+    }
+  }
+]

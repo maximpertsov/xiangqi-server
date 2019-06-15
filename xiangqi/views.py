@@ -4,25 +4,16 @@ from itertools import groupby
 
 from django.core.serializers import serialize
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView
 
 from xiangqi import models
 
 
-def allow_cross_origin(f):
-    def wrapped(*args, **kwargs):
-        response = f(*args, **kwargs)
-        response["Access-Control-Allow-Origin"] = "http://localhost:3000"
-        response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
-        response["Access-Control-Max-Age"] = "1000"
-        response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
-        return response
-
-    return wrapped
-
-
-class Game(DetailView):
+@method_decorator(csrf_exempt, name="dispatch")
+class GameDetailView(DetailView):
     model = models.Game
 
     @staticmethod
@@ -53,7 +44,7 @@ class Game(DetailView):
         result = [[None for _ in range(self.files)] for _ in range(self.ranks)]
         for piece in models.Piece.objects.all():
             rank, file = self.parse_position(piece.starting_position)
-            result[rank][file] = piece.name
+            result[rank][file] = piece
         return result
 
     @property
@@ -63,13 +54,13 @@ class Game(DetailView):
             from_rank, from_file = self.parse_position(move.from_position)
             to_rank, to_file = self.parse_position(move.to_position)
             result[from_rank][from_file] = None
-            result[to_rank][to_file] = move.piece.name
+            result[to_rank][to_file] = move.piece
 
         return result
 
     def fen_rank(self, rank):
         return ''.join(
-            str(sum(1 for _ in g)) if p is None else p for p, g in groupby(rank)
+            str(sum(1 for _ in g)) if p is None else p.name for p, g in groupby(rank)
         )
 
     @property
@@ -79,6 +70,13 @@ class Game(DetailView):
     @property
     def participants(self):
         return self.game.participant_set.select_related('player', 'player__user').all()
+
+    @property
+    def active_participant(self):
+        if self.moves.exists():
+            last_move_participant = self.moves.last().participant
+            return self.participants.exclude(pk=last_move_participant.pk).first()
+        return self.participants.filter(role='red').first()
 
     @property
     def players_data(self):
@@ -93,7 +91,6 @@ class Game(DetailView):
             )
         return result
 
-    @allow_cross_origin
     def get(self, request, pk):
         serialized = json.loads(serialize('json', [self.game]))
         result = serialized[0]['fields']
@@ -102,4 +99,50 @@ class Game(DetailView):
         result['files'] = self.files
         result['fen'] = self.current_position_fen
         result['players'] = self.players_data
+        # TODO add test
+        result['active_color'] = getattr(self.active_participant, 'role', 'red')
         return JsonResponse(result, status=200)
+
+    def post(self, request, pk):
+        try:
+            request_data = json.loads(request.body.decode("utf-8"))
+            # TODO: validate with jsonschema?
+            # jsonschema.validate(json_request, schema)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": 'Error parsing request'}, status=400)
+        # except jsonschema.ValidationError as e:
+        #     return JsonResponse({"error": str(e)}, status=400)
+
+        username = request_data['player']
+        from_position = request_data['from']
+        to_position = request_data['to']
+        piece_name = request_data['piece']
+        move_type = request_data['type']
+
+        try:
+            participant = self.participants.get(player__user__username=username)
+        except models.Participant.DoesNotExist:
+            return JsonResponse({"error": 'Invalid player'}, status=400)
+
+        if self.active_participant != participant:
+            return JsonResponse({"error": 'Moving out of turn'}, status=400)
+
+        from_rank, from_file = self.parse_position(from_position)
+        to_rank, to_file = self.parse_position(from_position)
+        piece = self.current_position[from_rank][from_file]
+        if piece.name != piece_name:
+            return JsonResponse({"error": 'Invalid move'}, status=400)
+
+        models.Move.objects.create(
+            game=self.game,
+            participant=participant,
+            piece=piece,
+            # TODO: receiving from client, but maybe this should be generated server-side?
+            type=models.MoveType.objects.get_or_create(name=move_type)[0],
+            # TODO: either order by red + black move, or drop entirely
+            order=self.moves.count() + 1,
+            notation='rank,file->rank,file',
+            from_position=from_position,
+            to_position=to_position,
+        )
+        return JsonResponse({}, status=201)
