@@ -99,7 +99,8 @@ class GameDetailView(DetailView):
         result['files'] = self.files
         result['fen'] = self.current_position_fen
         result['players'] = self.players_data
-        result['active_color'] = self.active_participant.role
+        # TODO add test
+        result['active_color'] = getattr(self.active_participant, 'role', 'red')
         return JsonResponse(result, status=200)
 
     def post(self, request, pk):
