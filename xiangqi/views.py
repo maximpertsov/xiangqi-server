@@ -47,7 +47,7 @@ class GameMixin(SingleObjectMixin):
         return result
 
     @property
-    def current_position(self):
+    def current_board(self):
         result = deepcopy(self.initial_board)
         for move in self.moves:
             from_rank, from_file = self.parse_position(move.from_position)
@@ -57,14 +57,14 @@ class GameMixin(SingleObjectMixin):
 
         return result
 
-    def fen_rank(self, rank):
+    @staticmethod
+    def fen_rank(rank):
         return ''.join(
             str(sum(1 for _ in g)) if p is None else p.name for p, g in groupby(rank)
         )
 
-    @property
-    def current_position_fen(self):
-        return '/'.join(self.fen_rank(rank) for rank in self.current_position)
+    def board_fen(self, board):
+        return '/'.join(self.fen_rank(rank) for rank in board)
 
     @property
     def participants(self):
@@ -99,7 +99,8 @@ class GameView(GameMixin, View):
         del result['board_dimensions']
         result['ranks'] = self.ranks
         result['files'] = self.files
-        result['fen'] = self.current_position_fen
+        result['initial_fen'] = self.board_fen(self.initial_board)
+        result['fen'] = self.board_fen(self.current_board)
         result['players'] = self.players_data
         # TODO add test
         result['active_color'] = getattr(self.active_participant, 'role', 'red')
@@ -134,7 +135,7 @@ class GameMoveView(GameMixin, View):
 
         from_rank, from_file = self.parse_position(from_position)
         to_rank, to_file = self.parse_position(from_position)
-        piece = self.current_position[from_rank][from_file]
+        piece = self.current_board[from_rank][from_file]
         if piece.name != piece_name:
             return JsonResponse({"error": 'Invalid move'}, status=400)
 
