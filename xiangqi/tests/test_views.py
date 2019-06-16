@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from django.core.management import call_command
 from pytest_factoryboy import register
@@ -7,6 +9,22 @@ from xiangqi.tests import factories
 register(factories.UserFactory)
 register(factories.PlayerFactory)
 register(factories.GameFactory)
+register(factories.MoveFactory)
+register(factories.ParticipantFactory)
+
+
+@pytest.fixture
+def pieces(game):
+    call_command('loaddata', 'pieces.json')
+    return game
+
+
+@pytest.fixture
+def game_with_players(game, participant_factory, player_factory):
+    p1, p2 = player_factory.create_batch(2)
+    participant_factory(game=game, player=p1, role='red')
+    participant_factory(game=game, player=p2, role='black')
+    return game
 
 
 @pytest.mark.django_db
@@ -28,9 +46,7 @@ def test_get_game_200(client, game):
 
 
 @pytest.mark.django_db
-def test_get_game_pieces(django_db_blocker, client, game):
-    call_command('loaddata', 'pieces.json')
-
+def test_get_game_pieces(client, game, pieces):
     r = client.get('/api/game/{}'.format(game.pk))
     assert r.status_code == 200
 
@@ -39,3 +55,18 @@ def test_get_game_pieces(django_db_blocker, client, game):
     assert data['ranks'] == 10
     assert data['files'] == 9
     assert data['players'] == []
+
+
+@pytest.mark.django_db
+def test_post_move_201(client, game_with_players, pieces):
+    participant = game_with_players.participant_set.first()
+    url = '/api/game/{}/move'.format(game_with_players.pk)
+    data = {
+        "player": "{}".format(participant.player.user.username),
+        "piece": "h",
+        "from": "0,1",
+        "to": "2,2",
+        "type": "move",
+    }
+    r = client.post(url, data=json.dumps(data), content_type="application/json")
+    assert r.status_code == 201
