@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from xiangqi.views import GameDetailView
+from xiangqi.views import GameMoveView, GameView
 
 urlpatterns = [
-    path('api/game/<int:pk>', GameDetailView.as_view()),
+    path('api/game/<int:pk>/move', GameMoveView.as_view()),
+    path('api/game/<int:pk>', GameView.as_view()),
     path('admin/', admin.site.urls),
 ]

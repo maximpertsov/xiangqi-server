@@ -7,13 +7,12 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import DetailView
+from django.views.generic.detail import SingleObjectMixin, View
 
 from xiangqi import models
 
 
-@method_decorator(csrf_exempt, name="dispatch")
-class GameDetailView(DetailView):
+class GameMixin(SingleObjectMixin):
     model = models.Game
 
     @staticmethod
@@ -91,6 +90,9 @@ class GameDetailView(DetailView):
             )
         return result
 
+
+@method_decorator(csrf_exempt, name="dispatch")
+class GameView(GameMixin, View):
     def get(self, request, pk):
         serialized = json.loads(serialize('json', [self.game]))
         result = serialized[0]['fields']
@@ -103,6 +105,9 @@ class GameDetailView(DetailView):
         result['active_color'] = getattr(self.active_participant, 'role', 'red')
         return JsonResponse(result, status=200)
 
+
+@method_decorator(csrf_exempt, name="dispatch")
+class GameMoveView(GameMixin, View):
     def post(self, request, pk):
         try:
             request_data = json.loads(request.body.decode("utf-8"))
