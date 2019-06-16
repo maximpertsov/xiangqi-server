@@ -77,18 +77,16 @@ class GameMixin(SingleObjectMixin):
             return self.participants.exclude(pk=last_move_participant.pk).first()
         return self.participants.filter(role='red').first()
 
-    @property
-    def players_data(self):
-        result = []
-        for participant in self.participants:
-            result.append(
-                {
-                    'name': participant.player.user.username,
-                    'color': participant.role,
-                    'score': participant.score,
-                }
-            )
-        return result
+    @cached_property
+    def players_data_by_participant(self):
+        return {
+            participant.pk: {
+                'name': participant.player.user.username,
+                'color': participant.role,
+                'score': participant.score,
+            }
+            for participant in self.participants
+        }
 
 
 @method_decorator(csrf_exempt, name="dispatch")
@@ -101,7 +99,7 @@ class GameView(GameMixin, View):
         result['files'] = self.files
         result['initial_fen'] = self.board_fen(self.initial_board)
         result['fen'] = self.board_fen(self.current_board)
-        result['players'] = self.players_data
+        result['players'] = list(self.players_data_by_participant.values())
         # TODO add test
         result['active_color'] = getattr(self.active_participant, 'role', 'red')
         return JsonResponse(result, status=200)
@@ -109,6 +107,18 @@ class GameView(GameMixin, View):
 
 @method_decorator(csrf_exempt, name="dispatch")
 class GameMoveView(GameMixin, View):
+    def get(self, request, pk):
+        serialized = json.loads(serialize('json', self.moves.all()))
+        moves = []
+        for data in serialized:
+            move = data.pop('fields')
+            participant_pk = move.pop('participant')
+            move['player'] = dict(self.players_data_by_participant[participant_pk])
+            move['player'].pop('score')
+            moves.append(move)
+
+        return JsonResponse({'moves': moves}, status=200)
+
     def post(self, request, pk):
         try:
             request_data = json.loads(request.body.decode("utf-8"))
