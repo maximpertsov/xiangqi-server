@@ -58,9 +58,9 @@ def test_get_game_pieces(client, game, pieces):
 
 
 @pytest.mark.django_db
-def test_post_move_201(client, game_with_players, pieces):
+def test_post_move_201_then_get(client, game_with_players, pieces):
     participant = game_with_players.participant_set.first()
-    url = '/api/game/{}/move'.format(game_with_players.pk)
+    url = '/api/game/{}/moves'.format(game_with_players.pk)
     data = {
         "player": "{}".format(participant.player.user.username),
         "piece": "h",
@@ -70,3 +70,8 @@ def test_post_move_201(client, game_with_players, pieces):
     }
     r = client.post(url, data=json.dumps(data), content_type="application/json")
     assert r.status_code == 201
+
+    r = client.get(url)
+    r.status_code == 200
+    data = r.json()
+    assert len(data['moves']) == 1
