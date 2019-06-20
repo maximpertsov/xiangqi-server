@@ -17,7 +17,6 @@ class GameMixin(SingleObjectMixin):
 
     @staticmethod
     def parse_position(position):
-        # TODO: return None if parsing fails?
         return [int(dim.strip()) for dim in position.split(',')]
 
     @cached_property
@@ -107,15 +106,28 @@ class GameView(GameMixin, View):
 
 @method_decorator(csrf_exempt, name="dispatch")
 class GameMoveView(GameMixin, View):
+    def serialize_position(self, position_string):
+        rank, file = self.parse_position(position_string)
+        return {'rank': rank, 'file': file}
+
     def get(self, request, pk):
         serialized = json.loads(serialize('json', self.moves.all()))
         moves = []
         for data in serialized:
-            move = data.pop('fields')
-            participant_pk = move.pop('participant')
-            move['player'] = dict(self.players_data_by_participant[participant_pk])
-            move['player'].pop('score')
-            moves.append(move)
+            fields = data.pop('fields')
+            player = dict(self.players_data_by_participant[fields['participant']])
+            del player['score']
+
+            from_position = self.serialize_position(fields['from_position'])
+            to_position = self.serialize_position(fields['to_position'])
+
+            moves.append(
+                {
+                    'player': player,
+                    'from_position': from_position,
+                    'to_position': to_position,
+                }
+            )
 
         return JsonResponse({'moves': moves}, status=200)
 
