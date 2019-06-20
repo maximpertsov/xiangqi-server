@@ -2,6 +2,7 @@ import json
 from copy import deepcopy
 from itertools import groupby
 
+import jsonschema
 from django.core.serializers import serialize
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -106,6 +107,19 @@ class GameView(GameMixin, View):
 
 @method_decorator(csrf_exempt, name="dispatch")
 class GameMoveView(GameMixin, View):
+    @property
+    def post_schema(self):
+        return {
+            "properties": {
+                "player": {"type": "string"},
+                "from": {"type": "string"},
+                "to": {"type": "string"},
+                "piece": {"type": "string"},
+                "type": {"type": "string"},
+            },
+            "required": ["player", "from", "to", "piece", "type"],
+        }
+
     def serialize_position(self, position_string):
         rank, file = self.parse_position(position_string)
         return {'rank': rank, 'file': file}
@@ -134,12 +148,11 @@ class GameMoveView(GameMixin, View):
     def post(self, request, pk):
         try:
             request_data = json.loads(request.body.decode("utf-8"))
-            # TODO: validate with jsonschema?
-            # jsonschema.validate(json_request, schema)
+            jsonschema.validate(request_data, self.post_schema)
         except json.JSONDecodeError:
             return JsonResponse({"error": 'Error parsing request'}, status=400)
-        # except jsonschema.ValidationError as e:
-        #     return JsonResponse({"error": str(e)}, status=400)
+        except jsonschema.ValidationError as e:
+            return JsonResponse({"error": str(e)}, status=400)
 
         username = request_data['player']
         from_position = request_data['from']
