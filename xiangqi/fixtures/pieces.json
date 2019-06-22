@@ -724,8 +724,10 @@
     "pk": 1,
     "fields": {
       "name": "r",
-      "color": "black",
-      "origin_id": 1
+      "origin": [
+        0,
+        0
+      ]
     }
   },
   {
@@ -733,8 +735,10 @@
     "pk": 2,
     "fields": {
       "name": "h",
-      "color": "black",
-      "origin_id": 2
+      "origin": [
+        0,
+        1
+      ]
     }
   },
   {
@@ -742,8 +746,10 @@
     "pk": 3,
     "fields": {
       "name": "e",
-      "color": "black",
-      "origin_id": 3
+      "origin": [
+        0,
+        2
+      ]
     }
   },
   {
@@ -751,8 +757,10 @@
     "pk": 4,
     "fields": {
       "name": "a",
-      "color": "black",
-      "origin_id": 4
+      "origin": [
+        0,
+        3
+      ]
     }
   },
   {
@@ -760,8 +768,10 @@
     "pk": 5,
     "fields": {
       "name": "k",
-      "color": "black",
-      "origin_id": 5
+      "origin": [
+        0,
+        4
+      ]
     }
   },
   {
@@ -769,8 +779,10 @@
     "pk": 6,
     "fields": {
       "name": "a",
-      "color": "black",
-      "origin_id": 6
+      "origin": [
+        0,
+        5
+      ]
     }
   },
   {
@@ -778,8 +790,10 @@
     "pk": 7,
     "fields": {
       "name": "e",
-      "color": "black",
-      "origin_id": 7
+      "origin": [
+        0,
+        6
+      ]
     }
   },
   {
@@ -787,8 +801,10 @@
     "pk": 8,
     "fields": {
       "name": "h",
-      "color": "black",
-      "origin_id": 8
+      "origin": [
+        0,
+        7
+      ]
     }
   },
   {
@@ -796,8 +812,10 @@
     "pk": 9,
     "fields": {
       "name": "r",
-      "color": "black",
-      "origin_id": 9
+      "origin": [
+        0,
+        8
+      ]
     }
   },
   {
@@ -805,8 +823,10 @@
     "pk": 10,
     "fields": {
       "name": "c",
-      "color": "black",
-      "origin_id": 20
+      "origin": [
+        2,
+        1
+      ]
     }
   },
   {
@@ -814,8 +834,10 @@
     "pk": 11,
     "fields": {
       "name": "c",
-      "color": "black",
-      "origin_id": 26
+      "origin": [
+        2,
+        7
+      ]
     }
   },
   {
@@ -823,8 +845,10 @@
     "pk": 12,
     "fields": {
       "name": "p",
-      "color": "black",
-      "origin_id": 28
+      "origin": [
+        3,
+        0
+      ]
     }
   },
   {
@@ -832,8 +856,10 @@
     "pk": 13,
     "fields": {
       "name": "p",
-      "color": "black",
-      "origin_id": 30
+      "origin": [
+        3,
+        2
+      ]
     }
   },
   {
@@ -841,8 +867,10 @@
     "pk": 14,
     "fields": {
       "name": "p",
-      "color": "black",
-      "origin_id": 32
+      "origin": [
+        3,
+        4
+      ]
     }
   },
   {
@@ -850,8 +878,10 @@
     "pk": 15,
     "fields": {
       "name": "p",
-      "color": "black",
-      "origin_id": 34
+      "origin": [
+        3,
+        6
+      ]
     }
   },
   {
@@ -859,8 +889,10 @@
     "pk": 16,
     "fields": {
       "name": "p",
-      "color": "black",
-      "origin_id": 36
+      "origin": [
+        3,
+        8
+      ]
     }
   },
   {
@@ -868,8 +900,10 @@
     "pk": 17,
     "fields": {
       "name": "P",
-      "color": "red",
-      "origin_id": 55
+      "origin": [
+        6,
+        0
+      ]
     }
   },
   {
@@ -877,8 +911,10 @@
     "pk": 18,
     "fields": {
       "name": "P",
-      "color": "red",
-      "origin_id": 57
+      "origin": [
+        6,
+        2
+      ]
     }
   },
   {
@@ -886,8 +922,10 @@
     "pk": 19,
     "fields": {
       "name": "P",
-      "color": "red",
-      "origin_id": 59
+      "origin": [
+        6,
+        4
+      ]
     }
   },
   {
@@ -895,8 +933,10 @@
     "pk": 20,
     "fields": {
       "name": "P",
-      "color": "red",
-      "origin_id": 61
+      "origin": [
+        6,
+        6
+      ]
     }
   },
   {
@@ -904,8 +944,10 @@
     "pk": 21,
     "fields": {
       "name": "P",
-      "color": "red",
-      "origin_id": 63
+      "origin": [
+        6,
+        8
+      ]
     }
   },
   {
@@ -913,8 +955,10 @@
     "pk": 22,
     "fields": {
       "name": "C",
-      "color": "red",
-      "origin_id": 65
+      "origin": [
+        7,
+        1
+      ]
     }
   },
   {
@@ -922,8 +966,10 @@
     "pk": 23,
     "fields": {
       "name": "C",
-      "color": "red",
-      "origin_id": 71
+      "origin": [
+        7,
+        7
+      ]
     }
   },
   {
@@ -931,8 +977,10 @@
     "pk": 24,
     "fields": {
       "name": "R",
-      "color": "red",
-      "origin_id": 82
+      "origin": [
+        9,
+        0
+      ]
     }
   },
   {
@@ -940,8 +988,10 @@
     "pk": 25,
     "fields": {
       "name": "H",
-      "color": "red",
-      "origin_id": 83
+      "origin": [
+        9,
+        1
+      ]
     }
   },
   {
@@ -949,8 +999,10 @@
     "pk": 26,
     "fields": {
       "name": "E",
-      "color": "red",
-      "origin_id": 84
+      "origin": [
+        9,
+        2
+      ]
     }
   },
   {
@@ -958,8 +1010,10 @@
     "pk": 27,
     "fields": {
       "name": "A",
-      "color": "red",
-      "origin_id": 85
+      "origin": [
+        9,
+        3
+      ]
     }
   },
   {
@@ -967,8 +1021,10 @@
     "pk": 28,
     "fields": {
       "name": "K",
-      "color": "red",
-      "origin_id": 86
+      "origin": [
+        9,
+        4
+      ]
     }
   },
   {
@@ -976,8 +1032,10 @@
     "pk": 29,
     "fields": {
       "name": "A",
-      "color": "red",
-      "origin_id": 87
+      "origin": [
+        9,
+        5
+      ]
     }
   },
   {
@@ -985,8 +1043,10 @@
     "pk": 30,
     "fields": {
       "name": "E",
-      "color": "red",
-      "origin_id": 88
+      "origin": [
+        9,
+        6
+      ]
     }
   },
   {
@@ -994,8 +1054,10 @@
     "pk": 31,
     "fields": {
       "name": "H",
-      "color": "red",
-      "origin_id": 89
+      "origin": [
+        9,
+        7
+      ]
     }
   },
   {
@@ -1003,8 +1065,10 @@
     "pk": 32,
     "fields": {
       "name": "R",
-      "color": "red",
-      "origin_id": 90
+      "origin": [
+        9,
+        8
+      ]
     }
   }
 ]
