@@ -1,5 +1,16 @@
+from enum import Enum
+
 from django.contrib.auth import get_user_model
 from django.db import models
+
+
+class Color(Enum):
+    RED = 'red'
+    BLACK = 'black'
+
+    @classmethod
+    def choices(cls):
+        return [(tag, tag.value) for tag in cls]
 
 
 class Player(models.Model):
@@ -34,6 +45,7 @@ class Participant(models.Model):
 class Piece(models.Model):
     name = models.CharField(max_length=32)
     starting_position = models.CharField(max_length=32, null=True)
+    color = models.CharField(max_length=32, choices=Color.choices())
 
 
 class MoveType(models.Model):
