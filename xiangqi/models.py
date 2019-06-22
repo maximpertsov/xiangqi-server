@@ -38,6 +38,9 @@ class Position(models.Model):
     rank = models.PositiveIntegerField(db_index=True)
     file = models.PositiveIntegerField(db_index=True)
 
+    def natural_key(self):
+        return (self.rank, self.file)
+
 
 class Game(models.Model):
     start_time = models.DateTimeField(null=True)

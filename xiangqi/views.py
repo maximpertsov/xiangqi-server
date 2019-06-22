@@ -148,18 +148,19 @@ class GameMoveView(GameMixin, View):
         return result
 
     def get(self, request, pk):
-        serialized = json.loads(serialize('json', self.moves.all()))
+        serialized = serialize('json', self.moves.all(), use_natural_foreign_keys=True)
         moves = []
-        for data in serialized:
+        for data in json.loads(serialized):
             fields = data.pop('fields')
             player = dict(self.players_data_by_participant[fields['participant']])
             del player['score']
 
-            origin = fields['origin']
-            destination = fields['destination']
-
             moves.append(
-                {'player': player, 'origin': origin, 'destination': destination}
+                {
+                    'player': player,
+                    'origin': fields['origin'],
+                    'destination': fields['destination'],
+                }
             )
 
         return JsonResponse({'moves': moves}, status=200)
