@@ -3,6 +3,7 @@ from copy import deepcopy
 from itertools import groupby
 
 import jsonschema
+from django.core.cache import cache
 from django.core.serializers import serialize
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -90,14 +91,25 @@ class GameMixin(SingleObjectMixin):
 
 @method_decorator(csrf_exempt, name="dispatch")
 class GameView(GameMixin, View):
+    @cached_property
+    def cache_key(self):
+        return 'initial_fen_{}'.format(self.kwargs[self.pk_url_kwarg])
+
+    @cached_property
+    def initial_fen(self):
+        result = cache.get(self.cache_key)
+        if result is None:
+            result = self.board_fen(self.initial_board)
+            cache.set(self.cache_key, result, 100)
+        return result
+
     def get(self, request, pk):
         serialized = json.loads(serialize('json', [self.game]))
         result = serialized[0]['fields']
         del result['board_dimensions']
         result['ranks'] = self.ranks
         result['files'] = self.files
-        result['initial_fen'] = self.board_fen(self.initial_board)
-        result['fen'] = self.board_fen(self.current_board)
+        result['initial_fen'] = self.initial_fen
         result['players'] = list(self.players_data_by_participant.values())
         # TODO add test
         result['active_color'] = getattr(self.active_participant, 'role', 'red')
