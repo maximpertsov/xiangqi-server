@@ -725,7 +725,7 @@
     "fields": {
       "name": "r",
       "color": "black",
-      "starting_position_id": 1
+      "origin_id": 1
     }
   },
   {
@@ -734,7 +734,7 @@
     "fields": {
       "name": "h",
       "color": "black",
-      "starting_position_id": 2
+      "origin_id": 2
     }
   },
   {
@@ -743,7 +743,7 @@
     "fields": {
       "name": "e",
       "color": "black",
-      "starting_position_id": 3
+      "origin_id": 3
     }
   },
   {
@@ -752,7 +752,7 @@
     "fields": {
       "name": "a",
       "color": "black",
-      "starting_position_id": 4
+      "origin_id": 4
     }
   },
   {
@@ -761,7 +761,7 @@
     "fields": {
       "name": "k",
       "color": "black",
-      "starting_position_id": 5
+      "origin_id": 5
     }
   },
   {
@@ -770,7 +770,7 @@
     "fields": {
       "name": "a",
       "color": "black",
-      "starting_position_id": 6
+      "origin_id": 6
     }
   },
   {
@@ -779,7 +779,7 @@
     "fields": {
       "name": "e",
       "color": "black",
-      "starting_position_id": 7
+      "origin_id": 7
     }
   },
   {
@@ -788,7 +788,7 @@
     "fields": {
       "name": "h",
       "color": "black",
-      "starting_position_id": 8
+      "origin_id": 8
     }
   },
   {
@@ -797,7 +797,7 @@
     "fields": {
       "name": "r",
       "color": "black",
-      "starting_position_id": 9
+      "origin_id": 9
     }
   },
   {
@@ -806,7 +806,7 @@
     "fields": {
       "name": "c",
       "color": "black",
-      "starting_position_id": 20
+      "origin_id": 20
     }
   },
   {
@@ -815,7 +815,7 @@
     "fields": {
       "name": "c",
       "color": "black",
-      "starting_position_id": 26
+      "origin_id": 26
     }
   },
   {
@@ -824,7 +824,7 @@
     "fields": {
       "name": "p",
       "color": "black",
-      "starting_position_id": 28
+      "origin_id": 28
     }
   },
   {
@@ -833,7 +833,7 @@
     "fields": {
       "name": "p",
       "color": "black",
-      "starting_position_id": 30
+      "origin_id": 30
     }
   },
   {
@@ -842,7 +842,7 @@
     "fields": {
       "name": "p",
       "color": "black",
-      "starting_position_id": 32
+      "origin_id": 32
     }
   },
   {
@@ -851,7 +851,7 @@
     "fields": {
       "name": "p",
       "color": "black",
-      "starting_position_id": 34
+      "origin_id": 34
     }
   },
   {
@@ -860,7 +860,7 @@
     "fields": {
       "name": "p",
       "color": "black",
-      "starting_position_id": 36
+      "origin_id": 36
     }
   },
   {
@@ -869,7 +869,7 @@
     "fields": {
       "name": "P",
       "color": "red",
-      "starting_position_id": 55
+      "origin_id": 55
     }
   },
   {
@@ -878,7 +878,7 @@
     "fields": {
       "name": "P",
       "color": "red",
-      "starting_position_id": 57
+      "origin_id": 57
     }
   },
   {
@@ -887,7 +887,7 @@
     "fields": {
       "name": "P",
       "color": "red",
-      "starting_position_id": 59
+      "origin_id": 59
     }
   },
   {
@@ -896,7 +896,7 @@
     "fields": {
       "name": "P",
       "color": "red",
-      "starting_position_id": 61
+      "origin_id": 61
     }
   },
   {
@@ -905,7 +905,7 @@
     "fields": {
       "name": "P",
       "color": "red",
-      "starting_position_id": 63
+      "origin_id": 63
     }
   },
   {
@@ -914,7 +914,7 @@
     "fields": {
       "name": "C",
       "color": "red",
-      "starting_position_id": 65
+      "origin_id": 65
     }
   },
   {
@@ -923,7 +923,7 @@
     "fields": {
       "name": "C",
       "color": "red",
-      "starting_position_id": 71
+      "origin_id": 71
     }
   },
   {
@@ -932,7 +932,7 @@
     "fields": {
       "name": "R",
       "color": "red",
-      "starting_position_id": 82
+      "origin_id": 82
     }
   },
   {
@@ -941,7 +941,7 @@
     "fields": {
       "name": "H",
       "color": "red",
-      "starting_position_id": 83
+      "origin_id": 83
     }
   },
   {
@@ -950,7 +950,7 @@
     "fields": {
       "name": "E",
       "color": "red",
-      "starting_position_id": 84
+      "origin_id": 84
     }
   },
   {
@@ -959,7 +959,7 @@
     "fields": {
       "name": "A",
       "color": "red",
-      "starting_position_id": 85
+      "origin_id": 85
     }
   },
   {
@@ -968,7 +968,7 @@
     "fields": {
       "name": "K",
       "color": "red",
-      "starting_position_id": 86
+      "origin_id": 86
     }
   },
   {
@@ -977,7 +977,7 @@
     "fields": {
       "name": "A",
       "color": "red",
-      "starting_position_id": 87
+      "origin_id": 87
     }
   },
   {
@@ -986,7 +986,7 @@
     "fields": {
       "name": "E",
       "color": "red",
-      "starting_position_id": 88
+      "origin_id": 88
     }
   },
   {
@@ -995,7 +995,7 @@
     "fields": {
       "name": "H",
       "color": "red",
-      "starting_position_id": 89
+      "origin_id": 89
     }
   },
   {
@@ -1004,7 +1004,7 @@
     "fields": {
       "name": "R",
       "color": "red",
-      "starting_position_id": 90
+      "origin_id": 90
     }
   }
 ]

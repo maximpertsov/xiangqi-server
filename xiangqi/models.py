@@ -51,9 +51,7 @@ class Participant(models.Model):
 
 class Piece(models.Model):
     name = models.CharField(max_length=32)
-    starting_position = models.ForeignKey(
-        Position, related_name='+', on_delete=models.PROTECT
-    )
+    origin = models.ForeignKey(Position, related_name='+', on_delete=models.PROTECT)
     color = models.CharField(max_length=32, choices=Color.choices())
 
 
@@ -68,9 +66,9 @@ class Move(models.Model):
     type = models.ForeignKey(MoveType, on_delete=models.CASCADE)
     order = models.PositiveIntegerField()
     notation = models.CharField(max_length=32)
-    from_position = models.ForeignKey(
+    origin = models.ForeignKey(
         Position, related_name='+', null=True, on_delete=models.PROTECT
     )
-    to_position = models.ForeignKey(
+    destination = models.ForeignKey(
         Position, related_name='+', on_delete=models.PROTECT
     )
