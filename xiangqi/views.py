@@ -37,7 +37,9 @@ class GameMixin(SingleObjectMixin):
 
     @property
     def moves(self):
-        return self.game.move_set.select_related('piece').order_by('order')
+        return self.game.move_set.select_related(
+            'piece', 'origin', 'destination'
+        ).order_by('order')
 
     @cached_property
     def initial_board(self):
@@ -123,17 +125,27 @@ class GameMoveView(GameMixin, View):
         return {
             "properties": {
                 "player": {"type": "string"},
-                "from": {"type": "string"},
-                "to": {"type": "string"},
+                "origin": {
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "minItems": 2,
+                    "maxItems": 2,
+                },
+                "destination": {
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "minItems": 2,
+                    "maxItems": 2,
+                },
                 "piece": {"type": "string"},
                 "type": {"type": "string"},
             },
             "required": ["player", "from", "to", "piece", "type"],
         }
 
-    def serialize_position(self, position_string):
-        rank, file = self.parse_position(position_string)
-        return {'rank': rank, 'file': file}
+    def position(self, rank, file):
+        result, _ = models.Position.objects.get_or_create(rank=rank, file=file)
+        return result
 
     def get(self, request, pk):
         serialized = json.loads(serialize('json', self.moves.all()))
@@ -143,15 +155,11 @@ class GameMoveView(GameMixin, View):
             player = dict(self.players_data_by_participant[fields['participant']])
             del player['score']
 
-            origin = self.serialize_position(fields['origin'])
-            destination = self.serialize_position(fields['destination'])
+            origin = fields['origin']
+            destination = fields['destination']
 
             moves.append(
-                {
-                    'player': player,
-                    'origin': origin,
-                    'destination': destination,
-                }
+                {'player': player, 'origin': origin, 'destination': destination}
             )
 
         return JsonResponse({'moves': moves}, status=200)
@@ -166,8 +174,6 @@ class GameMoveView(GameMixin, View):
             return JsonResponse({"error": str(e)}, status=400)
 
         username = request_data['player']
-        origin = request_data['from']
-        destination = request_data['to']
         piece_name = request_data['piece']
         move_type = request_data['type']
 
@@ -179,8 +185,8 @@ class GameMoveView(GameMixin, View):
         if self.active_participant != participant:
             return JsonResponse({"error": 'Moving out of turn'}, status=400)
 
-        from_rank, from_file = self.parse_position(origin)
-        to_rank, to_file = self.parse_position(origin)
+        from_rank, from_file = request_data['from']
+        to_rank, to_file = request_data['to']
         piece = self.current_board[from_rank][from_file]
         if piece.name != piece_name:
             return JsonResponse({"error": 'Invalid move'}, status=400)
@@ -194,7 +200,7 @@ class GameMoveView(GameMixin, View):
             # TODO: either order by red + black move, or drop entirely
             order=self.moves.count() + 1,
             notation='rank,file->rank,file',
-            origin=origin,
-            destination=destination,
+            origin=self.position(from_rank, from_file),
+            destination=self.position(to_rank, to_file),
         )
         return JsonResponse({}, status=201)
