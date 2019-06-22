@@ -41,15 +41,14 @@ class GameMixin(SingleObjectMixin):
     @cached_property
     def initial_board(self):
         result = [[None for _ in range(self.files)] for _ in range(self.ranks)]
-        for piece in models.Piece.objects.all():
-            rank, file = self.parse_position(piece.starting_position)
-            result[rank][file] = piece
+        for piece in models.Piece.objects.all().select_related('starting_position'):
+            result[piece.starting_position.rank][piece.starting_position.file] = piece
         return result
 
     @property
     def current_board(self):
         result = deepcopy(self.initial_board)
-        for move in self.moves:
+        for move in self.moves.select_related('from_position', 'to_position'):
             from_rank, from_file = self.parse_position(move.from_position)
             to_rank, to_file = self.parse_position(move.to_position)
             result[from_rank][from_file] = None
