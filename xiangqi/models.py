@@ -23,6 +23,12 @@ class Result(models.Model):
     description = models.TextField()
 
 
+# TODO: make this immutable
+class Position(models.Model):
+    rank = models.PositiveIntegerField(db_index=True)
+    file = models.PositiveIntegerField(db_index=True)
+
+
 class Game(models.Model):
     start_time = models.DateTimeField(null=True)
     end_time = models.DateTimeField(null=True)
@@ -40,11 +46,14 @@ class Participant(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     score = models.DecimalField(max_digits=5, decimal_places=2)
     role = models.CharField(max_length=32)
+    color = models.CharField(max_length=32, choices=Color.choices())
 
 
 class Piece(models.Model):
     name = models.CharField(max_length=32)
-    starting_position = models.CharField(max_length=32, null=True)
+    starting_position = models.ForeignKey(
+        Position, related_name='+', on_delete=models.PROTECT
+    )
     color = models.CharField(max_length=32, choices=Color.choices())
 
 
@@ -59,5 +68,9 @@ class Move(models.Model):
     type = models.ForeignKey(MoveType, on_delete=models.CASCADE)
     order = models.PositiveIntegerField()
     notation = models.CharField(max_length=32)
-    from_position = models.CharField(max_length=32, null=True)
-    to_position = models.CharField(max_length=32)
+    from_position = models.ForeignKey(
+        Position, related_name='+', null=True, on_delete=models.PROTECT
+    )
+    to_position = models.ForeignKey(
+        Position, related_name='+', on_delete=models.PROTECT
+    )
