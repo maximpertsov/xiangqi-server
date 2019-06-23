@@ -4,8 +4,8 @@ from xiangqi.models import Color
 
 
 class ParticipantManager(models.Manager):
-    def get_by_natural_key(self, game, username):
-        return self.get(game=game, player__user__username=username)
+    def get_by_natural_key(self, slug, username):
+        return self.get(game__slug=slug, player__user__username=username)
 
 
 class Participant(models.Model):
