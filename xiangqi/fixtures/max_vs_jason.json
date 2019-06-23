@@ -37,7 +37,7 @@
       "player": ["jkalltheway"],
       "game_id": 2,
       "score": 0,
-      "role": "black"
+      "color": "black"
     }
   },
   {
@@ -47,7 +47,7 @@
       "player": ["bycepto"],
       "game_id": 2,
       "score": 0,
-      "role": "red"
+      "color": "red"
     }
   }
 ]
