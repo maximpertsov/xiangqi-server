@@ -47,7 +47,7 @@ def test_get_game_200(client, game):
 
 @pytest.mark.django_db
 def test_get_game_pieces(client, game, pieces):
-    r = client.get('/api/game/{}'.format(game.pk))
+    r = client.get('/api/game/{}'.format(game.slug))
     assert r.status_code == 200
 
     data = r.json()
@@ -63,7 +63,7 @@ def test_get_game_pieces(client, game, pieces):
 @pytest.mark.django_db
 def test_post_move_201_then_get(client, game_with_players, pieces):
     participant = game_with_players.participant_set.first()
-    url = '/api/game/{}/moves'.format(game_with_players.pk)
+    url = '/api/game/{}/moves'.format(game_with_players.slug)
     data = {
         "player": "{}".format(participant.player.user.username),
         "piece": "h",
