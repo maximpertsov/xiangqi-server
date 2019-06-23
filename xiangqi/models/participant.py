@@ -22,7 +22,7 @@ class Participant(models.Model):
     def natural_key(self):
         return (self.game, self.color)
 
-    natural_key.dependencies = ['game']
+    natural_key.dependencies = ['xiangqi.game']
 
     def __str__(self):
         player = 'unknown' if self.player is None else self.player
