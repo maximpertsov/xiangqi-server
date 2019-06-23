@@ -57,10 +57,8 @@ class GameMixin(SingleObjectMixin):
     def current_board(self):
         result = deepcopy(self.initial_board)
         for move in self.moves.select_related('origin', 'destination'):
-            from_rank, from_file = self.parse_position(move.origin)
-            to_rank, to_file = self.parse_position(move.destination)
-            result[from_rank][from_file] = None
-            result[to_rank][to_file] = move.piece
+            result[move.origin.rank][move.origin.file] = None
+            result[move.destination.rank][move.destination.file] = move.piece
 
         return result
 
