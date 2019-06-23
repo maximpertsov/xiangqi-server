@@ -20,7 +20,7 @@ class Participant(models.Model):
     color = models.CharField(max_length=32, choices=Color.choices())
 
     def natural_key(self):
-        return (self.game, self.color)
+        return (self.game.slug, self.color)
 
     natural_key.dependencies = ['xiangqi.game']
 

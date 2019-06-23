@@ -82,7 +82,7 @@ class GameMixin(SingleObjectMixin):
     @cached_property
     def players_data_by_participant(self):
         return {
-            participant.pk: {
+            tuple(participant.natural_key()): {
                 'name': participant.player.user.username,
                 'color': participant.color,
                 'score': participant.score,
@@ -152,7 +152,8 @@ class GameMoveView(GameMixin, View):
         moves = []
         for data in json.loads(serialized):
             fields = data.pop('fields')
-            player = dict(self.players_data_by_participant[fields['participant']])
+            participant_key = tuple(fields['participant'])
+            player = dict(self.players_data_by_participant[participant_key])
             del player['score']
 
             moves.append(
