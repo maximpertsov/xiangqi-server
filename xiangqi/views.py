@@ -4,7 +4,7 @@ from itertools import groupby
 
 import jsonschema
 from django.core.cache import cache
-from django.core.serializers import serialize
+from django.core.serializers import deserialize, serialize
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
@@ -125,13 +125,13 @@ class GameMoveView(GameMixin, View):
         return {
             "properties": {
                 "player": {"type": "string"},
-                "origin": {
+                "from": {
                     "type": "array",
                     "items": {"type": "number"},
                     "minItems": 2,
                     "maxItems": 2,
                 },
-                "destination": {
+                "to": {
                     "type": "array",
                     "items": {"type": "number"},
                     "minItems": 2,
@@ -141,6 +141,7 @@ class GameMoveView(GameMixin, View):
                 "type": {"type": "string"},
             },
             "required": ["player", "from", "to", "piece", "type"],
+            "additionalProperties": False,
         }
 
     def position(self, rank, file):
@@ -175,8 +176,12 @@ class GameMoveView(GameMixin, View):
         except jsonschema.ValidationError as e:
             return JsonResponse({"error": str(e)}, status=400)
 
-        username = request_data['player']
-        piece_name = request_data['piece']
+        username = request_data.pop('player')
+        request_data.update(participant=[slug, username])
+        request_data['origin'] = request_data.pop('from')
+        request_data['destination'] = request_data.pop('to')
+        piece_name = request_data.pop('piece')
+
         move_type = request_data['type']
 
         try:
@@ -187,22 +192,25 @@ class GameMoveView(GameMixin, View):
         if self.active_participant != participant:
             return JsonResponse({"error": 'Moving out of turn'}, status=400)
 
-        from_rank, from_file = request_data['from']
-        to_rank, to_file = request_data['to']
+        from_rank, from_file = request_data['origin']
+        to_rank, to_file = request_data['destination']
         piece = self.current_board[from_rank][from_file]
         if piece.name != piece_name:
             return JsonResponse({"error": 'Invalid move'}, status=400)
 
-        models.Move.objects.create(
-            game=self.game,
-            participant=participant,
-            piece=piece,
-            # TODO: receiving from client, but maybe this should be generated server-side?
-            type=models.MoveType.objects.get_or_create(name=move_type)[0],
-            # TODO: either order by red + black move, or drop entirely
-            order=self.moves.count() + 1,
-            notation='rank,file->rank,file',
-            origin=self.position(from_rank, from_file),
-            destination=self.position(to_rank, to_file),
+        request_data['piece'] = piece.pk
+        request_data['type'] = models.MoveType.objects.get_or_create(
+            name=move_type
+        )[0].pk
+        request_data['order'] = self.moves.count() + 1
+        request_data['notation'] = 'rank,file->rank,file'
+
+        move_data = {'model': 'xiangqi.move', 'fields': request_data}
+
+        print(move_data)
+        deserialized = deserialize(
+            'json', json.dumps([move_data]), use_natural_foreign_keys=True
         )
-        return JsonResponse({}, status=201)
+        for obj in deserialized:
+            print(obj.object)
+            return JsonResponse({}, status=201)
