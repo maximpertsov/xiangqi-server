@@ -77,14 +77,14 @@ class GameMixin(SingleObjectMixin):
         if self.moves.exists():
             last_move_participant = self.moves.last().participant
             return self.participants.exclude(pk=last_move_participant.pk).first()
-        return self.participants.filter(role='red').first()
+        return self.participants.filter(color='red').first()
 
     @cached_property
     def players_data_by_participant(self):
         return {
             participant.pk: {
                 'name': participant.player.user.username,
-                'color': participant.role,
+                'color': participant.color,
                 'score': participant.score,
             }
             for participant in self.participants
@@ -95,7 +95,7 @@ class GameMixin(SingleObjectMixin):
 class GameView(GameMixin, View):
     @cached_property
     def cache_key(self):
-        return 'initial_fen_{}'.format(self.kwargs[self.pk_url_kwarg])
+        return 'initial_fen_{}'.format(self.kwargs[self.slug_url_kwarg])
 
     @cached_property
     def initial_fen(self):
@@ -105,7 +105,7 @@ class GameView(GameMixin, View):
             cache.set(self.cache_key, result, 100)
         return result
 
-    def get(self, request, pk):
+    def get(self, request, slug):
         serialized = json.loads(serialize('json', [self.game]))
         result = serialized[0]['fields']
         del result['board_dimensions']
@@ -114,7 +114,7 @@ class GameView(GameMixin, View):
         result['initial_fen'] = self.initial_fen
         result['players'] = list(self.players_data_by_participant.values())
         # TODO add test
-        result['active_color'] = getattr(self.active_participant, 'role', 'red')
+        result['active_color'] = getattr(self.active_participant, 'color', 'red')
         return JsonResponse(result, status=200)
 
 
@@ -147,7 +147,7 @@ class GameMoveView(GameMixin, View):
         result, _ = models.Position.objects.get_or_create(rank=rank, file=file)
         return result
 
-    def get(self, request, pk):
+    def get(self, request, slug):
         serialized = serialize('json', self.moves.all(), use_natural_foreign_keys=True)
         moves = []
         for data in json.loads(serialized):
@@ -165,7 +165,7 @@ class GameMoveView(GameMixin, View):
 
         return JsonResponse({'moves': moves}, status=200)
 
-    def post(self, request, pk):
+    def post(self, request, slug):
         try:
             request_data = json.loads(request.body.decode("utf-8"))
             jsonschema.validate(request_data, self.post_schema)

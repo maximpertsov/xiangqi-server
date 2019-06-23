@@ -19,7 +19,7 @@ from django.urls import path
 from xiangqi.views import GameMoveView, GameView
 
 urlpatterns = [
-    path('api/game/<int:pk>/moves', GameMoveView.as_view()),
-    path('api/game/<int:pk>', GameView.as_view()),
+    path('api/game/<str:slug>/moves', GameMoveView.as_view()),
+    path('api/game/<str:slug>', GameView.as_view()),
     path('admin/', admin.site.urls),
 ]
