@@ -15,10 +15,16 @@ class Player(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     rating = models.PositiveIntegerField(default=1500)
 
-    def natural_key(self):
+    def get_username(self):
         return self.user.username
 
+    def natural_key(self):
+        return self.get_username()
+
     natural_key.dependencies = [get_user_model()]
+
+    def __str__(self):
+        return self.get_username()
 
 
 @receiver(post_save, sender=get_user_model())

@@ -18,29 +18,13 @@
     }
   },
   {
-    "model": "xiangqi.player",
-    "pk": 1,
-    "fields": {
-      "user_id": 1,
-      "rating": 1500
-    }
-  },
-  {
-    "model": "xiangqi.player",
-    "pk": 2,
-    "fields": {
-      "user_id": 2,
-      "rating": 1500
-    }
-  },
-  {
     "model": "xiangqi.game",
     "pk": 2,
     "fields": {
       "start_time": null,
       "end_time": null,
       "player_limit": 2,
-      "created_by_id": 2,
+      "created_by": ["bycepto"],
       "board_dimensions": "10,9",
       "move_time_limit": null,
       "game_time_limit": null
@@ -50,7 +34,7 @@
     "model": "xiangqi.participant",
     "pk": 1,
     "fields": {
-      "player_id": 1,
+      "player": ["jkalltheway"],
       "game_id": 2,
       "score": 0,
       "role": "black"
@@ -60,7 +44,7 @@
     "model": "xiangqi.participant",
     "pk": 2,
     "fields": {
-      "player_id": 2,
+      "player": ["bycepto"],
       "game_id": 2,
       "score": 0,
       "role": "red"
