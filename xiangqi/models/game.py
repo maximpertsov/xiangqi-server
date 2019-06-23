@@ -16,6 +16,9 @@ class GameManager(models.Manager):
         kwargs['slug'] = self._generate_slug() if slug is None else slug
         return super().create(**kwargs)
 
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
 
 class Game(models.Model):
     objects = GameManager()
@@ -32,3 +35,6 @@ class Game(models.Model):
     move_time_limit = models.CharField(max_length=128, null=True)
     game_time_limit = models.CharField(max_length=128, null=True)
     result = models.ForeignKey('result', on_delete=models.CASCADE, null=True)
+
+    def natural_key(self):
+        return self.slug
