@@ -1,11 +1,11 @@
 import json
 from copy import deepcopy
+from functools import partial
 from itertools import groupby
 
 import jsonschema
 from django.core import serializers
 from django.core.cache import cache
-from django.core.serializers import deserialize, serialize
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
@@ -13,6 +13,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.detail import SingleObjectMixin, View
 
 from xiangqi import models
+
+serialize = partial(serializers.serialize, 'json', use_natural_foreign_keys=True)
+deserialize = partial(serializers.deserialize, 'json', use_natural_foreign_keys=True)
 
 
 class GameMixin(SingleObjectMixin):
@@ -107,8 +110,8 @@ class GameView(GameMixin, View):
         return result
 
     def get(self, request, slug):
-        serialized = json.loads(serialize('json', [self.game]))
-        result = serialized[0]['fields']
+        serialized = serialize([self.game])
+        result = json.loads(serialized)[0]['fields']
         del result['board_dimensions']
         result['ranks'] = self.ranks
         result['files'] = self.files
@@ -150,7 +153,7 @@ class GameMoveView(GameMixin, View):
         return result
 
     def get(self, request, slug):
-        serialized = serialize('json', self.moves.all(), use_natural_foreign_keys=True)
+        serialized = serialize(self.moves.all())
         moves = []
         for data in json.loads(serialized):
             fields = data.pop('fields')
@@ -208,9 +211,7 @@ class GameMoveView(GameMixin, View):
         move_data = {'model': 'xiangqi.move', 'fields': request_data}
 
         try:
-            deserialized = deserialize(
-                'json', json.dumps([move_data]), use_natural_foreign_keys=True
-            )
+            deserialized = deserialize(json.dumps([move_data]))
             for obj in deserialized:
                 obj.object.save()
                 return JsonResponse({}, status=201)
