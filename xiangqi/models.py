@@ -14,9 +14,13 @@ class Color(Enum):
 
 
 class Player(models.Model):
-    # TODO set all player attributes to 'anonymous' after a user is deleted
-    user = models.OneToOneField(get_user_model(), on_delete=models.SET_NULL, null=True)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     rating = models.PositiveIntegerField()
+
+    def natural_key(self):
+        return self.user.username
+
+    natural_key.dependencies = ['auth.user']
 
 
 class Result(models.Model):
