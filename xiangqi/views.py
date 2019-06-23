@@ -203,17 +203,16 @@ class GameMoveView(GameMixin, View):
         )[0].pk
         request_data['order'] = self.moves.count() + 1
         request_data['notation'] = 'rank,file->rank,file'
+        request_data['game'] = [slug]
 
         move_data = {'model': 'xiangqi.move', 'fields': request_data}
 
         try:
-            print(move_data)
             deserialized = deserialize(
                 'json', json.dumps([move_data]), use_natural_foreign_keys=True
             )
             for obj in deserialized:
-                print(obj.object)
-            return JsonResponse({}, status=201)
-        except serializers.base.DeserializationError as e:
-            print(str(e))
+                obj.object.save()
+                return JsonResponse({}, status=201)
+        except serializers.base.DeserializationError:
             return JsonResponse({"error": "Could not save move"}, status=400)
