@@ -21,7 +21,7 @@
     "model": "xiangqi.game",
     "pk": 2,
     "fields": {
-      "xid": "ABC",
+      "slug": "ABC123",
       "start_time": null,
       "end_time": null,
       "player_limit": 2,

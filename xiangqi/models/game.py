@@ -3,24 +3,26 @@ from django.utils.crypto import get_random_string
 
 
 class GameManager(models.Manager):
-    def _generate_xid(self):
+    def _generate_slug(self):
         size = 8
         while True:
-            xid = get_random_string(size)
-            if self.filter(xid=xid).exists():
+            slug = get_random_string(size)
+            if self.filter(slug=slug).exists():
                 size += 1
                 continue
-            return xid
+            return slug
 
-    def create(self, xid=None, **kwargs):
-        kwargs['xid'] = self._generate_xid() if xid is None else xid
+    def create(self, slug=None, **kwargs):
+        kwargs['slug'] = self._generate_slug() if slug is None else slug
         return super().create(**kwargs)
 
 
 class Game(models.Model):
     objects = GameManager()
 
-    xid = models.CharField(max_length=64, unique=True, editable=False)
+    slug = models.CharField(
+        max_length=64, unique=True, editable=False, blank=False, null=False
+    )
     start_time = models.DateTimeField(null=True)
     end_time = models.DateTimeField(null=True)
     player_limit = models.PositiveIntegerField(default=2)
