@@ -4,9 +4,16 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
+class PlayerManager(models.Manager):
+    def get_by_natural_key(self, username):
+        return self.get(user__username=username)
+
+
 class Player(models.Model):
+    objects = PlayerManager()
+
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
-    rating = models.PositiveIntegerField()
+    rating = models.PositiveIntegerField(default=1500)
 
     def natural_key(self):
         return self.user.username
