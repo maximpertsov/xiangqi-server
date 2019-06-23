@@ -6,7 +6,7 @@ class GameManager(models.Manager):
     def _generate_xid(self):
         size = 8
         while True:
-            xid = get_random_string(8)
+            xid = get_random_string(size)
             if self.filter(xid=xid).exists():
                 size += 1
                 continue
