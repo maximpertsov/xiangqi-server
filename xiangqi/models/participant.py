@@ -14,7 +14,7 @@ class Participant(models.Model):
     class Meta:
         unique_together = [("game", "color")]
 
-    player = models.ForeignKey('player', on_delete=models.CASCADE)
+    player = models.ForeignKey('player', on_delete=models.SET_NULL, null=True)
     game = models.ForeignKey('game', on_delete=models.CASCADE)
     score = models.DecimalField(max_digits=5, decimal_places=2)
     color = models.CharField(max_length=32, choices=Color.choices())
@@ -23,3 +23,7 @@ class Participant(models.Model):
         return (self.game, self.color)
 
     natural_key.dependencies = ['game']
+
+    def __str__(self):
+        player = 'unknown' if self.player is None else self.player
+        return '{} ({})'.format(player, self.color)
