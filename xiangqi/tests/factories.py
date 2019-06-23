@@ -18,6 +18,7 @@ class UserFactory(DjangoModelFactory):
 class PlayerFactory(DjangoModelFactory):
     class Meta:
         model = models.Player
+        django_get_or_create = ("user",)
 
     user = SubFactory(UserFactory)
     rating = 1500
