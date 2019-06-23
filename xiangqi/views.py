@@ -3,6 +3,7 @@ from copy import deepcopy
 from itertools import groupby
 
 import jsonschema
+from django.core import serializers
 from django.core.cache import cache
 from django.core.serializers import deserialize, serialize
 from django.http import JsonResponse
@@ -182,8 +183,6 @@ class GameMoveView(GameMixin, View):
         request_data['destination'] = request_data.pop('to')
         piece_name = request_data.pop('piece')
 
-        move_type = request_data['type']
-
         try:
             participant = self.participants.get(player__user__username=username)
         except models.Participant.DoesNotExist:
@@ -200,17 +199,21 @@ class GameMoveView(GameMixin, View):
 
         request_data['piece'] = piece.pk
         request_data['type'] = models.MoveType.objects.get_or_create(
-            name=move_type
+            name=request_data.pop('type')
         )[0].pk
         request_data['order'] = self.moves.count() + 1
         request_data['notation'] = 'rank,file->rank,file'
 
         move_data = {'model': 'xiangqi.move', 'fields': request_data}
 
-        print(move_data)
-        deserialized = deserialize(
-            'json', json.dumps([move_data]), use_natural_foreign_keys=True
-        )
-        for obj in deserialized:
-            print(obj.object)
+        try:
+            print(move_data)
+            deserialized = deserialize(
+                'json', json.dumps([move_data]), use_natural_foreign_keys=True
+            )
+            for obj in deserialized:
+                print(obj.object)
             return JsonResponse({}, status=201)
+        except serializers.base.DeserializationError as e:
+            print(str(e))
+            return JsonResponse({"error": "Could not save move"}, status=400)
