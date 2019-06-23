@@ -6,6 +6,7 @@ from itertools import groupby
 import jsonschema
 from django.core import serializers
 from django.core.cache import cache
+from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
@@ -171,47 +172,49 @@ class GameMoveView(GameMixin, View):
 
         return JsonResponse({'moves': moves}, status=200)
 
-    def post(self, request, slug):
-        try:
-            request_data = json.loads(request.body.decode("utf-8"))
-            jsonschema.validate(request_data, self.post_schema)
-        except json.JSONDecodeError:
-            return JsonResponse({"error": 'Error parsing request'}, status=400)
-        except jsonschema.ValidationError as e:
-            return JsonResponse({"error": str(e)}, status=400)
-
-        username = request_data.pop('player')
-        request_data.update(participant=[slug, username])
-        request_data['origin'] = request_data.pop('from')
-        request_data['destination'] = request_data.pop('to')
-        piece_name = request_data.pop('piece')
+    def validate_data(self, payload, slug):
+        username = payload.pop('player')
+        payload.update(participant=[slug, username])
+        payload['origin'] = payload.pop('from')
+        payload['destination'] = payload.pop('to')
+        piece_name = payload.pop('piece')
 
         try:
             participant = self.participants.get(player__user__username=username)
         except models.Participant.DoesNotExist:
-            return JsonResponse({"error": 'Invalid player'}, status=400)
+            raise ValidationError('Invalid player')
 
         if self.active_participant != participant:
-            return JsonResponse({"error": 'Moving out of turn'}, status=400)
+            raise ValidationError('Moving out of turn')
 
-        from_rank, from_file = request_data['origin']
-        to_rank, to_file = request_data['destination']
+        from_rank, from_file = payload['origin']
+        to_rank, to_file = payload['destination']
         piece = self.current_board[from_rank][from_file]
         if piece.name != piece_name:
-            return JsonResponse({"error": 'Invalid move'}, status=400)
+            raise ValidationError('Invalid move')
 
-        request_data['piece'] = piece.pk
-        request_data['type'] = models.MoveType.objects.get_or_create(
-            name=request_data.pop('type')
+        payload['piece'] = piece.pk
+        payload['type'] = models.MoveType.objects.get_or_create(
+            name=payload.pop('type')
         )[0].pk
-        request_data['order'] = self.moves.count() + 1
-        request_data['notation'] = 'rank,file->rank,file'
-        request_data['game'] = [slug]
+        payload['order'] = self.moves.count() + 1
+        payload['notation'] = 'rank,file->rank,file'
+        payload['game'] = [slug]
 
-        move_data = {'model': 'xiangqi.move', 'fields': request_data}
+    def post(self, request, slug):
+        try:
+            payload = json.loads(request.body.decode("utf-8"))
+            jsonschema.validate(payload, self.post_schema)
+            self.validate_data(payload, slug)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": 'Error parsing request'}, status=400)
+        except (jsonschema.ValidationError, ValidationError) as e:
+            return JsonResponse({"error": str(e)}, status=400)
+
+        data = {'model': 'xiangqi.move', 'fields': payload}
 
         try:
-            deserialized = deserialize(json.dumps([move_data]))
+            deserialized = deserialize(json.dumps([data]))
             for obj in deserialized:
                 obj.object.save()
                 return JsonResponse({}, status=201)
