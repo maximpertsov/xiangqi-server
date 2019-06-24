@@ -1,10 +1,733 @@
 [
   {
+    "model": "xiangqi.position",
+    "pk": 1,
+    "fields": {
+      "rank": 0,
+      "file": 0
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 2,
+    "fields": {
+      "rank": 0,
+      "file": 1
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 3,
+    "fields": {
+      "rank": 0,
+      "file": 2
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 4,
+    "fields": {
+      "rank": 0,
+      "file": 3
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 5,
+    "fields": {
+      "rank": 0,
+      "file": 4
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 6,
+    "fields": {
+      "rank": 0,
+      "file": 5
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 7,
+    "fields": {
+      "rank": 0,
+      "file": 6
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 8,
+    "fields": {
+      "rank": 0,
+      "file": 7
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 9,
+    "fields": {
+      "rank": 0,
+      "file": 8
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 10,
+    "fields": {
+      "rank": 1,
+      "file": 0
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 11,
+    "fields": {
+      "rank": 1,
+      "file": 1
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 12,
+    "fields": {
+      "rank": 1,
+      "file": 2
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 13,
+    "fields": {
+      "rank": 1,
+      "file": 3
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 14,
+    "fields": {
+      "rank": 1,
+      "file": 4
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 15,
+    "fields": {
+      "rank": 1,
+      "file": 5
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 16,
+    "fields": {
+      "rank": 1,
+      "file": 6
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 17,
+    "fields": {
+      "rank": 1,
+      "file": 7
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 18,
+    "fields": {
+      "rank": 1,
+      "file": 8
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 19,
+    "fields": {
+      "rank": 2,
+      "file": 0
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 20,
+    "fields": {
+      "rank": 2,
+      "file": 1
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 21,
+    "fields": {
+      "rank": 2,
+      "file": 2
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 22,
+    "fields": {
+      "rank": 2,
+      "file": 3
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 23,
+    "fields": {
+      "rank": 2,
+      "file": 4
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 24,
+    "fields": {
+      "rank": 2,
+      "file": 5
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 25,
+    "fields": {
+      "rank": 2,
+      "file": 6
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 26,
+    "fields": {
+      "rank": 2,
+      "file": 7
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 27,
+    "fields": {
+      "rank": 2,
+      "file": 8
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 28,
+    "fields": {
+      "rank": 3,
+      "file": 0
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 29,
+    "fields": {
+      "rank": 3,
+      "file": 1
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 30,
+    "fields": {
+      "rank": 3,
+      "file": 2
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 31,
+    "fields": {
+      "rank": 3,
+      "file": 3
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 32,
+    "fields": {
+      "rank": 3,
+      "file": 4
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 33,
+    "fields": {
+      "rank": 3,
+      "file": 5
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 34,
+    "fields": {
+      "rank": 3,
+      "file": 6
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 35,
+    "fields": {
+      "rank": 3,
+      "file": 7
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 36,
+    "fields": {
+      "rank": 3,
+      "file": 8
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 37,
+    "fields": {
+      "rank": 4,
+      "file": 0
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 38,
+    "fields": {
+      "rank": 4,
+      "file": 1
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 39,
+    "fields": {
+      "rank": 4,
+      "file": 2
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 40,
+    "fields": {
+      "rank": 4,
+      "file": 3
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 41,
+    "fields": {
+      "rank": 4,
+      "file": 4
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 42,
+    "fields": {
+      "rank": 4,
+      "file": 5
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 43,
+    "fields": {
+      "rank": 4,
+      "file": 6
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 44,
+    "fields": {
+      "rank": 4,
+      "file": 7
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 45,
+    "fields": {
+      "rank": 4,
+      "file": 8
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 46,
+    "fields": {
+      "rank": 5,
+      "file": 0
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 47,
+    "fields": {
+      "rank": 5,
+      "file": 1
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 48,
+    "fields": {
+      "rank": 5,
+      "file": 2
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 49,
+    "fields": {
+      "rank": 5,
+      "file": 3
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 50,
+    "fields": {
+      "rank": 5,
+      "file": 4
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 51,
+    "fields": {
+      "rank": 5,
+      "file": 5
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 52,
+    "fields": {
+      "rank": 5,
+      "file": 6
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 53,
+    "fields": {
+      "rank": 5,
+      "file": 7
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 54,
+    "fields": {
+      "rank": 5,
+      "file": 8
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 55,
+    "fields": {
+      "rank": 6,
+      "file": 0
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 56,
+    "fields": {
+      "rank": 6,
+      "file": 1
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 57,
+    "fields": {
+      "rank": 6,
+      "file": 2
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 58,
+    "fields": {
+      "rank": 6,
+      "file": 3
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 59,
+    "fields": {
+      "rank": 6,
+      "file": 4
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 60,
+    "fields": {
+      "rank": 6,
+      "file": 5
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 61,
+    "fields": {
+      "rank": 6,
+      "file": 6
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 62,
+    "fields": {
+      "rank": 6,
+      "file": 7
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 63,
+    "fields": {
+      "rank": 6,
+      "file": 8
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 64,
+    "fields": {
+      "rank": 7,
+      "file": 0
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 65,
+    "fields": {
+      "rank": 7,
+      "file": 1
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 66,
+    "fields": {
+      "rank": 7,
+      "file": 2
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 67,
+    "fields": {
+      "rank": 7,
+      "file": 3
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 68,
+    "fields": {
+      "rank": 7,
+      "file": 4
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 69,
+    "fields": {
+      "rank": 7,
+      "file": 5
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 70,
+    "fields": {
+      "rank": 7,
+      "file": 6
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 71,
+    "fields": {
+      "rank": 7,
+      "file": 7
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 72,
+    "fields": {
+      "rank": 7,
+      "file": 8
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 73,
+    "fields": {
+      "rank": 8,
+      "file": 0
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 74,
+    "fields": {
+      "rank": 8,
+      "file": 1
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 75,
+    "fields": {
+      "rank": 8,
+      "file": 2
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 76,
+    "fields": {
+      "rank": 8,
+      "file": 3
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 77,
+    "fields": {
+      "rank": 8,
+      "file": 4
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 78,
+    "fields": {
+      "rank": 8,
+      "file": 5
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 79,
+    "fields": {
+      "rank": 8,
+      "file": 6
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 80,
+    "fields": {
+      "rank": 8,
+      "file": 7
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 81,
+    "fields": {
+      "rank": 8,
+      "file": 8
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 82,
+    "fields": {
+      "rank": 9,
+      "file": 0
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 83,
+    "fields": {
+      "rank": 9,
+      "file": 1
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 84,
+    "fields": {
+      "rank": 9,
+      "file": 2
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 85,
+    "fields": {
+      "rank": 9,
+      "file": 3
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 86,
+    "fields": {
+      "rank": 9,
+      "file": 4
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 87,
+    "fields": {
+      "rank": 9,
+      "file": 5
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 88,
+    "fields": {
+      "rank": 9,
+      "file": 6
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 89,
+    "fields": {
+      "rank": 9,
+      "file": 7
+    }
+  },
+  {
+    "model": "xiangqi.position",
+    "pk": 90,
+    "fields": {
+      "rank": 9,
+      "file": 8
+    }
+  },
+  {
     "model": "xiangqi.piece",
     "pk": 1,
     "fields": {
       "name": "r",
-      "starting_position": "0,0"
+      "origin": [
+        0,
+        0
+      ]
     }
   },
   {
@@ -12,7 +735,10 @@
     "pk": 2,
     "fields": {
       "name": "h",
-      "starting_position": "0,1"
+      "origin": [
+        0,
+        1
+      ]
     }
   },
   {
@@ -20,7 +746,10 @@
     "pk": 3,
     "fields": {
       "name": "e",
-      "starting_position": "0,2"
+      "origin": [
+        0,
+        2
+      ]
     }
   },
   {
@@ -28,7 +757,10 @@
     "pk": 4,
     "fields": {
       "name": "a",
-      "starting_position": "0,3"
+      "origin": [
+        0,
+        3
+      ]
     }
   },
   {
@@ -36,7 +768,10 @@
     "pk": 5,
     "fields": {
       "name": "k",
-      "starting_position": "0,4"
+      "origin": [
+        0,
+        4
+      ]
     }
   },
   {
@@ -44,7 +779,10 @@
     "pk": 6,
     "fields": {
       "name": "a",
-      "starting_position": "0,5"
+      "origin": [
+        0,
+        5
+      ]
     }
   },
   {
@@ -52,7 +790,10 @@
     "pk": 7,
     "fields": {
       "name": "e",
-      "starting_position": "0,6"
+      "origin": [
+        0,
+        6
+      ]
     }
   },
   {
@@ -60,7 +801,10 @@
     "pk": 8,
     "fields": {
       "name": "h",
-      "starting_position": "0,7"
+      "origin": [
+        0,
+        7
+      ]
     }
   },
   {
@@ -68,7 +812,10 @@
     "pk": 9,
     "fields": {
       "name": "r",
-      "starting_position": "0,8"
+      "origin": [
+        0,
+        8
+      ]
     }
   },
   {
@@ -76,7 +823,10 @@
     "pk": 10,
     "fields": {
       "name": "c",
-      "starting_position": "2,1"
+      "origin": [
+        2,
+        1
+      ]
     }
   },
   {
@@ -84,7 +834,10 @@
     "pk": 11,
     "fields": {
       "name": "c",
-      "starting_position": "2,7"
+      "origin": [
+        2,
+        7
+      ]
     }
   },
   {
@@ -92,7 +845,10 @@
     "pk": 12,
     "fields": {
       "name": "p",
-      "starting_position": "3,0"
+      "origin": [
+        3,
+        0
+      ]
     }
   },
   {
@@ -100,7 +856,10 @@
     "pk": 13,
     "fields": {
       "name": "p",
-      "starting_position": "3,2"
+      "origin": [
+        3,
+        2
+      ]
     }
   },
   {
@@ -108,7 +867,10 @@
     "pk": 14,
     "fields": {
       "name": "p",
-      "starting_position": "3,4"
+      "origin": [
+        3,
+        4
+      ]
     }
   },
   {
@@ -116,7 +878,10 @@
     "pk": 15,
     "fields": {
       "name": "p",
-      "starting_position": "3,6"
+      "origin": [
+        3,
+        6
+      ]
     }
   },
   {
@@ -124,7 +889,10 @@
     "pk": 16,
     "fields": {
       "name": "p",
-      "starting_position": "3,8"
+      "origin": [
+        3,
+        8
+      ]
     }
   },
   {
@@ -132,7 +900,10 @@
     "pk": 17,
     "fields": {
       "name": "P",
-      "starting_position": "6,0"
+      "origin": [
+        6,
+        0
+      ]
     }
   },
   {
@@ -140,7 +911,10 @@
     "pk": 18,
     "fields": {
       "name": "P",
-      "starting_position": "6,2"
+      "origin": [
+        6,
+        2
+      ]
     }
   },
   {
@@ -148,7 +922,10 @@
     "pk": 19,
     "fields": {
       "name": "P",
-      "starting_position": "6,4"
+      "origin": [
+        6,
+        4
+      ]
     }
   },
   {
@@ -156,7 +933,10 @@
     "pk": 20,
     "fields": {
       "name": "P",
-      "starting_position": "6,6"
+      "origin": [
+        6,
+        6
+      ]
     }
   },
   {
@@ -164,7 +944,10 @@
     "pk": 21,
     "fields": {
       "name": "P",
-      "starting_position": "6,8"
+      "origin": [
+        6,
+        8
+      ]
     }
   },
   {
@@ -172,7 +955,10 @@
     "pk": 22,
     "fields": {
       "name": "C",
-      "starting_position": "7,1"
+      "origin": [
+        7,
+        1
+      ]
     }
   },
   {
@@ -180,7 +966,10 @@
     "pk": 23,
     "fields": {
       "name": "C",
-      "starting_position": "7,7"
+      "origin": [
+        7,
+        7
+      ]
     }
   },
   {
@@ -188,7 +977,10 @@
     "pk": 24,
     "fields": {
       "name": "R",
-      "starting_position": "9,0"
+      "origin": [
+        9,
+        0
+      ]
     }
   },
   {
@@ -196,7 +988,10 @@
     "pk": 25,
     "fields": {
       "name": "H",
-      "starting_position": "9,1"
+      "origin": [
+        9,
+        1
+      ]
     }
   },
   {
@@ -204,7 +999,10 @@
     "pk": 26,
     "fields": {
       "name": "E",
-      "starting_position": "9,2"
+      "origin": [
+        9,
+        2
+      ]
     }
   },
   {
@@ -212,7 +1010,10 @@
     "pk": 27,
     "fields": {
       "name": "A",
-      "starting_position": "9,3"
+      "origin": [
+        9,
+        3
+      ]
     }
   },
   {
@@ -220,7 +1021,10 @@
     "pk": 28,
     "fields": {
       "name": "K",
-      "starting_position": "9,4"
+      "origin": [
+        9,
+        4
+      ]
     }
   },
   {
@@ -228,7 +1032,10 @@
     "pk": 29,
     "fields": {
       "name": "A",
-      "starting_position": "9,5"
+      "origin": [
+        9,
+        5
+      ]
     }
   },
   {
@@ -236,7 +1043,10 @@
     "pk": 30,
     "fields": {
       "name": "E",
-      "starting_position": "9,6"
+      "origin": [
+        9,
+        6
+      ]
     }
   },
   {
@@ -244,7 +1054,10 @@
     "pk": 31,
     "fields": {
       "name": "H",
-      "starting_position": "9,7"
+      "origin": [
+        9,
+        7
+      ]
     }
   },
   {
@@ -252,7 +1065,10 @@
     "pk": 32,
     "fields": {
       "name": "R",
-      "starting_position": "9,8"
+      "origin": [
+        9,
+        8
+      ]
     }
   }
 ]
