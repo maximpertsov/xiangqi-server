@@ -19,7 +19,7 @@ class Piece(models.Model):
     color = models.CharField(max_length=32, choices=Color.choices())
 
     def natural_key(self):
-        return [self.name] + self.origin.natural_key()
+        return tuple([self.name] + list(self.origin.natural_key()))
 
     natural_key.dependencies = ['xiangqi.position']
 
