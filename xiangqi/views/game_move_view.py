@@ -1,124 +1,20 @@
 import json
-from copy import deepcopy
 from functools import partial
-from itertools import groupby
 
 import jsonschema
 from django.core import serializers
-from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
-from django.utils.functional import cached_property
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic.detail import SingleObjectMixin, View
+from django.views.generic.detail import View
 
 from xiangqi import models
 
+from xiangqi.views import GameMixin
+
 serialize = partial(serializers.serialize, 'json', use_natural_foreign_keys=True)
 deserialize = partial(serializers.deserialize, 'json', use_natural_foreign_keys=True)
-
-
-class GameMixin(SingleObjectMixin):
-    model = models.Game
-
-    @staticmethod
-    def parse_position(position):
-        return [int(dim.strip()) for dim in position.split(',')]
-
-    @cached_property
-    def game(self):
-        return self.get_object()
-
-    @cached_property
-    def ranks(self):
-        ranks, _ = self.parse_position(self.game.board_dimensions)
-        return ranks
-
-    @cached_property
-    def files(self):
-        _, files = self.parse_position(self.game.board_dimensions)
-        return files
-
-    @property
-    def moves(self):
-        return self.game.move_set.select_related(
-            'piece', 'origin', 'destination'
-        ).order_by('order')
-
-    @cached_property
-    def initial_board(self):
-        result = [[None for _ in range(self.files)] for _ in range(self.ranks)]
-        for piece in models.Piece.objects.all().select_related('origin'):
-            result[piece.origin.rank][piece.origin.file] = piece
-        return result
-
-    @property
-    def current_board(self):
-        result = deepcopy(self.initial_board)
-        for move in self.moves.select_related('origin', 'destination'):
-            result[move.origin.rank][move.origin.file] = None
-            result[move.destination.rank][move.destination.file] = move.piece
-
-        return result
-
-    @staticmethod
-    def fen_rank(rank):
-        return ''.join(
-            str(sum(1 for _ in g)) if p is None else p.name for p, g in groupby(rank)
-        )
-
-    def board_fen(self, board):
-        return '/'.join(self.fen_rank(rank) for rank in board)
-
-    @property
-    def participants(self):
-        return self.game.participant_set.select_related('player', 'player__user').all()
-
-    @property
-    def active_participant(self):
-        if self.moves.exists():
-            last_move_participant = self.moves.last().participant
-            return self.participants.exclude(pk=last_move_participant.pk).first()
-        return self.participants.filter(color='red').first()
-
-    @cached_property
-    def players_data_by_participant(self):
-        return {
-            tuple(participant.natural_key()): {
-                'name': participant.player.user.username,
-                'color': participant.color,
-                'score': participant.score,
-            }
-            for participant in self.participants
-        }
-
-
-@method_decorator(csrf_exempt, name="dispatch")
-class GameView(GameMixin, View):
-    @cached_property
-    def cache_key(self):
-        return 'initial_fen_{}'.format(self.kwargs[self.slug_url_kwarg])
-
-    @cached_property
-    def initial_fen(self):
-        result = cache.get(self.cache_key)
-        if result is None:
-            result = self.board_fen(self.initial_board)
-            cache.set(self.cache_key, result, 100)
-        return result
-
-    def get(self, request, slug):
-        serialized = serialize([self.game])
-        result = json.loads(serialized)[0]['fields']
-        del result['board_dimensions']
-        result['ranks'] = self.ranks
-        result['files'] = self.files
-        result['initial_fen'] = self.initial_fen
-        result['players'] = list(self.players_data_by_participant.values())
-        # TODO add test
-        result['active_color'] = getattr(self.active_participant, 'color', 'red')
-        return JsonResponse(result, status=200)
 
 
 @method_decorator(csrf_exempt, name="dispatch")
