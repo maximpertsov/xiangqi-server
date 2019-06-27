@@ -27,4 +27,4 @@ class Token(models.Model):
 
     string = models.CharField(max_length=255, unique=True)
     created_on = models.DateTimeField()
-    expires_on = models.PositiveIntegerField()
+    expires_on = models.DateTimeField()
