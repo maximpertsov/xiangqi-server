@@ -12,6 +12,9 @@ class TokenManager(models.Manager):
         kwargs.update(string=string)
         return super().create(**kwargs)
 
+    def bulk_create(self):
+        raise NotImplementedError('Bulk token creation not allowed')
+
 
 class Token(models.Model):
     string = models.CharField(max_length=255, unique=True)
