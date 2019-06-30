@@ -11,7 +11,7 @@ class TokenManager(models.Manager):
     def create(self, user, **kwargs):
         created_on = timezone.now()
         expires_on = created_on + timezone.timedelta(seconds=DEFAULT_TOKEN_LIFE)
-        payload = {'sub': user.username, 'exp': expires_on.isoformat()}
+        payload = {'sub': user.username, 'exp': int(expires_on.timestamp())}
         token_string = jwt.encode(payload).decode()
         kwargs.update(string=token_string, created_on=created_on, expires_on=expires_on)
         return super().create(**kwargs)

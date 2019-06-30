@@ -30,7 +30,7 @@ class AuthenticateView(View):
 
     def post(self, request):
         try:
-            user = None  # self.get_user_from_cookie(request)
+            user = self.get_user_from_cookie(request)
             if user is None:
                 user = self.get_user_from_payload(request)
                 if user is None:
@@ -58,7 +58,9 @@ class AuthenticateView(View):
         User = get_user_model()
 
         try:
-            token = self.get_and_expire_active_token(request.COOKIES['access_token'])
+            string = request.COOKIES['access_token']
+            token = self.get_and_expire_active_token(string)
+            print(token.string)
             return token.get_user()
         except (KeyError, Token.DoesNotExist, User.DoesNotExist):
             return
@@ -70,7 +72,7 @@ class AuthenticateView(View):
 
     def get_and_expire_active_token(self, string):
         now = timezone.now()
-        token = Token.objects.get(string=string, expires_on__lt=now)
+        token = Token.objects.get(string=string, expires_on__gt=now)
         token.expires_on = now
         token.save()
         return token
