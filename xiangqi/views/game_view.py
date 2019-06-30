@@ -4,9 +4,7 @@ from functools import partial
 from django.core import serializers
 from django.core.cache import cache
 from django.http import JsonResponse
-from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.detail import View
 
 from xiangqi.views import GameMixin
@@ -14,7 +12,6 @@ from xiangqi.views import GameMixin
 serialize = partial(serializers.serialize, 'json', use_natural_foreign_keys=True)
 
 
-@method_decorator(csrf_exempt, name="dispatch")
 class GameView(GameMixin, View):
     @cached_property
     def cache_key(self):

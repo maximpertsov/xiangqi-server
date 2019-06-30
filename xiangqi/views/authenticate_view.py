@@ -5,9 +5,7 @@ from django.contrib.auth import authenticate, get_user_model
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.utils import timezone
-from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
 
 from xiangqi.models import Token
 
@@ -15,7 +13,6 @@ JWT_COOKIE = 'access_token'
 
 
 # TODO: break this up into a login and authenticate view?
-@method_decorator(csrf_exempt, name="dispatch")
 class AuthenticateView(View):
     @property
     def post_schema(self):
