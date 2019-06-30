@@ -5,7 +5,8 @@
     "fields": {
       "username": "jkalltheway",
       "first_name": "Jason",
-      "last_name": "Kuang"
+      "last_name": "Kuang",
+      "password": "pbkdf2_sha256$150000$zl6H28KvBqYi$BqQcbTwEgvgv5QLafsOV3YTPwi+GsVaDT6EAUmZ7XAo="
     }
   },
   {
@@ -14,7 +15,8 @@
     "fields": {
       "username": "bycepto",
       "first_name": "Max",
-      "last_name": "Pertsov"
+      "last_name": "Pertsov",
+      "password": "pbkdf2_sha256$150000$dDPWs54CBWY9$uQ+OVUocBjRzy4RfrRHZvcyGTikxYjMZ/MGOevANPK0="
     }
   },
   {

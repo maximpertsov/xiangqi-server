@@ -78,3 +78,19 @@ def test_post_move_201_then_get(client, game_with_players, pieces):
     r.status_code == 200
     data = r.json()
     assert len(data['moves']) == 1
+
+
+@pytest.mark.django_db
+def test_authenticate(client, user):
+    password = 's0_s0_secure'
+    user.set_password(password)
+    user.save()
+
+    data = {'username': user.username, 'password': password}
+
+    r = client.post(
+        '/api/authenticate', data=json.dumps(data), content_type="application/json"
+    )
+    assert r.status_code == 201
+    response_data = r.json()
+    assert 'access_token' in response_data
