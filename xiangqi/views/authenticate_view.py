@@ -26,6 +26,8 @@ class AuthenticateView(View):
 
     def post(self, request):
         try:
+            self.get_cookie_token(request)
+
             payload = json.loads(request.body.decode())
             jsonschema.validate(payload, self.post_schema)
             token = self.get_token(payload)
@@ -44,6 +46,9 @@ class AuthenticateView(View):
             return JsonResponse({"error": e.message}, status=400)
         except ValidationError as e:
             return JsonResponse({"error": e.message}, status=401)
+
+    def get_cookie_token(self, request):
+        print(request.COOKIES.get('access_token'))
 
     def get_token(self, payload):
         user = authenticate(**payload)
