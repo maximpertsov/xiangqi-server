@@ -7,4 +7,4 @@ import jwt
 ALGO = 'HS256'
 
 encode = partial(jwt.encode, key=settings.JWT_SECRET, algorithm=ALGO)
-decode = partial(jwt.decode, key=settings.JWT_SECRET, algorithms=[ALGO])
+decode = partial(jwt.decode, key=settings.JWT_SECRET, verify=True, algorithms=[ALGO])

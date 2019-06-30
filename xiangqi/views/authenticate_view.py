@@ -1,16 +1,20 @@
 import json
 
 import jsonschema
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
 from xiangqi.models import Token
 
+JWT_COOKIE = 'access_token'
 
+
+# TODO: break this up into a login and authenticate view?
 @method_decorator(csrf_exempt, name="dispatch")
 class AuthenticateView(View):
     @property
@@ -26,14 +30,17 @@ class AuthenticateView(View):
 
     def post(self, request):
         try:
-            self.get_cookie_token(request)
+            user = None  # self.get_user_from_cookie(request)
+            if user is None:
+                user = self.get_user_from_payload(request)
+                if user is None:
+                    raise ValidationError('Authentication failed')
 
-            payload = json.loads(request.body.decode())
-            jsonschema.validate(payload, self.post_schema)
-            token = self.get_token(payload)
+            token = self.get_new_token(user)
+
             response = JsonResponse({'access_token': token.string}, status=201)
             response.set_cookie(
-                'access_token',
+                JWT_COOKIE,
                 token.string,
                 expires=token.expires_on,
                 domain='localhost',
@@ -47,12 +54,22 @@ class AuthenticateView(View):
         except ValidationError as e:
             return JsonResponse({"error": e.message}, status=401)
 
-    def get_cookie_token(self, request):
-        print(request.COOKIES.get('access_token'))
+    def get_user_from_cookie(self, request):
+        User = get_user_model()
 
-    def get_token(self, payload):
-        user = authenticate(**payload)
-        print(user)
-        if user is None:
-            raise ValidationError('Authentication failed')
+        try:
+            token = self.get_active_token(request.COOKIES['access_token'])
+            return token.get_user()
+        except (KeyError, Token.DoesNotExist, User.DoesNotExist):
+            return
+
+    def get_user_from_payload(self, request):
+        payload = json.loads(request.body.decode())
+        jsonschema.validate(payload, self.post_schema)
+        return authenticate(**payload)
+
+    def get_active_token(self, string):
+        return Token.objects.get(string=string, expires_on__lt=timezone.now)
+
+    def get_new_token(self, user):
         return Token.objects.create(user)
