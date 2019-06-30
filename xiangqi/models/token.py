@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 
@@ -10,7 +11,7 @@ class TokenManager(models.Manager):
     def create(self, user, **kwargs):
         created_on = timezone.now()
         expires_on = created_on + timezone.timedelta(seconds=DEFAULT_TOKEN_LIFE)
-        payload = {'sub': user.username, 'exp': expires_on.isoformat()}
+        payload = {'sub': user.username, 'exp': int(expires_on.timestamp())}
         token_string = jwt.encode(payload).decode()
         kwargs.update(string=token_string, created_on=created_on, expires_on=expires_on)
         return super().create(**kwargs)
@@ -28,3 +29,9 @@ class Token(models.Model):
     string = models.CharField(max_length=255, unique=True)
     created_on = models.DateTimeField()
     expires_on = models.DateTimeField()
+
+    # TODO: add to user manager (requires users proxy class)
+    def get_user(self):
+        User = get_user_model()
+        user_info = jwt.decode(self.string)
+        return User.objects.get(username=user_info['sub'])
