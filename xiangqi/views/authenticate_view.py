@@ -29,7 +29,7 @@ class AuthenticateView(View):
             payload = json.loads(request.body.decode())
             jsonschema.validate(payload, self.post_schema)
             token = self.get_token(payload)
-            return JsonResponse({'access_token': str(token)}, status=201)
+            return JsonResponse({'access_token': token.string}, status=201)
         except json.JSONDecodeError:
             return JsonResponse({"error": 'Error parsing request'}, status=400)
         except jsonschema.ValidationError as e:
@@ -42,4 +42,4 @@ class AuthenticateView(View):
         print(user)
         if user is None:
             raise ValidationError('Authentication failed')
-        return Token.objects.create(user).string
+        return Token.objects.create(user)
