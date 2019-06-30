@@ -5,7 +5,9 @@ import jsonschema
 from django.core import serializers
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
-from django.views.generic.detail import View
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.views import View
 
 from xiangqi import models
 from xiangqi.views import GameMixin
@@ -14,6 +16,7 @@ serialize = partial(serializers.serialize, 'json', use_natural_foreign_keys=True
 deserialize = partial(serializers.deserialize, 'json', use_natural_foreign_keys=True)
 
 
+@method_decorator(csrf_exempt, name="dispatch")
 class GameMoveView(GameMixin, View):
     @property
     def post_schema(self):

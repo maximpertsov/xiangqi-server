@@ -58,9 +58,8 @@ class AuthenticateView(View):
         User = get_user_model()
 
         try:
-            string = request.COOKIES['access_token']
+            string = request.COOKIES[JWT_COOKIE]
             token = self.get_and_expire_active_token(string)
-            print(token.string)
             return token.get_user()
         except (KeyError, Token.DoesNotExist, User.DoesNotExist):
             return
