@@ -58,7 +58,7 @@ class AuthenticateView(View):
         User = get_user_model()
 
         try:
-            token = self.get_active_token(request.COOKIES['access_token'])
+            token = self.get_and_expire_active_token(request.COOKIES['access_token'])
             return token.get_user()
         except (KeyError, Token.DoesNotExist, User.DoesNotExist):
             return
@@ -68,8 +68,12 @@ class AuthenticateView(View):
         jsonschema.validate(payload, self.post_schema)
         return authenticate(**payload)
 
-    def get_active_token(self, string):
-        return Token.objects.get(string=string, expires_on__lt=timezone.now)
+    def get_and_expire_active_token(self, string):
+        now = timezone.now()
+        token = Token.objects.get(string=string, expires_on__lt=now)
+        token.expires_on = now
+        token.save()
+        return token
 
     def get_new_token(self, user):
         return Token.objects.create(user)
