@@ -1,19 +1,26 @@
-import json
-from functools import partial
-
-from django.core import serializers
+from django.core.cache import cache
 from django.http import JsonResponse
+from django.utils.functional import cached_property
 from django.views.generic.detail import View
 
 from xiangqi.views import GameMixin
 
-serialize = partial(serializers.serialize, 'json', use_natural_foreign_keys=True)
+CACHE_TTL = 3600
 
 
 class GameCurrentPlayerView(GameMixin, View):
+    @cached_property
+    def cache_key(self):
+        return 'current_player_{}'.format(self.kwargs[self.slug_url_kwarg])
+
+    @cached_property
+    def current_player(self):
+        result = cache.get(self.cache_key)
+        if result is None:
+            result = self.active_participant.player.user.username
+            cache.set(self.cache_key, result, CACHE_TTL)
+        return result
+
     # TODO: cache result for faster polling
     def get(self, request, slug):
-        serialized = serialize([self.active_participant])
-        data = json.loads(serialized)
-        current_player = data[0].pop('fields')['player']
-        return JsonResponse({'player': current_player}, status=200)
+        return JsonResponse({'player': self.current_player}, status=200)
