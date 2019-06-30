@@ -31,7 +31,7 @@ class AuthenticateView(View):
             token = self.get_token(payload)
             response = JsonResponse({'access_token': token.string}, status=201)
             response.set_cookie(
-                'access-token',
+                'access_token',
                 token.string,
                 expires=token.expires_on,
                 domain='localhost',
