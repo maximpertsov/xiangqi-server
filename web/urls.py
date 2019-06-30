@@ -22,6 +22,6 @@ urlpatterns = [
     path('api/authenticate', views.AuthenticateView.as_view()),
     path('api/game/<str:slug>/moves', views.GameMoveView.as_view()),
     path('api/game/<str:slug>', views.GameView.as_view()),
-    path('api/game/<str:slug>/current-player', views.GameCurrentPlayerView.as_view()),
+    path('api/game/<str:slug>/last-update', views.LastUpdateView.as_view()),
     path('admin/', admin.site.urls),
 ]

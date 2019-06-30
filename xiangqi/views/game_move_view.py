@@ -6,6 +6,7 @@ from django.core import serializers
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.views import View
@@ -97,10 +98,11 @@ class GameMoveView(GameMixin, View):
         payload['notation'] = 'rank,file->rank,file'
         payload['game'] = [slug]
 
-    # TODO: centralize cache key
     @cached_property
     def cache_key(self):
-        return 'current_player_{}'.format(self.kwargs[self.slug_url_kwarg])
+        from xiangqi.views import LastUpdateView
+
+        return LastUpdateView.get_cache_key(self.kwargs[self.slug_url_kwarg])
 
     def post(self, request, slug):
         try:
@@ -118,8 +120,8 @@ class GameMoveView(GameMixin, View):
             deserialized = deserialize(json.dumps([data]))
             for obj in deserialized:
                 obj.object.save()
-                # clear current player cache
-                cache.delete(self.cache_key)
+                now = timezone.now()
+                cache.set(self.cache_key, int(now.timestamp()), timeout=None)
                 return JsonResponse({}, status=201)
         except serializers.base.DeserializationError:
             return JsonResponse({"error": "Could not save move"}, status=400)
