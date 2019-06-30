@@ -8,7 +8,6 @@ from django.http import JsonResponse
 from django.views.generic.detail import View
 
 from xiangqi import models
-
 from xiangqi.views import GameMixin
 
 serialize = partial(serializers.serialize, 'json', use_natural_foreign_keys=True)
