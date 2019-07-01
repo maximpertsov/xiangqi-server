@@ -19,3 +19,6 @@ CACHES = {'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
 
 # CORS configuration
 CORS_ORIGIN_WHITELIST = ['http://localhost:3000', 'http://localhost:5000']
+
+# JWT configuration
+JWT_COOKIE_DOMAIN = 'localhost'

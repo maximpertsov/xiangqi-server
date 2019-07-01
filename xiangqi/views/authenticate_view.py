@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
+from django.conf import settings
 
 from xiangqi.models import Token
 
@@ -44,7 +45,7 @@ class AuthenticateView(View):
                 JWT_COOKIE,
                 token.string,
                 expires=token.expires_on,
-                domain='localhost',
+                domain=settings.JWT_COOKIE_DOMAIN,
                 httponly=True,
             )
             return response
