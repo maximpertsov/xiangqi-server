@@ -7,10 +7,10 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.utils import timezone
-from django.utils.decorators import method_decorator
+# from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
+# from django.views.decorators.csrf import csrf_exempt
 
 from xiangqi import models
 from xiangqi.views import GameMixin
@@ -19,7 +19,7 @@ serialize = partial(serializers.serialize, 'json', use_natural_foreign_keys=True
 deserialize = partial(serializers.deserialize, 'json', use_natural_foreign_keys=True)
 
 
-@method_decorator(csrf_exempt, name="dispatch")
+# @method_decorator(csrf_exempt, name="dispatch")
 class GameMoveView(GameMixin, View):
     @property
     def post_schema(self):
