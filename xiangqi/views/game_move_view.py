@@ -3,9 +3,12 @@ from functools import partial
 
 import jsonschema
 from django.core import serializers
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
-from django.views.generic.detail import View
+from django.utils import timezone
+from django.utils.functional import cached_property
+from django.views import View
 
 from xiangqi import models
 from xiangqi.views import GameMixin
@@ -92,6 +95,12 @@ class GameMoveView(GameMixin, View):
         payload['notation'] = 'rank,file->rank,file'
         payload['game'] = [slug]
 
+    @cached_property
+    def cache_key(self):
+        from xiangqi.views import LastUpdateView
+
+        return LastUpdateView.get_cache_key(self.kwargs[self.slug_url_kwarg])
+
     def post(self, request, slug):
         try:
             payload = json.loads(request.body.decode("utf-8"))
@@ -108,6 +117,8 @@ class GameMoveView(GameMixin, View):
             deserialized = deserialize(json.dumps([data]))
             for obj in deserialized:
                 obj.object.save()
+                now = timezone.now()
+                cache.set(self.cache_key, int(now.timestamp()), timeout=None)
                 return JsonResponse({}, status=201)
         except serializers.base.DeserializationError:
             return JsonResponse({"error": "Could not save move"}, status=400)

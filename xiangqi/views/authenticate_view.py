@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
 from xiangqi.models import Token
 
@@ -15,6 +15,7 @@ JWT_COOKIE = 'access_token'
 
 
 # TODO: break this up into a login and authenticate view?
+@method_decorator(ensure_csrf_cookie, name="dispatch")
 @method_decorator(csrf_exempt, name="dispatch")
 class AuthenticateView(View):
     @property
@@ -58,9 +59,8 @@ class AuthenticateView(View):
         User = get_user_model()
 
         try:
-            string = request.COOKIES['access_token']
+            string = request.COOKIES[JWT_COOKIE]
             token = self.get_and_expire_active_token(string)
-            print(token.string)
             return token.get_user()
         except (KeyError, Token.DoesNotExist, User.DoesNotExist):
             return

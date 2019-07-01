@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from xiangqi.views import AuthenticateView, GameMoveView, GameView
+from xiangqi import views
 
 urlpatterns = [
-    path('api/authenticate', AuthenticateView.as_view()),
-    path('api/game/<str:slug>/moves', GameMoveView.as_view()),
-    path('api/game/<str:slug>', GameView.as_view()),
+    path('api/authenticate', views.AuthenticateView.as_view()),
+    path('api/game/<str:slug>/moves', views.GameMoveView.as_view()),
+    path('api/game/<str:slug>', views.GameView.as_view()),
+    path('api/game/<str:slug>/last-update', views.LastUpdateView.as_view()),
     path('admin/', admin.site.urls),
 ]
