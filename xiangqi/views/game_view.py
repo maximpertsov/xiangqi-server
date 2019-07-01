@@ -5,7 +5,7 @@ from django.core import serializers
 from django.core.cache import cache
 from django.http import JsonResponse
 from django.utils.functional import cached_property
-from django.views.generic.detail import View
+from django.views import View
 
 from xiangqi.views import GameMixin
 
