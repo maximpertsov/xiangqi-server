@@ -105,7 +105,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # CORS configuration
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000', 'http://localhost:5000']
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_HEADERS = default_headers + ('set-cookie',)
