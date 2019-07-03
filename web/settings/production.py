@@ -19,7 +19,7 @@ DATABASES = {'default': dj_database_url.config(conn_max_age=600)}
 CACHES = {'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}}
 
 # CORS configuration
-CORS_ORIGIN_WHITELIST = ['https://localhost:3000', 'http://localhost:5000']
+CORS_ORIGIN_WHITELIST = ['https://maximpertsov.github.io']
 
 # JWT configuration
-JWT_COOKIE_DOMAIN = 'localhost'
+JWT_COOKIE_DOMAIN = 'maximpertsov.github.io'
