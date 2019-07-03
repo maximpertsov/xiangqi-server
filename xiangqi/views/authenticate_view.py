@@ -47,6 +47,7 @@ class AuthenticateView(View):
                 expires=token.expires_on,
                 domain=settings.JWT_COOKIE_DOMAIN,
                 httponly=True,
+                samesite='Lax',
             )
             return response
         except json.JSONDecodeError:
