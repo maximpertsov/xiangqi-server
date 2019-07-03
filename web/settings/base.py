@@ -108,7 +108,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # CORS configuration
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = default_headers + ('set-cookie',)
+CORS_ALLOW_HEADERS = default_headers + ('set-cookie', 'x-pingother')
 
 # JWT configuration
 JWT_COOKIE_DOMAIN = None
