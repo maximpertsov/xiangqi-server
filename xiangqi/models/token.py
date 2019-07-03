@@ -1,8 +1,8 @@
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 
 from xiangqi.lib import jwt
+from xiangqi.models import User
 
 DEFAULT_TOKEN_LIFE = 3600
 
@@ -32,6 +32,5 @@ class Token(models.Model):
 
     # TODO: add to user manager (requires users proxy class)
     def get_user(self):
-        User = get_user_model()
         user_info = jwt.decode(self.string)
         return User.objects.get(username=user_info['sub'])

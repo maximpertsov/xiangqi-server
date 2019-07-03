@@ -1,10 +1,8 @@
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-
-User = get_user_model()
+from .user import User
 
 
 class PlayerManager(models.Manager):
@@ -18,11 +16,8 @@ class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rating = models.PositiveIntegerField(default=1500)
 
-    def get_username(self):
-        return self.user.username
-
     def natural_key(self):
-        return self.get_username()
+        return self.user.natural_key()
 
     natural_key.dependencies = [User._meta.app_label + '.' + User._meta.model_name]
 
@@ -30,12 +25,12 @@ class Player(models.Model):
         return self.get_username()
 
 
-@receiver(post_save, sender=get_user_model())
+@receiver(post_save, sender=User)
 def create_player(sender, instance, created, **kwargs):
     if created:
         Player.objects.create(user=instance)
 
 
-@receiver(post_save, sender=get_user_model())
+@receiver(post_save, sender=User)
 def save_player(sender, instance, **kwargs):
     instance.player.save()
