@@ -1,12 +1,11 @@
 import factory as f
-from django.contrib.auth import get_user_model
 
 from xiangqi import models as m
 
 
 class UserFactory(f.DjangoModelFactory):
     class Meta:
-        model = get_user_model()
+        model = m.User
         django_get_or_create = ("username",)
 
     first_name = f.Faker('first_name')

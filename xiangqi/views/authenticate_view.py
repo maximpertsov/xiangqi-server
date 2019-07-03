@@ -1,16 +1,16 @@
 import json
 
 import jsonschema
-from django.contrib.auth import authenticate, get_user_model
+from django.conf import settings
+from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
-from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 
-from xiangqi.models import Token
+from xiangqi.models import Token, User
 
 JWT_COOKIE = 'access_token'
 
@@ -57,8 +57,6 @@ class AuthenticateView(View):
             return JsonResponse({"error": e.message}, status=401)
 
     def get_user_from_cookie(self, request):
-        User = get_user_model()
-
         try:
             string = request.COOKIES[JWT_COOKIE]
             token = self.get_and_expire_active_token(string)
