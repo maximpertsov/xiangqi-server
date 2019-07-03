@@ -41,16 +41,12 @@ class AuthenticateView(View):
             token = self.get_new_token(user)
 
             response = JsonResponse({'access_token': token.string}, status=201)
-
-            # TODO: add to settings
-            response['X-Frame-Options'] = 'allow from https://xchess.herokuapp.com'
             response.set_cookie(
                 JWT_COOKIE,
                 token.string,
                 expires=token.expires_on,
                 domain=settings.JWT_COOKIE_DOMAIN,
                 httponly=True,
-                samesite='Lax',
             )
             return response
         except json.JSONDecodeError:
