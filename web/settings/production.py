@@ -23,3 +23,4 @@ CORS_ORIGIN_WHITELIST = ['https://maximpertsov.github.io']
 
 # JWT configuration
 JWT_COOKIE_DOMAIN = 'maximpertsov.github.io'
+CSRF_TRUSTED_ORIGINS = [JWT_COOKIE_DOMAIN]
