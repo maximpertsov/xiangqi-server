@@ -20,6 +20,8 @@ from xiangqi import views
 
 urlpatterns = [
     path('api/authenticate', views.AuthenticateView.as_view()),
+    path('api/csrf', views.csrf),
+    path('api/ping', views.ping),
     path('api/game/<str:slug>/moves', views.GameMoveView.as_view()),
     path('api/game/<str:slug>', views.GameView.as_view()),
     path('api/game/<str:slug>/last-update', views.LastUpdateView.as_view()),
