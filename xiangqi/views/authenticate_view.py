@@ -45,7 +45,7 @@ class AuthenticateView(View):
                 JWT_COOKIE,
                 token.string,
                 expires=token.expires_on,
-                domain=settings.JWT_COOKIE_DOMAIN,
+                domain=settings.CLIENT_DOMAIN,
                 httponly=True,
             )
             return response
