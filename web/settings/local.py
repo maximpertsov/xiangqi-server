@@ -1,3 +1,5 @@
+import itertools
+
 import dj_database_url
 
 from web.settings.base import *
@@ -19,8 +21,11 @@ CACHES = {'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
 
 # CORS configuration
 CLIENT_DOMAIN = '127.0.0.1'
+WHITELIST_DOMAINS = [CLIENT_DOMAIN, 'localhost']
+WHITELIST_PORTS = [3000, 5000]
 CORS_ORIGIN_WHITELIST = [
-    url.format(CLIENT_DOMAIN) for url in ('http://{}:3000', 'http://{}:5000')
+    'http://{}:{}'.format(domain, port)
+    for domain, port in itertools.product(WHITELIST_DOMAINS, WHITELIST_PORTS)
 ]
 
 # CSRF
