@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
 
 from xiangqi.models import Token, User
 
@@ -15,7 +16,7 @@ JWT_COOKIE = 'access_token'
 
 
 # TODO: break this up into a login and authenticate view?
-@ensure_csrf_cookie
+@method_decorator(ensure_csrf_cookie, name='dispatch')
 class AuthenticateView(View):
     @property
     def post_schema(self):
