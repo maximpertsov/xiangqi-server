@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views import View
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from xiangqi.models import Token, User
 
@@ -14,6 +15,7 @@ JWT_COOKIE = 'access_token'
 
 
 # TODO: break this up into a login and authenticate view?
+@ensure_csrf_cookie
 class AuthenticateView(View):
     @property
     def post_schema(self):
