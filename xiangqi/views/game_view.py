@@ -36,6 +36,4 @@ class GameView(GameMixin, View):
         result['files'] = self.files
         result['initial_fen'] = self.initial_fen
         result['players'] = list(self.players_data_by_participant.values())
-        # TODO add test
-        result['active_color'] = getattr(self.active_participant, 'color', 'red')
         return JsonResponse(result, status=200)
