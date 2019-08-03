@@ -117,7 +117,7 @@ class GameMoveView(GameMixin, View):
             deserialized = deserialize(json.dumps([data]))
             for obj in deserialized:
                 obj.object.save()
-                cache.set(self.cache_key, models.Move.objects.count, timeout=None)
+                cache.set(self.cache_key, models.Move.objects.count(), timeout=None)
                 return JsonResponse({}, status=201)
         except serializers.base.DeserializationError:
             return JsonResponse({"error": "Could not save move"}, status=400)
