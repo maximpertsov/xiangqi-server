@@ -79,6 +79,13 @@ def test_post_move_201_then_get(client, game_with_players, pieces):
     data = r.json()
     assert len(data['moves']) == 1
 
+    # TODO: move to own unit test
+    # Test move count api
+    r = client.get('/api/game/{}/move-count'.format(game_with_players.slug))
+    assert r.status_code == 200
+    data = r.json()
+    assert data['move_count'] == 1
+
 
 @pytest.mark.django_db
 def test_authenticate(client, user):
