@@ -24,7 +24,6 @@ urlpatterns = [
     path('api/ping', views.ping),
     path('api/game/<str:slug>/moves', views.GameMoveView.as_view()),
     path('api/game/<str:slug>', views.GameView.as_view()),
-    path('api/game/<str:slug>/last-update', views.LastUpdateView.as_view()),
     path('api/game/<str:slug>/move-count', views.MoveCountView.as_view()),
     path('admin/', admin.site.urls),
 ]
