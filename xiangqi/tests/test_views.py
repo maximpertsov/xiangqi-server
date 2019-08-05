@@ -75,7 +75,7 @@ def test_post_move_201_then_get(client, game_with_players, pieces):
     assert r.status_code == 201
 
     r = client.get(url)
-    r.status_code == 200
+    assert r.status_code == 200
     data = r.json()
     assert len(data['moves']) == 1
 
