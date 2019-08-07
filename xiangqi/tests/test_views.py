@@ -61,6 +61,27 @@ def test_get_game_pieces(client, game, pieces):
 
 
 @pytest.mark.django_db
+def test_get_games_for_non_participant(client, game_with_players):
+    url = '/api/player/{}/games'.format('FAKE')
+    r = client.get(url)
+    assert r.status_code == 200
+
+    data = r.json()
+    assert data['games'] == []
+
+
+@pytest.mark.django_db
+def test_get_games_for_participant(client, game_with_players):
+    username = game_with_players.participant_set.first().player.user.username
+    url = '/api/player/{}/games'.format(username)
+    r = client.get(url)
+    assert r.status_code == 200
+
+    data = r.json()
+    assert data['games'] == [{'slug': game_with_players.slug}]
+
+
+@pytest.mark.django_db
 def test_post_move_201_then_get(client, game_with_players, pieces):
     participant = game_with_players.participant_set.first()
     url = '/api/game/{}/moves'.format(game_with_players.slug)
