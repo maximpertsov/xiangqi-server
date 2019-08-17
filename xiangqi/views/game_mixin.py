@@ -80,3 +80,15 @@ class GameMixin(SingleObjectMixin):
             }
             for participant in self.participants
         }
+
+    @cached_property
+    def red_player(self):
+        for player in self.players_data_by_participant.values():
+            if player['color'] == 'red':
+                return player
+
+    @cached_property
+    def black_player(self):
+        for player in self.players_data_by_participant.values():
+            if player['color'] == 'black':
+                return player

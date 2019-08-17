@@ -40,8 +40,6 @@ def test_get_game_200(client, game):
 
     data = r.json()
     assert data['initial_fen'] == '9/9/9/9/9/9/9/9/9/9'
-    assert data['ranks'] == 10
-    assert data['files'] == 9
     assert data['players'] == []
 
 
@@ -54,10 +52,28 @@ def test_get_game_pieces(client, game, pieces):
 
     expected_fen = 'rheakaehr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RHEAKAEHR'
     assert data['initial_fen'] == expected_fen
-
-    assert data['ranks'] == 10
-    assert data['files'] == 9
     assert data['players'] == []
+
+
+@pytest.mark.django_db
+def test_get_games_for_non_participant(client, game_with_players):
+    url = '/api/player/{}/games'.format('FAKE')
+    r = client.get(url)
+    assert r.status_code == 200
+
+    data = r.json()
+    assert data['games'] == []
+
+
+@pytest.mark.django_db
+def test_get_games_for_participant(client, game_with_players):
+    username = game_with_players.participant_set.first().player.user.username
+    url = '/api/player/{}/games'.format(username)
+    r = client.get(url)
+    assert r.status_code == 200
+
+    data = r.json()
+    assert data['games'] == [{'slug': game_with_players.slug}]
 
 
 @pytest.mark.django_db
