@@ -92,7 +92,3 @@ class GameMixin(SingleObjectMixin):
         for player in self.players_data_by_participant.values():
             if player['color'] == 'black':
                 return player
-
-    @cached_property
-    def title(self):
-        return '{} vs {}'.format(self.red_player['name'], self.black_player['name'])

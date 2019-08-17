@@ -26,6 +26,5 @@ class GameView(GameMixin, View):
         result = {
             'initial_fen': self.initial_fen,
             'players': list(self.players_data_by_participant.values()),
-            'title': self.title,
         }
         return JsonResponse(result, status=200)

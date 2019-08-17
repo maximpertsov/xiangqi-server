@@ -40,8 +40,6 @@ def test_get_game_200(client, game):
 
     data = r.json()
     assert data['initial_fen'] == '9/9/9/9/9/9/9/9/9/9'
-    assert data['ranks'] == 10
-    assert data['files'] == 9
     assert data['players'] == []
 
 
@@ -54,9 +52,6 @@ def test_get_game_pieces(client, game, pieces):
 
     expected_fen = 'rheakaehr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RHEAKAEHR'
     assert data['initial_fen'] == expected_fen
-
-    assert data['ranks'] == 10
-    assert data['files'] == 9
     assert data['players'] == []
 
 
