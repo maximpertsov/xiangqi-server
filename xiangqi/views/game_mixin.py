@@ -30,9 +30,9 @@ class GameMixin(SingleObjectMixin):
 
     @property
     def moves(self):
-        return self.game.move_set.select_related(
-            'piece', 'origin', 'destination'
-        ).order_by('order')
+        return self.game.move_set.select_related('origin', 'destination').order_by(
+            'order'
+        )
 
     @cached_property
     def initial_board(self):
