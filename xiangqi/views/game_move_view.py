@@ -59,7 +59,6 @@ class GameMoveView(GameMixin, View):
                     'player': player,
                     'origin': fields['origin'],
                     'destination': fields['destination'],
-                    'piece': fields['piece'][0],
                 }
             )
 
