@@ -34,11 +34,11 @@ class GameMoveView(GameMixin, View):
                     "minItems": 2,
                     "maxItems": 2,
                 },
-                "piece": {"type": "string"},
                 "type": {"type": "string"},
             },
-            "required": ["player", "from", "to", "piece", "type"],
-            "additionalProperties": False,
+            "required": ["player", "from", "to", "type"],
+            # TODO: revert to False
+            "additionalProperties": True,
         }
 
     def position(self, rank, file):
@@ -59,7 +59,6 @@ class GameMoveView(GameMixin, View):
                     'player': player,
                     'origin': fields['origin'],
                     'destination': fields['destination'],
-                    'piece': fields['piece'][0],
                 }
             )
 
@@ -70,7 +69,8 @@ class GameMoveView(GameMixin, View):
         payload.update(participant=[slug, username])
         payload['origin'] = payload.pop('from')
         payload['destination'] = payload.pop('to')
-        piece_name = payload.pop('piece')
+        # TODO: remove
+        payload.pop('piece', None)
 
         try:
             participant = self.participants.get(player__user__username=username)
@@ -80,13 +80,6 @@ class GameMoveView(GameMixin, View):
         if self.active_participant != participant:
             raise ValidationError('Moving out of turn')
 
-        from_rank, from_file = payload['origin']
-        to_rank, to_file = payload['destination']
-        piece = self.current_board[from_rank][from_file]
-        if piece.name != piece_name:
-            raise ValidationError('Invalid move')
-
-        payload['piece'] = piece.pk
         payload['type'] = models.MoveType.objects.get_or_create(
             name=payload.pop('type')
         )[0].pk
