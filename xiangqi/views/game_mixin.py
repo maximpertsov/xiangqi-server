@@ -1,4 +1,3 @@
-from copy import deepcopy
 from itertools import groupby
 
 from django.utils.functional import cached_property
@@ -30,24 +29,15 @@ class GameMixin(SingleObjectMixin):
 
     @property
     def moves(self):
-        return self.game.move_set.select_related(
-            'piece', 'origin', 'destination'
-        ).order_by('order')
+        return self.game.move_set.select_related('origin', 'destination').order_by(
+            'order'
+        )
 
     @cached_property
     def initial_board(self):
         result = [[None for _ in range(self.files)] for _ in range(self.ranks)]
         for piece in models.Piece.objects.all().select_related('origin'):
             result[piece.origin.rank][piece.origin.file] = piece
-        return result
-
-    @property
-    def current_board(self):
-        result = deepcopy(self.initial_board)
-        for move in self.moves.select_related('origin', 'destination'):
-            result[move.origin.rank][move.origin.file] = None
-            result[move.destination.rank][move.destination.file] = move.piece
-
         return result
 
     @staticmethod

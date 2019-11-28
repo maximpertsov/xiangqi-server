@@ -37,13 +37,8 @@ class GameMoveView(GameMixin, View):
                 "type": {"type": "string"},
             },
             "required": ["player", "from", "to", "type"],
-            # TODO: revert to False
-            "additionalProperties": True,
+            "additionalProperties": False,
         }
-
-    def position(self, rank, file):
-        result, _ = models.Position.objects.get_or_create(rank=rank, file=file)
-        return result
 
     def get(self, request, slug):
         serialized = serialize(self.moves.all())
@@ -69,8 +64,6 @@ class GameMoveView(GameMixin, View):
         payload.update(participant=[slug, username])
         payload['origin'] = payload.pop('from')
         payload['destination'] = payload.pop('to')
-        # TODO: remove
-        payload.pop('piece', None)
 
         try:
             participant = self.participants.get(player__user__username=username)
