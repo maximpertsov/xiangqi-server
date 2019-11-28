@@ -40,10 +40,6 @@ class GameMoveView(GameMixin, View):
             "additionalProperties": False,
         }
 
-    def position(self, rank, file):
-        result, _ = models.Position.objects.get_or_create(rank=rank, file=file)
-        return result
-
     def get(self, request, slug):
         serialized = serialize(self.moves.all())
         moves = []
