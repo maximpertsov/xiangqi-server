@@ -34,10 +34,9 @@ class GameMoveView(GameMixin, View):
                     "minItems": 2,
                     "maxItems": 2,
                 },
-                "type": {"type": "string"},
             },
-            "required": ["player", "from", "to", "type"],
-            "additionalProperties": False,
+            "required": ["player", "from", "to"],
+            "additionalProperties": True,
         }
 
     def get(self, request, slug):
@@ -61,10 +60,6 @@ class GameMoveView(GameMixin, View):
 
     def validate_data(self, payload, slug):
         username = payload.pop('player')
-        payload.update(participant=[slug, username])
-        payload['origin'] = payload.pop('from')
-        payload['destination'] = payload.pop('to')
-
         try:
             participant = self.participants.get(player__user__username=username)
         except models.Participant.DoesNotExist:
@@ -73,12 +68,13 @@ class GameMoveView(GameMixin, View):
         if self.active_participant != participant:
             raise ValidationError('Moving out of turn')
 
-        payload['type'] = models.MoveType.objects.get_or_create(
-            name=payload.pop('type')
-        )[0].pk
+        payload.update(participant=[slug, username])
+        payload['origin'] = payload.pop('from')
+        payload['destination'] = payload.pop('to')
         payload['order'] = self.moves.count() + 1
-        payload['notation'] = 'rank,file->rank,file'
         payload['game'] = [slug]
+        # TODO: remove
+        payload.pop('type', None)
 
     @cached_property
     def cache_key(self):
