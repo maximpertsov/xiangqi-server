@@ -58,11 +58,6 @@ class PieceFactory(f.DjangoModelFactory):
         model = m.Piece
 
 
-class MoveTypeFactory(f.DjangoModelFactory):
-    class Meta:
-        model = m.MoveType
-
-
 class MoveFactory(f.DjangoModelFactory):
     class Meta:
         model = m.Move
