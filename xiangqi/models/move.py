@@ -4,7 +4,6 @@ from django.db import models
 class Move(models.Model):
     game = models.ForeignKey('game', on_delete=models.CASCADE)
     participant = models.ForeignKey('participant', on_delete=models.CASCADE)
-    type = models.ForeignKey('movetype', on_delete=models.CASCADE, null=True)
     order = models.PositiveIntegerField()
     notation = models.CharField(max_length=32, null=True)
     origin = models.ForeignKey(

@@ -10,7 +10,6 @@ from .position import Position
 from .game import Game
 from .participant import Participant
 from .piece import Piece
-from .move_type import MoveType
 from .move import Move
 
 from .token import Token
