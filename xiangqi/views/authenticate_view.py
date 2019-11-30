@@ -69,11 +69,10 @@ class AuthenticateView(View):
         return authenticate(**payload)
 
     def get_and_expire_active_token(self, string):
-        now = timezone.now()
-        token = Token.objects.get(string=string, expires_on__gt=now)
-        token.expires_on = now
-        token.save()
-        return token
+        token = Token.objects.get(string=string)
+        if token.expires_on > timezone.now():
+            return token
+        raise ValidationError('Expired token')
 
     def get_new_token(self, user):
         return Token.objects.create(user)
