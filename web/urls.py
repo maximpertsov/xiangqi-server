@@ -19,6 +19,7 @@ from django.urls import path
 from xiangqi import views
 
 urlpatterns = [
+    path('api/login', views.LoginView.as_view()),
     path('api/authenticate', views.AuthenticateView.as_view()),
     path('api/csrf', views.csrf),
     path('api/ping', views.ping),

@@ -10,9 +10,60 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from xiangqi.models import Token, User
+from xiangqi.models import AccessToken, RefreshToken, Token, User
 
-JWT_COOKIE = 'access_token'
+JWT_COOKIE = "access_token"
+REFRESH_COOKIE = "refresh_token"
+
+
+def create_access_token(user):
+    # TODO: invalidate active tokens?
+    return AccessToken.objects.create(user)
+
+
+def create_refresh_token(user):
+    # TODO: invalidate active tokens?
+    return RefreshToken.objects.create(user)
+
+
+class LoginView(View):
+    http_method_names = ["post"]
+
+    @property
+    def post_schema(self):
+        return {
+            "properties": {
+                "username": {"type": "string"},
+                "password": {"type": "string"},
+            },
+            "required": ["username", "password"],
+            "additionalProperties": False,
+        }
+
+    def post(self, request):
+        try:
+            payload = json.loads(request.body.decode())
+            jsonschema.validate(payload, self.post_schema)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Error parsing request"}, status=400)
+        except jsonschema.ValidationError as e:
+            return JsonResponse({"error": e.message}, status=400)
+
+        user = authenticate(**payload)
+        if user is None:
+            return JsonResponse({"error": "Authentication failed"}, status=401)
+
+        tokens = {
+            JWT_COOKIE: create_access_token(user),
+            REFRESH_COOKIE: create_refresh_token(user),
+        }
+
+        response = JsonResponse({}, status=201)
+        for cookie, token in tokens.items():
+            response.set_cookie(
+                cookie, token.token, domain=settings.CLIENT_DOMAIN, httponly=True
+            )
+        return response
 
 
 # TODO: break this up into a login and authenticate view?
