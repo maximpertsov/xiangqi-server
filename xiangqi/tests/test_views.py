@@ -103,6 +103,7 @@ def test_post_move_201_then_get(client, game_with_players, pieces):
 
 
 @pytest.mark.django_db
+@pytest.mark.skip('Requires cookies in request')
 def test_authenticate(client, user):
     password = 's0_s0_secure'
     user.set_password(password)
