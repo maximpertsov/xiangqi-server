@@ -27,9 +27,9 @@ class AccessTokenManager(models.Manager):
         created_at = timezone.now()
         expires_at = created_at + timezone.timedelta(seconds=ACCESS_TOKEN_LIFE)
         payload = {
-            'exp': int(expires_at.timestamp()),
-            'iss': int(created_at.timestamp()),
-            'sub': user.username,
+            "exp": int(expires_at.timestamp()),
+            "iss": int(created_at.timestamp()),
+            "sub": user.username,
         }
         token = jwt.encode(payload).decode()
         kwargs.update(
