@@ -32,7 +32,9 @@ class AccessTokenManager(models.Manager):
             'sub': user.username,
         }
         token = jwt.encode(payload).decode()
-        kwargs.update(token=token, created_at=created_at, expires_at=expires_at)
+        kwargs.update(
+            created_at=created_at, expires_at=expires_at, token=token, user=user
+        )
         return super().create(**kwargs)
 
 
@@ -41,12 +43,13 @@ class AccessToken(BaseToken):
 
 
 class RefreshTokenManager(models.Manager):
-    def create(self, token, **kwargs):
+    def create(self, user, **kwargs):
         created_at = timezone.now()
         kwargs.update(
-            token=uuid4(),
             created_at=created_at,
             expires_at=created_at + timezone.timedelta(seconds=REFRESH_TOKEN_LIFE),
+            token=uuid4(),
+            user=user,
         )
         return super().create(**kwargs)
 
