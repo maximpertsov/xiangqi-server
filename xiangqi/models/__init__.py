@@ -12,4 +12,4 @@ from .participant import Participant
 from .piece import Piece
 from .move import Move
 
-from .token import Token, AccessToken, RefreshToken
+from .token import AccessToken, RefreshToken
