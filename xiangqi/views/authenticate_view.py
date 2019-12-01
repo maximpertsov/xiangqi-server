@@ -70,20 +70,7 @@ class LoginView(View):
 class AuthenticateView(View):
     http_method_names = ["post"]
 
-    @property
-    def post_schema(self):
-        # TODO: disallow additional properties
-        return {"properties": {}, "required": [], "additionalProperties": True}
-
     def post(self, request):
-        try:
-            payload = json.loads(request.body.decode())
-            jsonschema.validate(payload, self.post_schema)
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Error parsing request"}, status=400)
-        except jsonschema.ValidationError as e:
-            return JsonResponse({"error": e.message}, status=400)
-
         try:
             access_token = request.COOKIES[ACCESS_TOKEN_KEY]
             refresh_token = request.COOKIES[REFRESH_TOKEN_KEY]
