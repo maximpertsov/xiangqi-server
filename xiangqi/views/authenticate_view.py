@@ -16,7 +16,7 @@ JWT_COOKIE = 'access_token'
 
 
 # TODO: break this up into a login and authenticate view?
-@method_decorator(ensure_csrf_cookie, name='dispatch')
+@method_decorator(ensure_csrf_cookie, name="dispatch")
 class AuthenticateView(View):
     @property
     def post_schema(self):
@@ -35,11 +35,11 @@ class AuthenticateView(View):
             if user is None:
                 user = self.get_user_from_payload(request)
                 if user is None:
-                    raise ValidationError('Authentication failed')
+                    raise ValidationError("Authentication failed")
 
             token = self.get_new_token(user)
 
-            response = JsonResponse({'access_token': token.string}, status=201)
+            response = JsonResponse({"access_token": token.string}, status=201)
             response.set_cookie(
                 JWT_COOKIE,
                 token.string,
@@ -49,7 +49,7 @@ class AuthenticateView(View):
             )
             return response
         except json.JSONDecodeError:
-            return JsonResponse({"error": 'Error parsing request'}, status=400)
+            return JsonResponse({"error": "Error parsing request"}, status=400)
         except jsonschema.ValidationError as e:
             return JsonResponse({"error": e.message}, status=400)
         except ValidationError as e:
@@ -72,7 +72,7 @@ class AuthenticateView(View):
         token = Token.objects.get(string=string)
         if token.expires_on > timezone.now():
             return token
-        raise ValidationError('Expired token')
+        raise ValidationError("Expired token")
 
     def get_new_token(self, user):
         return Token.objects.create(user)
