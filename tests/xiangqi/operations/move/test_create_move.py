@@ -1,4 +1,7 @@
+from unittest.mock import patch
+
 import pytest
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.management import call_command
 from pytest_factoryboy import register
@@ -44,8 +47,12 @@ def payload():
 def test_create_move(game_with_players, participant, payload, pieces):
     assert Move.objects.count() == 0
     payload.update(player=participant.player.user.username)
-    CreateMove(game_with_players, payload).perform()
-    assert Move.objects.count() == 1
+    with patch.object(cache, 'set') as mock_cache_set:
+        CreateMove(game_with_players, payload).perform()
+        mock_cache_set.assert_called_once_with(
+            "updated_at_{}".format(game_with_players.slug), 1, timeout=None
+        )
+        assert Move.objects.count() == 1
 
 
 @pytest.mark.django_db
