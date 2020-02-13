@@ -6,8 +6,6 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.utils.functional import cached_property
 
-from xiangqi import models
-
 serialize = partial(serializers.serialize, 'json', use_natural_foreign_keys=True)
 deserialize = partial(serializers.deserialize, 'json', use_natural_foreign_keys=True)
 
@@ -27,7 +25,7 @@ class CreateMove:
             deserialized = deserialize(json.dumps([data]))
             for obj in deserialized:
                 obj.object.save()
-                cache.set(self._cache_key, self._move_count, timeout=None)
+                cache.set(self._cache_key, self._move_count + 1, timeout=None)
         except serializers.base.DeserializationError:
             raise ValidationError("Could not save move")
 
@@ -49,7 +47,7 @@ class CreateMove:
 
     @cached_property
     def _move_count(self):
-        return models.Move.objects.count()
+        return self._game.move_set.count()
 
     @cached_property
     def _slug(self):
