@@ -51,7 +51,7 @@ class CreateMove:
     # TODO: temporary
     @staticmethod
     def rank_file_to_square(rank, file):
-        return '{file}{rank}'.format(rank=rank + 1, file='abcdefghi'[file])
+        return '{file}{rank}'.format(rank=10 - rank, file='abcdefghi'[file])
 
     @cached_property
     def _cache_key(self):

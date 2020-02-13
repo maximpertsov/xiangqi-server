@@ -53,7 +53,7 @@ def test_create_move(game_with_players, participant, payload, pieces):
             "updated_at_{}".format(game_with_players.slug), 1, timeout=None
         )
         # TODO: temporary?
-        assert Move.objects.first().name == 'b1c3'
+        assert Move.objects.first().name == 'b10c8'
         assert Move.objects.count() == 1
 
 
