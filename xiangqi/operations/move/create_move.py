@@ -29,7 +29,7 @@ class CreateMove:
                 obj.object.save()
                 cache.set(self._cache_key, self._move_count, timeout=None)
         except serializers.base.DeserializationError:
-            return ValidationError("Could not save move")
+            raise ValidationError("Could not save move")
 
     @cached_property
     def _update_attributes(self):
