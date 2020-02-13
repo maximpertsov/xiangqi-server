@@ -1,7 +1,7 @@
 import pytest
 from pytest_factoryboy import register
 
-from xiangqi.tests import factories
+from tests import factories
 
 register(factories.UserFactory)
 register(factories.PlayerFactory)
