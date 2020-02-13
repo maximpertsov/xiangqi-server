@@ -1,3 +1,9 @@
+"""
+Adapted from 'xiangcheck' library written by Michael Marsh
+
+https://pypi.org/project/xiangcheck/
+"""
+
 import widget
 
 class Checker(object):
