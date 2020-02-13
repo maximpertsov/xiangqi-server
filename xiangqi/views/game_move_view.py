@@ -50,6 +50,7 @@ class GameMoveView(GameMixin, View):
                     'player': player,
                     'origin': fields['origin'],
                     'destination': fields['destination'],
+                    'name': fields['name'],
                 }
             )
 
