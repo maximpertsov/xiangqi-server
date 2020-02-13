@@ -9,4 +9,3 @@ pyffish==0.0.39
 pytz==2018.9
 sqlparse==0.3.0
 whitenoise==4.1.2
-xiangcheck==0.1.2
