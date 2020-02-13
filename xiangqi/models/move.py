@@ -8,9 +8,11 @@ class Move(models.Model):
     # TODO: this should not be nullable
     name = models.CharField(max_length=10, null=True)
     notation = models.CharField(max_length=32, null=True)
+    # TODO: remove field
     origin = models.ForeignKey(
         'position', related_name='+', null=True, on_delete=models.PROTECT
     )
+    # TODO: remove field
     destination = models.ForeignKey(
-        'position', related_name='+', on_delete=models.PROTECT
+        'position', related_name='+', null=True, on_delete=models.PROTECT
     )
