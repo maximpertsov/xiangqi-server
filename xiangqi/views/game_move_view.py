@@ -3,17 +3,14 @@ from functools import partial
 
 import jsonschema
 from django.core import serializers
-from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
-from django.utils.functional import cached_property
 from django.views import View
 
-from xiangqi import models
+from xiangqi.operations.move import CreateMove
 from xiangqi.views import GameMixin
 
 serialize = partial(serializers.serialize, 'json', use_natural_foreign_keys=True)
-deserialize = partial(serializers.deserialize, 'json', use_natural_foreign_keys=True)
 
 
 class GameMoveView(GameMixin, View):
@@ -58,48 +55,13 @@ class GameMoveView(GameMixin, View):
 
         return JsonResponse({'moves': moves}, status=200)
 
-    def validate_data(self, payload, slug):
-        username = payload.pop('player')
-        try:
-            participant = self.participants.get(player__user__username=username)
-        except models.Participant.DoesNotExist:
-            raise ValidationError('Invalid player')
-
-        if self.active_participant != participant:
-            raise ValidationError('Moving out of turn')
-
-        payload.update(participant=[slug, username])
-        payload['origin'] = payload.pop('from')
-        payload['destination'] = payload.pop('to')
-        payload['order'] = self.moves.count() + 1
-        payload['game'] = [slug]
-        # TODO: remove
-        payload.pop('type', None)
-
-    @cached_property
-    def cache_key(self):
-        from xiangqi.views import MoveCountView
-
-        game_slug = self.kwargs[self.slug_url_kwarg]
-        return MoveCountView.get_cache_key(game_slug)
-
     def post(self, request, slug):
         try:
             payload = json.loads(request.body.decode("utf-8"))
             jsonschema.validate(payload, self.post_schema)
-            self.validate_data(payload, slug)
+            CreateMove(game=self.game, payload=payload).perform()
+            return JsonResponse({}, status=201)
         except json.JSONDecodeError:
             return JsonResponse({"error": 'Error parsing request'}, status=400)
         except (jsonschema.ValidationError, ValidationError) as e:
             return JsonResponse({"error": str(e)}, status=400)
-
-        data = {'model': 'xiangqi.move', 'fields': payload}
-
-        try:
-            deserialized = deserialize(json.dumps([data]))
-            for obj in deserialized:
-                obj.object.save()
-                cache.set(self.cache_key, models.Move.objects.count(), timeout=None)
-                return JsonResponse({}, status=201)
-        except serializers.base.DeserializationError:
-            return JsonResponse({"error": "Could not save move"}, status=400)
