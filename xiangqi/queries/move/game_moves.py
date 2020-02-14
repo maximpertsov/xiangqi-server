@@ -1,12 +1,8 @@
-import json
 from functools import partial
 from itertools import chain
 
 import pyffish
-from django.core import serializers
 from django.utils.functional import cached_property
-
-serialize = partial(serializers.serialize, 'json', use_natural_foreign_keys=True)
 
 get_fen = partial(pyffish.get_fen, 'xiangqi')
 start_fen = partial(pyffish.start_fen, 'xiangqi')
@@ -18,36 +14,28 @@ class GameMoves:
         self._game = game
 
     def result(self):
-        return [
-            {
-                'player': data.get('participant', [None, None])[1],
-                # {
-                #     'name': data['participant'][1],
-                #     'color': data['participant'],
-                # },
-                'origin': data.get('origin'),
-                'destination': data.get('destination'),
-                'move': data.get('name'),
-                'fen': data['fen'],
-                'legal_moves': data['legal_moves'],
-            }
-            for data in self._complete_game_moves_data
-        ]
+        result = []
+        game_moves = chain([None], self._game_moves)
 
-    @cached_property
-    def _complete_game_moves_data(self):
-        return [
-            {'fen': fen, 'legal_moves': legal_moves, **move_data.get('fields', {})}
-            for move_data, fen, legal_moves in zip(
-                chain([{}], self._game_moves_data), self._fens, self._legal_moves
-            )
-        ]
+        for move, fen, legal_moves in zip(game_moves, self._fens, self._legal_moves):
+            data = {'fen': fen, 'legal_moves': legal_moves}
+            if move:
+                data.update(self._move_data(move))
+            result.append(data)
 
-    pass
+        return result
 
-    @cached_property
-    def _game_moves_data(self):
-        return json.loads(serialize(self._game_moves))
+    def _move_data(self, move):
+        return {
+            'origin': move.origin,
+            'destination': move.destination,
+            'move': move.name,
+            'player': {
+                # TODO: cached get participants via lru cache?
+                'name': move.participant.player.user.username,
+                'color': move.participant.color,
+            },
+        }
 
     @cached_property
     def _game_moves(self):
