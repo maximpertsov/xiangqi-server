@@ -33,4 +33,6 @@ def game_with_moves(game, participant_factory, move_factory, player_factory):
 # TODO: remove need for existing pieces
 @pytest.mark.django_db
 def test_game_moves(game_with_moves, pieces):
-    assert GameMoves(game_with_moves).result() == [{}]
+    result = GameMoves(game_with_moves).result()
+    print(result)
+    assert len(result) == 4

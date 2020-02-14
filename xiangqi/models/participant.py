@@ -17,6 +17,7 @@ class Participant(models.Model):
     player = models.ForeignKey('player', on_delete=models.SET_NULL, null=True)
     game = models.ForeignKey('game', on_delete=models.CASCADE)
     score = models.DecimalField(max_digits=5, decimal_places=2)
+    # TODO: color => team?
     color = models.CharField(max_length=32, choices=Color.choices())
 
     def natural_key(self):

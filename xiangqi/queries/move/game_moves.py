@@ -1,5 +1,6 @@
 import json
 from functools import partial
+from itertools import chain
 
 import pyffish
 from django.core import serializers
@@ -17,24 +18,36 @@ class GameMoves:
         self._game = game
 
     def result(self):
-        serialized = serialize(self._game_moves)
-        moves = []
-        for data in json.loads(serialized):
-            fields = data.pop('fields')
-            participant_key = tuple(fields['participant'])
-            player = dict(self.players_data_by_participant[participant_key])
-            del player['score']
+        return [
+            {
+                'player': data.get('participant', [None, None])[1],
+                # {
+                #     'name': data['participant'][1],
+                #     'color': data['participant'],
+                # },
+                'origin': data.get('origin'),
+                'destination': data.get('destination'),
+                'move': data.get('name'),
+                'fen': data['fen'],
+                'legal_moves': data['legal_moves'],
+            }
+            for data in self._complete_game_moves_data
+        ]
 
-            moves.append(
-                {
-                    'player': player,
-                    'origin': fields['origin'],
-                    'destination': fields['destination'],
-                    'name': fields['name'],
-                }
+    @cached_property
+    def _complete_game_moves_data(self):
+        return [
+            {'fen': fen, 'legal_moves': legal_moves, **move_data.get('fields', {})}
+            for move_data, fen, legal_moves in zip(
+                chain([{}], self._game_moves_data), self._fens, self._legal_moves
             )
+        ]
 
-        return moves
+    pass
+
+    @cached_property
+    def _game_moves_data(self):
+        return json.loads(serialize(self._game_moves))
 
     @cached_property
     def _game_moves(self):
@@ -51,8 +64,3 @@ class GameMoves:
     @cached_property
     def _legal_moves(self):
         return [legal_moves(fen, []) for fen in self._fens]
-
-    # TODO: make a batch call to ffish
-    @cached_property
-    def _san_moves(self):
-        pass
