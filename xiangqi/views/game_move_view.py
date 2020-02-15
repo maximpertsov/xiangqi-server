@@ -12,37 +12,22 @@ from xiangqi.views import GameMixin
 
 class GameMoveView(GameMixin, View):
     def get(self, request, slug):
-        return JsonResponse({'moves': GameMoves(game=self.game).result()}, status=200)
+        return JsonResponse({"moves": GameMoves(game=self.game).result()}, status=200)
 
     def post(self, request, slug):
         try:
             payload = json.loads(request.body.decode("utf-8"))
-            jsonschema.validate(payload, self.post_schema)
+            # jsonschema.validate(payload, self.post_schema)
             CreateMove(game=self.game, payload=payload).perform()
             return JsonResponse({}, status=201)
         except json.JSONDecodeError:
-            return JsonResponse({"error": 'Error parsing request'}, status=400)
+            return JsonResponse({"error": "Error parsing request"}, status=400)
         except (jsonschema.ValidationError, ValidationError) as e:
             return JsonResponse({"error": str(e)}, status=400)
 
     @property
     def post_schema(self):
         return {
-            "properties": {
-                "player": {"type": "string"},
-                "from": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "minItems": 2,
-                    "maxItems": 2,
-                },
-                "to": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "minItems": 2,
-                    "maxItems": 2,
-                },
-            },
-            "required": ["player", "from", "to"],
-            "additionalProperties": True,
+            "properties": {"player": {"type": "string"}, "move": {"type", "string"}},
+            "required": ["player", "move"],
         }

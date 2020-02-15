@@ -27,8 +27,8 @@ class GameMoves:
 
     def _move_data(self, move):
         return {
-            'origin': move.origin.natural_key(),
-            'destination': move.destination.natural_key(),
+            # 'origin': move.origin.natural_key(),
+            # 'destination': move.destination.natural_key(),
             'move': move.name,
             'player': {
                 # TODO: cached get participants via lru cache?

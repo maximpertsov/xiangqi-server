@@ -37,16 +37,13 @@ class CreateMove:
             'destination': self._payload['to'],
             'order': self._move_count + 1,
             'game': [self._slug],
-            'name': self._name,
+            'name': self._move_name,
         }
 
     # TODO: temporary
     @cached_property
-    def _name(self):
-        return "{}{}".format(
-            self.rank_file_to_square(*self._payload['from']),
-            self.rank_file_to_square(*self._payload['to']),
-        )
+    def _move_name(self):
+        return self._payload['move']
 
     # TODO: temporary
     @staticmethod

@@ -34,5 +34,4 @@ def game_with_moves(game, participant_factory, move_factory, player_factory):
 @pytest.mark.django_db
 def test_game_moves(game_with_moves, pieces):
     result = GameMoves(game_with_moves).result()
-    print(result)
     assert len(result) == 4
