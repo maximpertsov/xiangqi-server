@@ -39,7 +39,7 @@ def participant(game_with_players):
 
 @pytest.fixture
 def payload():
-    return {"from": [0, 1], "to": [2, 2], "move": "b10c8"}
+    return {"move": "b10c8"}
 
 
 # TODO: remove need for existing pieces
