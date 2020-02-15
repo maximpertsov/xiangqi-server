@@ -33,8 +33,6 @@ class CreateMove:
     def _update_attributes(self):
         return {
             'participant': [self._slug, self._username],
-            'origin': self._payload['from'],
-            'destination': self._payload['to'],
             'order': self._move_count + 1,
             'game': [self._slug],
             'name': self._move_name,

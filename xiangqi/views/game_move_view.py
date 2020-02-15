@@ -17,7 +17,7 @@ class GameMoveView(GameMixin, View):
     def post(self, request, slug):
         try:
             payload = json.loads(request.body.decode("utf-8"))
-            # jsonschema.validate(payload, self.post_schema)
+            jsonschema.validate(payload, self.post_schema)
             CreateMove(game=self.game, payload=payload).perform()
             return JsonResponse({}, status=201)
         except json.JSONDecodeError:
@@ -28,6 +28,9 @@ class GameMoveView(GameMixin, View):
     @property
     def post_schema(self):
         return {
-            "properties": {"player": {"type": "string"}, "move": {"type", "string"}},
+            "properties": {
+                "player": {"type": "string"},
+                "move": {"type": "string"},
+            },
             "required": ["player", "move"],
         }

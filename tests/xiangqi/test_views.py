@@ -81,8 +81,6 @@ def test_post_move_201_then_get(client, game_with_players, pieces):
     url = "/api/game/{}/moves".format(game_with_players.slug)
     data = {
         "player": participant.player.user.username,
-        "from": [9, 0],
-        "to": [8, 0],
         "move": "a1a2",
     }
     r = client.post(url, data=json.dumps(data), content_type="application/json")
