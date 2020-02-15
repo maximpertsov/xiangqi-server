@@ -4,9 +4,9 @@ from itertools import chain
 import pyffish
 from django.utils.functional import cached_property
 
-get_fen = partial(pyffish.get_fen, 'xiangqi')
-start_fen = partial(pyffish.start_fen, 'xiangqi')
-legal_moves = partial(pyffish.legal_moves, 'xiangqi')
+get_fen = partial(pyffish.get_fen, "xiangqi")
+start_fen = partial(pyffish.start_fen, "xiangqi")
+legal_moves = partial(pyffish.legal_moves, "xiangqi")
 
 
 class GameMoves:
@@ -18,22 +18,27 @@ class GameMoves:
         game_moves = chain([None], self._game_moves)
 
         for move, fen, legal_moves in zip(game_moves, self._fens, self._legal_moves):
-            data = {'fen': fen, 'legal_moves': legal_moves}
+            data = {"fen": fen, "legal_moves": legal_moves}
             if move:
                 data.update(self._move_data(move))
             result.append(data)
 
         return result
 
-    def _move_data(self, move):
-        return {
-            'move': move.name,
-            'player': {
-                # TODO: cached get participants via lru cache?
-                'name': move.participant.player.user.username,
-                'color': move.participant.color,
-            },
-        }
+    def _move_data(self, move=None):
+        result = {"move": None, "player": None}
+        if move:
+            result.update(
+                {
+                    "move": move.name,
+                    "player": {
+                        # TODO: cached get participants via lru cache?
+                        "name": move.participant.player.user.username,
+                        "color": move.participant.color,
+                    },
+                }
+            )
+        return result
 
     @cached_property
     def _game_moves(self):
