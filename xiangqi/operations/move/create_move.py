@@ -33,11 +33,20 @@ class CreateMove:
     def _update_attributes(self):
         return {
             'participant': [self._slug, self._username],
-            'origin': self._payload['from'],
-            'destination': self._payload['to'],
             'order': self._move_count + 1,
             'game': [self._slug],
+            'name': self._move_name,
         }
+
+    # TODO: temporary
+    @cached_property
+    def _move_name(self):
+        return self._payload['move']
+
+    # TODO: temporary
+    @staticmethod
+    def rank_file_to_square(rank, file):
+        return '{file}{rank}'.format(rank=10 - rank, file='abcdefghi'[file])
 
     @cached_property
     def _cache_key(self):

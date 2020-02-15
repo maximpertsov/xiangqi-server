@@ -39,7 +39,7 @@ def participant(game_with_players):
 
 @pytest.fixture
 def payload():
-    return {"from": [0, 1], "to": [2, 2], "type": "move"}
+    return {"move": "b10c8"}
 
 
 # TODO: remove need for existing pieces
@@ -52,6 +52,8 @@ def test_create_move(game_with_players, participant, payload, pieces):
         mock_cache_set.assert_called_once_with(
             "updated_at_{}".format(game_with_players.slug), 1, timeout=None
         )
+        # TODO: temporary?
+        assert Move.objects.first().name == 'b10c8'
         assert Move.objects.count() == 1
 
 
