@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'xiangqi',
     'corsheaders',
+    'clear_cache',
 ]
 
 MIDDLEWARE = [
