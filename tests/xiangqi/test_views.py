@@ -49,7 +49,7 @@ def test_get_game_pieces(client, game, pieces):
 
     data = r.json()
 
-    expected_fen = "rheakaehr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RHEAKAEHR"
+    expected_fen = "rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR"
     assert data["initial_fen"] == expected_fen
     assert data["players"] == []
 

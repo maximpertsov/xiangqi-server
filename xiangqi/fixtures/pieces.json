@@ -789,7 +789,7 @@
     "model": "xiangqi.piece",
     "pk": 7,
     "fields": {
-      "name": "e",
+      "name": "b",
       "origin": [
         0,
         6
@@ -800,7 +800,7 @@
     "model": "xiangqi.piece",
     "pk": 8,
     "fields": {
-      "name": "h",
+      "name": "n",
       "origin": [
         0,
         7
@@ -1042,7 +1042,7 @@
     "model": "xiangqi.piece",
     "pk": 30,
     "fields": {
-      "name": "E",
+      "name": "B",
       "origin": [
         9,
         6
@@ -1053,7 +1053,7 @@
     "model": "xiangqi.piece",
     "pk": 31,
     "fields": {
-      "name": "H",
+      "name": "N",
       "origin": [
         9,
         7
