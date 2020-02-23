@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -16,6 +16,8 @@ def legal_moves():
 
 
 def test_legal_moves(fen, legal_moves):
-    with patch('pyffish.legal_moves', legal_moves) as mock_get_legal_moves:
+    with patch(
+        'pyffish.legal_moves', MagicMock(return_value=legal_moves)
+    ) as mock_get_legal_moves:
         assert LegalMoves(fen=fen).result() == legal_moves
-        assert mock_get_legal_moves.assert_called_once_with('xiangqi', fen, [])
+        mock_get_legal_moves.assert_called_once_with('xiangqi', fen, [])
