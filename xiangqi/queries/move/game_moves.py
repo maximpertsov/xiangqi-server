@@ -55,4 +55,4 @@ class GameMoves:
 
     @cached_property
     def _legal_moves(self):
-        return [LegalMoves(fen=fen).result() for fen in self._fens]
+        return [LegalMoves(fen=fen, moves=[]).result() for fen in self._fens]

@@ -11,13 +11,18 @@ def fen():
 
 
 @pytest.fixture
+def moves():
+    return []
+
+
+@pytest.fixture
 def legal_moves():
     return ['e1e2']
 
 
-def test_legal_moves(fen, legal_moves):
+def test_legal_moves(fen, moves, legal_moves):
     with patch(
         'pyffish.legal_moves', MagicMock(return_value=legal_moves)
     ) as mock_get_legal_moves:
-        assert LegalMoves(fen=fen).result() == legal_moves
-        mock_get_legal_moves.assert_called_once_with('xiangqi', fen, [])
+        assert LegalMoves(fen=fen, moves=moves).result() == legal_moves
+        mock_get_legal_moves.assert_called_once_with('xiangqi', fen, moves)
