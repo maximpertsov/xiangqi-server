@@ -3,7 +3,7 @@ from django.core.management import call_command
 from pytest_factoryboy import register
 
 from tests import factories
-from xiangqi.queries.move import GameMoves
+from xiangqi.queries.move.game_moves import GameMoves
 
 register(factories.UserFactory)
 register(factories.PlayerFactory)

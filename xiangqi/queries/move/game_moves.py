@@ -1,12 +1,10 @@
-from functools import partial
 from itertools import chain
 
 import pyffish
 from django.utils.functional import cached_property
 
-get_fen = partial(pyffish.get_fen, "xiangqi")
-start_fen = partial(pyffish.start_fen, "xiangqi")
-legal_moves = partial(pyffish.legal_moves, "xiangqi")
+from xiangqi.queries.move.create_move import CreateMove
+from xiangqi.queries.move.legal_moves import LegalMoves
 
 
 class GameMoves:
@@ -17,11 +15,9 @@ class GameMoves:
         result = []
         game_moves = chain([None], self._game_moves)
 
-        for move, fen, legal_moves in zip(game_moves, self._fens, self._legal_moves):
-            data = {"fen": fen, "legal_moves": legal_moves}
-            if move:
-                data.update(self._move_data(move))
-            result.append(data)
+        for move, new_move in zip(game_moves, self._new_moves):
+            new_move.update(self._move_data(move))
+            result.append(new_move)
 
         return result
 
@@ -45,13 +41,18 @@ class GameMoves:
         return self._game.move_set.all()
 
     @cached_property
-    def _fens(self):
-        result = [start_fen()]
-        for move in self._game_moves:
-            fen = get_fen(result[-1], [move.name])
-            result.append(fen)
-        return result
+    def _start_fen(self):
+        return pyffish.start_fen('xiangqi')
 
-    @cached_property
-    def _legal_moves(self):
-        return [legal_moves(fen, []) for fen in self._fens]
+    @property
+    def _new_moves(self):
+        result = [
+            {
+                'fen': self._start_fen,
+                'legal_moves': LegalMoves(fen=self._start_fen, moves=[]).result(),
+            }
+        ]
+        for move in self._game_moves:
+            new_move = CreateMove(fen=result[-1]['fen'], move=move.name).result()
+            result.append(new_move)
+        return result

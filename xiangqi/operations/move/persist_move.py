@@ -10,15 +10,15 @@ serialize = partial(serializers.serialize, 'json', use_natural_foreign_keys=True
 deserialize = partial(serializers.deserialize, 'json', use_natural_foreign_keys=True)
 
 
-class CreateMove:
+class PersistMove:
     def __init__(self, game, payload):
         self._game = game
         self._payload = payload
 
     def perform(self):
-        self._create_move()
+        self._persist_move()
 
-    def _create_move(self):
+    def _persist_move(self):
         data = {'model': 'xiangqi.move', 'fields': self._update_attributes}
 
         try:

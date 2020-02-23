@@ -8,7 +8,7 @@ from pytest_factoryboy import register
 
 from tests import factories
 from xiangqi.models import Move
-from xiangqi.operations.move import CreateMove
+from xiangqi.operations.move.persist_move import PersistMove
 
 register(factories.UserFactory)
 register(factories.PlayerFactory)
@@ -48,7 +48,7 @@ def test_create_move(game_with_players, participant, payload, pieces):
     assert Move.objects.count() == 0
     payload.update(player=participant.player.user.username)
     with patch.object(cache, 'set') as mock_cache_set:
-        CreateMove(game_with_players, payload).perform()
+        PersistMove(game_with_players, payload).perform()
         mock_cache_set.assert_called_once_with(
             "updated_at_{}".format(game_with_players.slug), 1, timeout=None
         )
@@ -61,4 +61,4 @@ def test_create_move(game_with_players, participant, payload, pieces):
 def test_create_move_non_participant(game_with_players, payload, pieces):
     payload.update(player="Not a game player")
     with pytest.raises(ValidationError):
-        CreateMove(game_with_players, payload).perform()
+        PersistMove(game_with_players, payload).perform()
