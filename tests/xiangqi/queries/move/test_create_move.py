@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from xiangqi.queries.move.create_move import CreateMove
+from xiangqi.queries.move.legal_moves import LegalMoves
 
 
 @pytest.fixture
@@ -33,9 +34,9 @@ def new_move(move, new_fen, new_legal_moves):
 def test_create_move(move, new_fen, new_move):
     with patch(
         'pyffish.get_fen', MagicMock(return_value=new_fen)
-    ) as mock_get_fen, patch(
-        'xiangqi.queries.move.legal_moves', MagicMock(return_value=new_legal_moves)
+    ) as mock_get_fen, patch.object(
+        LegalMoves, 'result', return_value=new_legal_moves,
     ) as mock_query_legal_moves:
         assert CreateMove(fen=fen, move=move).result() == new_move
         mock_get_fen.assert_called_once_with('xiangqi', fen, [move])
-        mock_query_legal_moves.assert_called_once_with(fen, [move])
+        mock_query_legal_moves.assert_called_once_with(fen=fen, moves=[move])
