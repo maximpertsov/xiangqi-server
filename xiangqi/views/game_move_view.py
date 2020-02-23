@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views import View
 
-from xiangqi.operations.move.create_move import CreateMove
+from xiangqi.operations.move.persist_move import PersistMove
 from xiangqi.queries.move import GameMoves
 from xiangqi.views import GameMixin
 
@@ -18,7 +18,7 @@ class GameMoveView(GameMixin, View):
         try:
             payload = json.loads(request.body.decode("utf-8"))
             jsonschema.validate(payload, self.post_schema)
-            CreateMove(game=self.game, payload=payload).perform()
+            PersistMove(game=self.game, payload=payload).perform()
             return JsonResponse({}, status=201)
         except json.JSONDecodeError:
             return JsonResponse({"error": "Error parsing request"}, status=400)

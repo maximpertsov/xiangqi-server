@@ -10,7 +10,7 @@ serialize = partial(serializers.serialize, 'json', use_natural_foreign_keys=True
 deserialize = partial(serializers.deserialize, 'json', use_natural_foreign_keys=True)
 
 
-class CreateMove:
+class PersistMove:
     def __init__(self, game, payload):
         self._game = game
         self._payload = payload
