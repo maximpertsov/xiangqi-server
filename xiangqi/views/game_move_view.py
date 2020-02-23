@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views import View
 
-from xiangqi.operations.move import CreateMove
+from xiangqi.operations.move.create_move import CreateMove
 from xiangqi.queries.move import GameMoves
 from xiangqi.views import GameMixin
 

@@ -8,7 +8,7 @@ from pytest_factoryboy import register
 
 from tests import factories
 from xiangqi.models import Move
-from xiangqi.operations.move import CreateMove
+from xiangqi.operations.move.create_move import CreateMove
 
 register(factories.UserFactory)
 register(factories.PlayerFactory)
