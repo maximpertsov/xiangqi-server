@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.views import View
 
 from xiangqi.operations.move.persist_move import PersistMove
-from xiangqi.queries.move import GameMoves
+from xiangqi.queries.move.game_moves import GameMoves
 from xiangqi.views import GameMixin
 
 

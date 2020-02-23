@@ -4,7 +4,7 @@ from itertools import chain
 import pyffish
 from django.utils.functional import cached_property
 
-from xiangqi.queries.move import LegalMoves
+from xiangqi.queries.move.legal_moves import LegalMoves
 
 get_fen = partial(pyffish.get_fen, "xiangqi")
 start_fen = partial(pyffish.start_fen, "xiangqi")

@@ -2,7 +2,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from xiangqi.queries.move import LegalMoves
+from xiangqi.queries.move.legal_moves import LegalMoves
 
 
 @pytest.fixture
