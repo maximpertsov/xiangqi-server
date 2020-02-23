@@ -26,17 +26,16 @@ def new_legal_moves():
     return []
 
 
-@pytest.fixture
-def new_move(move, new_fen, new_legal_moves):
-    return {'fen': new_fen, 'move': move, 'legal_moves': new_legal_moves}
-
-
-def test_create_move(move, new_fen, new_move):
+def test_create_move(move, new_fen, new_legal_moves):
     with patch(
         'pyffish.get_fen', MagicMock(return_value=new_fen)
     ) as mock_get_fen, patch.object(
-        LegalMoves, 'result', return_value=new_legal_moves,
+        LegalMoves, 'result', return_value=new_legal_moves
     ) as mock_query_legal_moves:
-        assert CreateMove(fen=fen, move=move).result() == new_move
+        assert CreateMove(fen=fen, move=move).result() == {
+            'fen': new_fen,
+            'move': move,
+            'legal_moves': new_legal_moves,
+        }
         mock_get_fen.assert_called_once_with('xiangqi', fen, [move])
-        mock_query_legal_moves.assert_called_once_with(fen=fen, moves=[move])
+        mock_query_legal_moves.assert_called_once_with()
