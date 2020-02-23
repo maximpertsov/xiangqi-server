@@ -16,9 +16,9 @@ class PersistMove:
         self._payload = payload
 
     def perform(self):
-        self._create_move()
+        self._persist_move()
 
-    def _create_move(self):
+    def _persist_move(self):
         data = {'model': 'xiangqi.move', 'fields': self._update_attributes}
 
         try:
