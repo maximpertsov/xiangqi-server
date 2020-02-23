@@ -4,9 +4,10 @@ from itertools import chain
 import pyffish
 from django.utils.functional import cached_property
 
+from xiangqi.queries.move import LegalMoves
+
 get_fen = partial(pyffish.get_fen, "xiangqi")
 start_fen = partial(pyffish.start_fen, "xiangqi")
-legal_moves = partial(pyffish.legal_moves, "xiangqi")
 
 
 class GameMoves:
@@ -54,4 +55,4 @@ class GameMoves:
 
     @cached_property
     def _legal_moves(self):
-        return [legal_moves(fen, []) for fen in self._fens]
+        return [LegalMoves(fen=fen).result() for fen in self._fens]
