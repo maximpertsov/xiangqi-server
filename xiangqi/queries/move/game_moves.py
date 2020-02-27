@@ -3,7 +3,7 @@ from itertools import chain
 import pyffish
 from django.utils.functional import cached_property
 
-from xiangqi.queries.move.create_move import CreateMove
+from xiangqi.queries.move.serialize_move import SerializeMove
 from xiangqi.queries.move.legal_moves import LegalMoves
 
 
@@ -53,6 +53,6 @@ class GameMoves:
             }
         ]
         for move in self._game_moves:
-            new_move = CreateMove(fen=result[-1]['fen'], move=move).result()
+            new_move = SerializeMove(fen=result[-1]['fen'], move=move).result()
             result.append(new_move)
         return result

@@ -3,7 +3,7 @@ import pyffish
 from xiangqi.queries.move.legal_moves import LegalMoves
 
 
-class CreateMove:
+class SerializeMove:
     def __init__(self, fen, move):
         self._fen = fen
         self._move = move

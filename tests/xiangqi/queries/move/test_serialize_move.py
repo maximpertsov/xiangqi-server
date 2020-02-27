@@ -4,7 +4,7 @@ import pytest
 from pytest_factoryboy import register
 
 from tests import factories
-from xiangqi.queries.move.create_move import CreateMove
+from xiangqi.queries.move.serialize_move import SerializeMove
 from xiangqi.queries.move.legal_moves import LegalMoves
 
 register(factories.GameFactory)
@@ -30,13 +30,13 @@ def new_legal_moves():
 
 
 @pytest.mark.django_db
-def test_create_move(move, new_fen, new_legal_moves):
+def test_serialize_move(move, new_fen, new_legal_moves):
     with patch(
         'pyffish.get_fen', MagicMock(return_value=new_fen)
     ) as mock_get_fen, patch.object(
         LegalMoves, 'result', return_value=new_legal_moves
     ) as mock_query_legal_moves:
-        assert CreateMove(fen=fen, move=move).result() == {
+        assert SerializeMove(fen=fen, move=move).result() == {
             'fen': new_fen,
             'move': move.name,
             'legal_moves': new_legal_moves,
