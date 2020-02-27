@@ -1,9 +1,17 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
+from pytest_factoryboy import register
 
+from tests import factories
 from xiangqi.queries.move.create_move import CreateMove
 from xiangqi.queries.move.legal_moves import LegalMoves
+
+register(factories.GameFactory)
+register(factories.PlayerFactory)
+register(factories.UserFactory)
+register(factories.ParticipantFactory)
+register(factories.MoveFactory)
 
 
 @pytest.fixture
@@ -17,15 +25,11 @@ def new_fen():
 
 
 @pytest.fixture
-def move():
-    return 'MOVE'
-
-
-@pytest.fixture
 def new_legal_moves():
     return []
 
 
+@pytest.mark.django_db
 def test_create_move(move, new_fen, new_legal_moves):
     with patch(
         'pyffish.get_fen', MagicMock(return_value=new_fen)
@@ -34,8 +38,8 @@ def test_create_move(move, new_fen, new_legal_moves):
     ) as mock_query_legal_moves:
         assert CreateMove(fen=fen, move=move).result() == {
             'fen': new_fen,
-            'move': move,
+            'move': move.name,
             'legal_moves': new_legal_moves,
         }
-        mock_get_fen.assert_called_once_with('xiangqi', fen, [move])
+        mock_get_fen.assert_called_once_with('xiangqi', fen, [move.name])
         mock_query_legal_moves.assert_called_once_with()

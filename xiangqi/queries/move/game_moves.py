@@ -53,6 +53,6 @@ class GameMoves:
             }
         ]
         for move in self._game_moves:
-            new_move = CreateMove(fen=result[-1]['fen'], move=move.name).result()
+            new_move = CreateMove(fen=result[-1]['fen'], move=move).result()
             result.append(new_move)
         return result
