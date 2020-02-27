@@ -8,7 +8,6 @@ from django.utils.functional import cached_property
 
 from xiangqi.queries.move.game_moves import GameMoves
 
-serialize = partial(serializers.serialize, 'json', use_natural_foreign_keys=True)
 deserialize = partial(serializers.deserialize, 'json', use_natural_foreign_keys=True)
 
 
