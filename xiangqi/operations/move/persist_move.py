@@ -10,6 +10,8 @@ from xiangqi.queries.move.game_moves import GameMoves
 
 deserialize = partial(serializers.deserialize, 'json', use_natural_foreign_keys=True)
 
+CACHE_TTL = 3600
+
 
 class PersistMove:
     def __init__(self, game, payload):
@@ -26,7 +28,7 @@ class PersistMove:
             deserialized = deserialize(json.dumps([data]))
             for obj in deserialized:
                 obj.object.save()
-                cache.set(self._cache_key, self._move_count + 1, timeout=None)
+                cache.set(self._cache_key, self._move_count + 1, timeout=CACHE_TTL)
                 return self._game_moves[-1]
         except serializers.base.DeserializationError:
             raise ValidationError("Could not save move")
