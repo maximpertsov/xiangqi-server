@@ -6,3 +6,5 @@ class Move(models.Model):
     participant = models.ForeignKey('participant', on_delete=models.CASCADE)
     order = models.PositiveIntegerField()
     name = models.CharField(max_length=10)
+
+    # TODO: order by `order`?
