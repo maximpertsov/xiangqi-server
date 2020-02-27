@@ -6,8 +6,7 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.utils.functional import cached_property
 
-# from xiangqi.queries.move.serialize_move import SerializeMove
-# from xiangqi.queries.move.game_moves import GameMoves
+from xiangqi.queries.move.game_moves import GameMoves
 
 serialize = partial(serializers.serialize, 'json', use_natural_foreign_keys=True)
 deserialize = partial(serializers.deserialize, 'json', use_natural_foreign_keys=True)
@@ -27,16 +26,15 @@ class PersistMove:
         try:
             deserialized = deserialize(json.dumps([data]))
             for obj in deserialized:
-                # fen = self._fen
                 obj.object.save()
                 cache.set(self._cache_key, self._move_count + 1, timeout=None)
-                # return SerializeMove(fen=fen, move=obj.object)
+                return self._game_moves[-1]
         except serializers.base.DeserializationError:
             raise ValidationError("Could not save move")
 
-    # @cached_property
-    # def _fen(self):
-    #     return GameMoves(game=self._game).result()[-1]['fen']
+    @cached_property
+    def _game_moves(self):
+        return GameMoves(game=self._game).result()
 
     @cached_property
     def _update_attributes(self):
