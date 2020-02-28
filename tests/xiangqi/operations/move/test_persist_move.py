@@ -7,8 +7,9 @@ from django.core.management import call_command
 from pytest_factoryboy import register
 
 from tests import factories
-from xiangqi.models import Move
+# from xiangqi.models import Move
 from xiangqi.operations.move.persist_move import PersistMove
+from xiangqi.queries.move.game_moves import GameMoves
 
 register(factories.UserFactory)
 register(factories.PlayerFactory)
@@ -45,16 +46,18 @@ def payload():
 # TODO: remove need for existing pieces
 @pytest.mark.django_db
 def test_create_move(game_with_players, participant, payload, pieces):
-    assert Move.objects.count() == 0
+    assert game_with_players.move_set.count() == 0
     payload.update(player=participant.player.user.username)
-    with patch.object(cache, 'set') as mock_cache_set:
+    with patch.object(cache, 'set') as mock_cache_set, patch.object(
+        GameMoves, 'result'
+    ) as mock_game_moves:
         PersistMove(game_with_players, payload).perform()
         mock_cache_set.assert_called_once_with(
-            "updated_at_{}".format(game_with_players.slug), 1, timeout=None
+            "updated_at_{}".format(game_with_players.slug), 1, timeout=3600
         )
-        # TODO: temporary?
-        assert Move.objects.first().name == 'b10c8'
-        assert Move.objects.count() == 1
+        mock_game_moves.assert_called_once()
+        assert game_with_players.move_set.first().name == 'b10c8'
+        assert game_with_players.move_set.count() == 1
 
 
 @pytest.mark.django_db
