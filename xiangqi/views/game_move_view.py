@@ -22,7 +22,7 @@ class GameMoveView(SingleObjectMixin, View):
             payload = json.loads(request.body.decode("utf-8"))
             jsonschema.validate(payload, self.post_schema)
             PersistMove(game=self._game, payload=payload).perform()
-            return JsonResponse({"move": self._latest_game_move}, status=201)
+            return JsonResponse({"moves": self._game_moves}, status=201)
         except json.JSONDecodeError:
             return JsonResponse({"error": "Error parsing request"}, status=400)
         except (jsonschema.ValidationError, ValidationError) as e:
@@ -34,10 +34,6 @@ class GameMoveView(SingleObjectMixin, View):
             "properties": {"player": {"type": "string"}, "move": {"type": "string"}},
             "required": ["player", "move"],
         }
-
-    @property
-    def _latest_game_move(self):
-        return self._game_moves[-1]
 
     @property
     def _game_moves(self):
