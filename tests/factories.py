@@ -65,5 +65,4 @@ class MoveFactory(f.DjangoModelFactory):
 
     game = f.SubFactory(GameFactory)
     name = 'a10a9'
-    order = f.Sequence(lambda x: x)
     participant = f.SubFactory(ParticipantFactory)

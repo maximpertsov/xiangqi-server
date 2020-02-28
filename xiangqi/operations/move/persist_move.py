@@ -28,7 +28,7 @@ class PersistMove:
             deserialized = deserialize(json.dumps([data]))
             for obj in deserialized:
                 obj.object.save()
-                cache.set(self._cache_key, self._move_count + 1, timeout=CACHE_TTL)
+                cache.set(self._cache_key, self._move_count, timeout=CACHE_TTL)
                 return self._game_moves[-1]
         except serializers.base.DeserializationError:
             raise ValidationError("Could not save move")
@@ -41,7 +41,6 @@ class PersistMove:
     def _update_attributes(self):
         return {
             'participant': [self._slug, self._username],
-            'order': self._move_count + 1,
             'game': [self._slug],
             'name': self._move_name,
         }
@@ -62,7 +61,7 @@ class PersistMove:
 
         return MoveCountView.get_cache_key(self._slug)
 
-    @cached_property
+    @property
     def _move_count(self):
         return self._game.move_set.count()
 
