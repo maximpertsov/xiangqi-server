@@ -29,7 +29,6 @@ class PersistMove:
             for obj in deserialized:
                 obj.object.save()
                 cache.set(self._cache_key, self._move_count, timeout=CACHE_TTL)
-                return self._game_moves[-1]
         except serializers.base.DeserializationError:
             raise ValidationError("Could not save move")
 

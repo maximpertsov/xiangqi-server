@@ -12,14 +12,14 @@ from xiangqi.views import GameMixin
 
 class GameMoveView(GameMixin, View):
     def get(self, request, slug):
-        return JsonResponse({"moves": GameMoves(game=self.game).result()}, status=200)
+        return JsonResponse({"moves": self._game_moves}, status=200)
 
     def post(self, request, slug):
         try:
             payload = json.loads(request.body.decode("utf-8"))
             jsonschema.validate(payload, self.post_schema)
             PersistMove(game=self.game, payload=payload).perform()
-            return JsonResponse({}, status=201)
+            return JsonResponse({"move": self._game_moves[-1]}, status=201)
         except json.JSONDecodeError:
             return JsonResponse({"error": "Error parsing request"}, status=400)
         except (jsonschema.ValidationError, ValidationError) as e:
@@ -28,9 +28,10 @@ class GameMoveView(GameMixin, View):
     @property
     def post_schema(self):
         return {
-            "properties": {
-                "player": {"type": "string"},
-                "move": {"type": "string"},
-            },
+            "properties": {"player": {"type": "string"}, "move": {"type": "string"}},
             "required": ["player", "move"],
         }
+
+    @property
+    def _game_moves(self):
+        return GameMoves(game=self.game).result()
