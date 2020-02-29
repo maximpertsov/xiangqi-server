@@ -1,6 +1,3 @@
-import json
-
-import jsonschema
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views import View
@@ -9,9 +6,10 @@ from django.views.generic.detail import SingleObjectMixin
 from xiangqi.models import Game
 from xiangqi.operations.move.persist_move import PersistMove
 from xiangqi.queries.move.game_moves import GameMoves
+from xiangqi.views.payload_schema_mixin import PayloadSchemaMixin
 
 
-class GameMoveView(SingleObjectMixin, View):
+class GameMoveView(SingleObjectMixin, PayloadSchemaMixin, View):
     model = Game
 
     def get(self, request, slug):
@@ -19,21 +17,13 @@ class GameMoveView(SingleObjectMixin, View):
 
     def post(self, request, slug):
         try:
-            payload = json.loads(request.body.decode("utf-8"))
-            jsonschema.validate(payload, self.post_schema)
-            PersistMove(game=self._game, payload=payload).perform()
+            self._persist_move()
             return JsonResponse({"move": self._latest_game_move}, status=201)
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Error parsing request"}, status=400)
-        except (jsonschema.ValidationError, ValidationError) as e:
+        except ValidationError as e:
             return JsonResponse({"error": str(e)}, status=400)
 
-    @property
-    def post_schema(self):
-        return {
-            "properties": {"player": {"type": "string"}, "move": {"type": "string"}},
-            "required": ["player", "move"],
-        }
+    def _persist_move(self):
+        PersistMove(game=self._game, payload=self.payload).perform()
 
     @property
     def _latest_game_move(self):
@@ -46,3 +36,10 @@ class GameMoveView(SingleObjectMixin, View):
     @property
     def _game(self):
         return self.get_object()
+
+    @property
+    def payload_schema(self):
+        return {
+            "properties": {"player": {"type": "string"}, "move": {"type": "string"}},
+            "required": ["player", "move"],
+        }
