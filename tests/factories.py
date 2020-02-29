@@ -50,6 +50,7 @@ class ParticipantFactory(f.DjangoModelFactory):
     class Meta:
         model = m.Participant
 
+    game = f.SubFactory(GameFactory)
     score = 0.0
 
 
@@ -61,3 +62,7 @@ class PieceFactory(f.DjangoModelFactory):
 class MoveFactory(f.DjangoModelFactory):
     class Meta:
         model = m.Move
+
+    game = f.SubFactory(GameFactory)
+    name = 'a10a9'
+    participant = f.SubFactory(ParticipantFactory)

@@ -21,6 +21,7 @@ from xiangqi import views
 urlpatterns = [
     path('api/login', views.LoginView.as_view()),
     path('api/authenticate', views.AuthenticateView.as_view()),
+    path('api/fen', views.FenMoveView.as_view()),
     path('api/ping', views.ping),
     path('api/player/<str:username>/games', views.GameListView.as_view()),
     path('api/game/<str:slug>/moves', views.GameMoveView.as_view()),
