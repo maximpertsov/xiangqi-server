@@ -1,12 +1,11 @@
-import json
-
-import jsonschema
 from django.conf import settings
 from django.contrib.auth import authenticate
+from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views import View
 
 from xiangqi.models import AccessToken, RefreshToken
+from xiangqi.views.payload_schema_mixin import PayloadSchemaMixin
 
 ACCESS_TOKEN_KEY = "access_token"
 REFRESH_TOKEN_KEY = "refresh_token"
@@ -27,11 +26,11 @@ def create_refresh_token(user):
     return RefreshToken.objects.create(user)
 
 
-class LoginView(View):
+class LoginView(PayloadSchemaMixin, View):
     http_method_names = ["post"]
 
     @property
-    def post_schema(self):
+    def payload_schema(self):
         return {
             "properties": {
                 "username": {"type": "string"},
@@ -43,14 +42,10 @@ class LoginView(View):
 
     def post(self, request):
         try:
-            payload = json.loads(request.body.decode())
-            jsonschema.validate(payload, self.post_schema)
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Error parsing request"}, status=400)
-        except jsonschema.ValidationError as e:
+            user = authenticate(**self.payload)
+        except ValidationError as e:
             return JsonResponse({"error": e.message}, status=400)
 
-        user = authenticate(**payload)
         if user is None:
             return AuthenticationFailedResponse()
 
