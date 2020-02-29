@@ -46,15 +46,17 @@ class GameMoves:
 
     @property
     def _new_moves(self):
-        result = [
-            {
-                "fen": self._start_fen,
-                "legal_moves": LegalMoves(fen=self._start_fen, moves=[]).result(),
-            }
-        ]
+        result = [self._initial_move]
         for move in self._game_moves:
-            new_move = SerializeMove(
-                fen=result[-1]["fen"], move_name=move.name
-            ).result()
+            previous_fen = result[-1]["fen"]
+            new_move = SerializeMove(fen=previous_fen, move_name=move.name).result()
             result.append(new_move)
+
         return result
+
+    @property
+    def _initial_move(self):
+        return {
+            "fen": self._start_fen,
+            "legal_moves": LegalMoves(fen=self._start_fen, moves=[]).result(),
+        }

@@ -4,8 +4,6 @@ from xiangqi.queries.move.legal_moves import LegalMoves
 
 
 class SerializeMove:
-    # TODO: define another query that does not require a fen and instead
-    # derives everything from all moves up until this point
     def __init__(self, fen, move_name):
         self._fen = fen
         self._move_name = move_name
