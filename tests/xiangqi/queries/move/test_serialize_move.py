@@ -28,7 +28,7 @@ def new_legal_moves():
 
 
 @pytest.mark.django_db
-def test_serialize_move(mocker, move, new_fen, new_legal_moves):
+def test_serialize_move(mocker, move__name, new_fen, new_legal_moves):
     mock_get_fen = mocker.patch(
         'pyffish.get_fen', mocker.MagicMock(return_value=new_fen)
     )
@@ -36,10 +36,10 @@ def test_serialize_move(mocker, move, new_fen, new_legal_moves):
         LegalMoves, 'result', return_value=new_legal_moves
     )
 
-    assert SerializeMove(fen=fen, move=move).result() == {
+    assert SerializeMove(fen=fen, move_name=move__name).result() == {
         'fen': new_fen,
-        'move': move.name,
+        'move': move__name,
         'legal_moves': new_legal_moves,
     }
-    mock_get_fen.assert_called_once_with('xiangqi', fen, [move.name])
+    mock_get_fen.assert_called_once_with('xiangqi', fen, [move__name])
     mock_query_legal_moves.assert_called_once_with()

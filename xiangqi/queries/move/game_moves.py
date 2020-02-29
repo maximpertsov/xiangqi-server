@@ -3,8 +3,8 @@ from itertools import chain
 import pyffish
 from django.utils.functional import cached_property
 
-from xiangqi.queries.move.serialize_move import SerializeMove
 from xiangqi.queries.move.legal_moves import LegalMoves
+from xiangqi.queries.move.serialize_move import SerializeMove
 
 
 class GameMoves:
@@ -42,17 +42,19 @@ class GameMoves:
 
     @cached_property
     def _start_fen(self):
-        return pyffish.start_fen('xiangqi')
+        return pyffish.start_fen("xiangqi")
 
     @property
     def _new_moves(self):
         result = [
             {
-                'fen': self._start_fen,
-                'legal_moves': LegalMoves(fen=self._start_fen, moves=[]).result(),
+                "fen": self._start_fen,
+                "legal_moves": LegalMoves(fen=self._start_fen, moves=[]).result(),
             }
         ]
         for move in self._game_moves:
-            new_move = SerializeMove(fen=result[-1]['fen'], move=move).result()
+            new_move = SerializeMove(
+                fen=result[-1]["fen"], move_name=move.name
+            ).result()
             result.append(new_move)
         return result
