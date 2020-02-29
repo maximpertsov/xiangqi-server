@@ -83,13 +83,13 @@ def test_post_move_201_then_get(client, game_with_players, pieces):
     data = {"player": participant.player.user.username, "move": "a1a2"}
     r = client.post(url, data=json.dumps(data), content_type="application/json")
     assert r.status_code == 201
-
-    moves_returned_by_post = r.json()['moves']
+    assert r.json()["move"]["move"] == "a1a2"
 
     r = client.get(url)
     assert r.status_code == 200
     data = r.json()
-    assert data["moves"] == moves_returned_by_post
+    # NOTE: includes initial state as move
+    assert len(data["moves"]) == 2
 
     # TODO: move to own unit test
     # Test move count api
