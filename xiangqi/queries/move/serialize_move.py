@@ -10,15 +10,20 @@ class SerializeMove:
 
     def result(self):
         return {
-            'fen': self._new_fen,
-            'legal_moves': self._legal_moves,
-            'move': self._move_name,
+            "fen": self._new_fen,
+            "gives_check": self._gives_check,
+            "legal_moves": self._legal_moves,
+            "move": self._move_name,
         }
 
     @property
     def _new_fen(self):
-        return pyffish.get_fen('xiangqi', self._fen, [self._move_name])
+        return pyffish.get_fen("xiangqi", self._fen, [self._move_name])
 
     @property
     def _legal_moves(self):
         return LegalMoves(fen=self._fen, moves=[self._move_name]).result()
+
+    @property
+    def _gives_check(self):
+        return pyffish.gives_check("xiangqi", self._fen, [self._move_name])
