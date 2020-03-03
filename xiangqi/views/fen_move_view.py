@@ -2,11 +2,15 @@ from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views import View
 
-from xiangqi.queries.move.serialize_move import SerializeMove
+from xiangqi.queries.move.serialize_move import SerializeInitialPlacement, SerializeMove
 from xiangqi.views.payload_schema_mixin import PayloadSchemaMixin
 
 
 class FenMoveView(PayloadSchemaMixin, View):
+    # TODO: make this a separate endpoint
+    def get(self, request):
+        return JsonResponse({"move": SerializeInitialPlacement().result()}, status=200)
+
     def post(self, request):
         try:
             return JsonResponse({"move": self._next_move}, status=200)
