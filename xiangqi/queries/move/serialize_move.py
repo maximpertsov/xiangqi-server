@@ -1,29 +1,57 @@
+from abc import ABC, abstractmethod
+
 import pyffish
 
 from xiangqi.queries.move.legal_moves import LegalMoves
 
 
-class SerializeMove:
+class BaseSerializeMove(ABC):
+    def result(self):
+        return {
+            "fen": self.fen,
+            "gives_check": self.gives_check,
+            "legal_moves": self.legal_moves,
+            "move": self.move_name,
+        }
+
+    @property
+    @abstractmethod
+    def fen(self):
+        pass
+
+    @property
+    @abstractmethod
+    def legal_moves(self):
+        pass
+
+    @property
+    @abstractmethod
+    def gives_check(self):
+        pass
+
+    @property
+    @abstractmethod
+    def move_name(self):
+        pass
+
+
+class SerializeMove(BaseSerializeMove):
     def __init__(self, fen, move_name):
         self._fen = fen
         self._move_name = move_name
 
-    def result(self):
-        return {
-            "fen": self._new_fen,
-            "gives_check": self._gives_check,
-            "legal_moves": self._legal_moves,
-            "move": self._move_name,
-        }
-
     @property
-    def _new_fen(self):
+    def fen(self):
         return pyffish.get_fen("xiangqi", self._fen, [self._move_name])
 
     @property
-    def _legal_moves(self):
+    def legal_moves(self):
         return LegalMoves(fen=self._fen, moves=[self._move_name]).result()
 
     @property
-    def _gives_check(self):
+    def gives_check(self):
         return pyffish.gives_check("xiangqi", self._fen, [self._move_name])
+
+    @property
+    def move_name(self):
+        return self._move_name
