@@ -55,3 +55,21 @@ class SerializeMove(BaseSerializeMove):
     @property
     def move_name(self):
         return self._move_name
+
+
+class SerializeInitialPlacement(BaseSerializeMove):
+    @property
+    def fen(self):
+        return pyffish.start_fen("xiangqi")
+
+    @property
+    def legal_moves(self):
+        return LegalMoves(fen=self.fen, moves=[]).result()
+
+    @property
+    def gives_check(self):
+        return False
+
+    @property
+    def move_name(self):
+        return None
