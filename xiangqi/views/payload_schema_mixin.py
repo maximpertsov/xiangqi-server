@@ -16,9 +16,9 @@ class PayloadSchemaMixin(ABC):
             jsonschema.validate(result, self.payload_schema)
             return result
         except json.JSONDecodeError:
-            return ValidationError("Error parsing request")
+            raise ValidationError("Error parsing request")
         except jsonschema.ValidationError as e:
-            return ValidationError(str(e))
+            raise ValidationError(str(e))
 
     @property
     @abstractmethod

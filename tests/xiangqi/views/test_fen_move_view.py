@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from xiangqi.queries.move.serialize_move import SerializeMove
+from xiangqi.queries.move.serialize_move import SerializeInitialPlacement, SerializeMove
 
 
 @pytest.fixture
@@ -25,10 +25,21 @@ def mock_serialize_move(mocker, serialize_result):
     return mocker.patch.object(SerializeMove, "result", return_value=serialize_result)
 
 
-def test_get_fen_move_ok(client, url, payload, mock_serialize_move, serialize_result):
+def test_post_fen_move_ok(client, url, payload, mock_serialize_move, serialize_result):
     response = client.post(
         url, data=json.dumps(payload), content_type="application/json"
     )
     mock_serialize_move.assert_called_once()
     assert response.status_code == 200
     assert response.json() == {"move": serialize_result}
+
+
+@pytest.fixture
+def mock_serialize_initial_placement(mocker):
+    return mocker.patch.object(SerializeInitialPlacement, "result", return_value={})
+
+
+def test_get_fen_move_ok(client, url, mock_serialize_initial_placement):
+    response = client.get(url)
+    mock_serialize_initial_placement.assert_called_once()
+    assert response.status_code == 200
