@@ -1,15 +1,7 @@
 import pytest
-from pytest_factoryboy import register
 
-from tests import factories
 from xiangqi.queries.move.legal_moves import LegalMoves
 from xiangqi.queries.move.serialize_move import SerializeMove
-
-register(factories.GameFactory)
-register(factories.PlayerFactory)
-register(factories.UserFactory)
-register(factories.ParticipantFactory)
-register(factories.MoveFactory)
 
 
 @pytest.fixture

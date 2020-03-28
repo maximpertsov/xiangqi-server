@@ -1,14 +1,6 @@
 import pytest
-from pytest_factoryboy import register
 
-from tests import factories
 from xiangqi.queries.move.game_moves import GameMoves
-
-register(factories.UserFactory)
-register(factories.PlayerFactory)
-register(factories.GameFactory)
-register(factories.MoveFactory)
-register(factories.ParticipantFactory)
 
 
 @pytest.fixture

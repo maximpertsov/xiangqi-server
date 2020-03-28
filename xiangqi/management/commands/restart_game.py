@@ -1,7 +1,7 @@
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
-from xiangqi.models import Game
+from xiangqi.models.game import Game
 
 
 class Command(BaseCommand):

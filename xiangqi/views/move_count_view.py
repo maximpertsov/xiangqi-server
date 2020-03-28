@@ -3,8 +3,8 @@ from django.http import JsonResponse
 from django.utils.functional import cached_property
 from django.views.generic.detail import SingleObjectMixin, View
 
-from xiangqi.models import Move
 from xiangqi.models.game import Game
+from xiangqi.models.move import Move
 
 
 class MoveCountView(SingleObjectMixin, View):
