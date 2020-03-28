@@ -23,13 +23,6 @@ class PlayerFactory(f.DjangoModelFactory):
     rating = 1500
 
 
-class ResultFactory(f.DjangoModelFactory):
-    class Meta:
-        model = m.Result
-
-    description = f.Faker("sentence")
-
-
 class GameFactory(f.DjangoModelFactory):
     class Meta:
         model = m.Game
