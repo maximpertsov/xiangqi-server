@@ -1,5 +1,5 @@
 from factory import DjangoModelFactory, Faker, LazyAttribute
-from xiangqi.models.user import User
+from xiangqi.models import User
 
 
 class UserFactory(DjangoModelFactory):

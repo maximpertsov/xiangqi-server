@@ -1,6 +1,6 @@
 from factory import DjangoModelFactory, SubFactory
 
-from xiangqi.models.move import Move
+from xiangqi.models import Move
 
 from .game import GameFactory
 from .participant import ParticipantFactory

@@ -4,7 +4,7 @@ from django.db import models
 from django.utils import timezone
 
 from xiangqi.lib import jwt
-from xiangqi.models.user import User
+from xiangqi.models import User
 
 ACCESS_TOKEN_LIFE = 60 * 60
 REFRESH_TOKEN_LIFE = 60 * 60 * 24 * 60

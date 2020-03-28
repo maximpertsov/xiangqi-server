@@ -1,5 +1,5 @@
 from factory import DjangoModelFactory, Sequence
-from xiangqi.models.game import Game
+from xiangqi.models import Game
 
 
 class GameFactory(DjangoModelFactory):

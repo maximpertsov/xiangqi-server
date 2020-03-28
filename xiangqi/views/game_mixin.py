@@ -1,6 +1,6 @@
 from django.views.generic.detail import SingleObjectMixin
 
-from xiangqi.models.game import Game
+from xiangqi.models import Game
 
 
 class GameMixin(SingleObjectMixin):

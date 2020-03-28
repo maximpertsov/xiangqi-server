@@ -1,6 +1,6 @@
 from factory import DjangoModelFactory, SubFactory
 
-from xiangqi.models.game_event import GameEvent
+from xiangqi.models import GameEvent
 
 from .game import GameFactory
 
