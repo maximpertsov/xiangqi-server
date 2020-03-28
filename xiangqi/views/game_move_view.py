@@ -1,17 +1,14 @@
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views import View
-from django.views.generic.detail import SingleObjectMixin
 
-from xiangqi.models.game import Game
 from xiangqi.operations.move.persist_move import PersistMove
 from xiangqi.queries.move.game_moves import GameMoves
+from xiangqi.views.game_mixin import GameMixin
 from xiangqi.views.payload_schema_mixin import PayloadSchemaMixin
 
 
-class GameMoveView(SingleObjectMixin, PayloadSchemaMixin, View):
-    model = Game
-
+class GameMoveView(GameMixin, PayloadSchemaMixin, View):
     def get(self, request, slug):
         return JsonResponse({"moves": self._game_moves}, status=200)
 
@@ -23,7 +20,7 @@ class GameMoveView(SingleObjectMixin, PayloadSchemaMixin, View):
             return JsonResponse({"error": str(e)}, status=400)
 
     def _persist_move(self):
-        PersistMove(game=self._game, payload=self.payload).perform()
+        PersistMove(game=self.game, payload=self.payload).perform()
 
     @property
     def _latest_game_move(self):
@@ -31,11 +28,7 @@ class GameMoveView(SingleObjectMixin, PayloadSchemaMixin, View):
 
     @property
     def _game_moves(self):
-        return GameMoves(game=self._game).result()
-
-    @property
-    def _game(self):
-        return self.get_object()
+        return GameMoves(game=self.game).result()
 
     @property
     def payload_schema(self):
