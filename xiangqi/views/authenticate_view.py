@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views import View
 
-from xiangqi.models import AccessToken, RefreshToken
+from xiangqi.models.token import AccessToken, RefreshToken
 from xiangqi.views.payload_schema_mixin import PayloadSchemaMixin
 
 ACCESS_TOKEN_KEY = "access_token"

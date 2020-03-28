@@ -1,22 +1,6 @@
 import pytest
-from django.core.management import call_command
-from pytest_factoryboy import register
 
-from tests import factories
 from xiangqi.queries.move.game_moves import GameMoves
-
-register(factories.UserFactory)
-register(factories.PlayerFactory)
-register(factories.GameFactory)
-register(factories.MoveFactory)
-register(factories.ParticipantFactory)
-
-
-# TODO: remove need for existing pieces
-@pytest.fixture
-def pieces(game):
-    call_command("loaddata", "pieces.json")
-    return game
 
 
 @pytest.fixture
@@ -30,9 +14,8 @@ def game_with_moves(game, participant_factory, move_factory, player_factory):
     return game
 
 
-# TODO: remove need for existing pieces
 @pytest.mark.django_db
-def test_game_moves(game_with_moves, pieces):
+def test_game_moves(game_with_moves):
     result = GameMoves(game_with_moves).result()
     assert len(result) == 4
     for serialized in result:

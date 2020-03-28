@@ -1,20 +1,21 @@
 from django.core.cache import cache
 from django.http import JsonResponse
 from django.utils.functional import cached_property
-from django.views.generic.detail import View
+from django.views.generic.detail import SingleObjectMixin, View
 
-from xiangqi.models import Move
-from xiangqi.views import GameMixin
+from xiangqi.models.game import Game
+from xiangqi.models.move import Move
 
 
-class MoveCountView(GameMixin, View):
+class MoveCountView(SingleObjectMixin, View):
+    model = Game
+
     @classmethod
     def get_cache_key(cls, game_slug):
-        return 'updated_at_{}'.format(game_slug)
+        return "updated_at_{}".format(game_slug)
 
     def get(self, request, slug):
-
-        return JsonResponse({'move_count': self.move_count}, status=200)
+        return JsonResponse({"move_count": self.move_count}, status=200)
 
     @cached_property
     def move_count(self):

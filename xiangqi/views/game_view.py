@@ -1,30 +1,25 @@
-from django.core.cache import cache
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
-from django.utils.functional import cached_property
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.generic.detail import SingleObjectMixin
 
-from xiangqi.views import GameMixin
+from xiangqi.models.game import Game
 
 
 @method_decorator(ensure_csrf_cookie, name="dispatch")
-class GameView(GameMixin, View):
-    @cached_property
-    def cache_key(self):
-        return 'initial_fen_{}'.format(self.kwargs[self.slug_url_kwarg])
-
-    @cached_property
-    def initial_fen(self):
-        result = cache.get(self.cache_key)
-        if result is None:
-            result = self.board_fen(self.initial_board)
-            cache.set(self.cache_key, result, 100)
-        return result
+class GameView(SingleObjectMixin, View):
+    model = Game
 
     def get(self, request, slug):
-        result = {
-            'initial_fen': self.initial_fen,
-            'players': list(self.players_data_by_participant.values()),
-        }
+        result = {"players": list(self._players)}
         return JsonResponse(result, status=200)
+
+    @property
+    def _players(self):
+        for participant in self.get_object().participant_set.all():
+            yield {
+                "name": participant.player.user.username,
+                "color": participant.color,
+                "score": participant.score,
+            }

@@ -1,15 +1,13 @@
 """
 isort:skip_file
+
+Models must be imported here to be referenced using the 'app_label.model_name' notation
 """
 
-from .color import Color
 from .user import User
 from .player import Player
-from .result import Result
-from .position import Position
 from .game import Game
 from .participant import Participant
-from .piece import Piece
 from .move import Move
 
 from .token import AccessToken, RefreshToken

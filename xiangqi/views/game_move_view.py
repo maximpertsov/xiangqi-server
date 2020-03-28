@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.views import View
 from django.views.generic.detail import SingleObjectMixin
 
-from xiangqi.models import Game
+from xiangqi.models.game import Game
 from xiangqi.operations.move.persist_move import PersistMove
 from xiangqi.queries.move.game_moves import GameMoves
 from xiangqi.views.payload_schema_mixin import PayloadSchemaMixin
