@@ -41,7 +41,7 @@ class PersistMove:
             "participant": [self._slug, self._username],
             "game": [self._slug],
             "name": self._move_name,
-            # "event": self._event,  # TODO: not json serializable
+            # "event_id": self._event.pk,  # TODO: add relationship
         }
 
     @cached_property

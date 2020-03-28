@@ -19,27 +19,36 @@ def participant(game_with_players):
 
 
 @pytest.fixture
-def payload():
-    return {"move": "b10c8"}
+def payload(participant):
+    return {"move": "b10c8", "player": participant.player.user.username}
+
+
+@pytest.fixture
+def event(game_with_players, payload, game_event_factory):
+    return game_event_factory(game=game_with_players, payload=payload, name="move")
 
 
 @pytest.mark.django_db
-def test_create_move(mocker, game_with_players, participant, payload):
+def test_create_move(mocker, event, participant):
     mock_cache_set = mocker.patch.object(cache, "set")
 
-    assert game_with_players.move_set.count() == 0
-    payload.update(player=participant.player.user.username)
+    assert event.game.move_set.count() == 0
 
-    PersistMove(game_with_players, payload).perform()
+    PersistMove(event=event).perform()
     mock_cache_set.assert_called_once_with(
-        "updated_at_{}".format(game_with_players.slug), 1, timeout=3600
+        "updated_at_{}".format(event.game.slug), 1, timeout=3600
     )
-    assert game_with_players.move_set.first().name == "b10c8"
-    assert game_with_players.move_set.count() == 1
+    assert event.game.move_set.first().name == "b10c8"
+    assert event.game.move_set.count() == 1
+
+
+@pytest.fixture
+def event_with_non_player(game_with_players, payload, game_event_factory):
+    payload.update(player="Not a game player")
+    return game_event_factory(game=game_with_players, payload=payload, name="move")
 
 
 @pytest.mark.django_db
-def test_create_move_non_participant(game_with_players, payload):
-    payload.update(player="Not a game player")
+def test_create_move_non_participant(event_with_non_player):
     with pytest.raises(ValidationError):
-        PersistMove(game_with_players, payload).perform()
+        PersistMove(event=event_with_non_player).perform()
