@@ -4,7 +4,6 @@ from django.utils.functional import cached_property
 from django.views.generic.detail import View
 
 from xiangqi.views.game_mixin import GameMixin
-from xiangqi.models.move import Move
 
 
 class MoveCountView(GameMixin, View):
@@ -19,7 +18,7 @@ class MoveCountView(GameMixin, View):
     def move_count(self):
         result = cache.get(self.cache_key)
         if result is None:
-            result = Move.objects.count()
+            result = self.game.move_set.count()
             cache.set(self.cache_key, result, timeout=None)
 
         return result

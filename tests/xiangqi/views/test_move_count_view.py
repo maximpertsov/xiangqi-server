@@ -21,7 +21,7 @@ def get_response(client, game_with_moves):
 
 
 @pytest.mark.django_db
-def test_post_move_201_then_get(get_response):
+def test_successful_response(get_response):
     response = get_response()
     assert response.status_code == 200
     assert response.json() == {"move_count": 3}
