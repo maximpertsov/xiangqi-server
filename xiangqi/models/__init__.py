@@ -9,7 +9,6 @@ from .result import Result
 from .position import Position
 from .game import Game
 from .participant import Participant
-from .piece import Piece
 from .move import Move
 
 from .token import AccessToken, RefreshToken

@@ -54,11 +54,6 @@ class ParticipantFactory(f.DjangoModelFactory):
     score = 0.0
 
 
-class PieceFactory(f.DjangoModelFactory):
-    class Meta:
-        model = m.Piece
-
-
 class MoveFactory(f.DjangoModelFactory):
     class Meta:
         model = m.Move
