@@ -1,7 +1,6 @@
 import json
 
 import pytest
-from django.core.management import call_command
 from pytest_factoryboy import register
 
 from tests import factories
@@ -11,12 +10,6 @@ register(factories.PlayerFactory)
 register(factories.GameFactory)
 register(factories.MoveFactory)
 register(factories.ParticipantFactory)
-
-
-@pytest.fixture
-def pieces(game):
-    call_command("loaddata", "pieces.json")
-    return game
 
 
 @pytest.fixture
@@ -39,20 +32,14 @@ def test_get_game_200(client, game):
     assert r.status_code == 200
 
     data = r.json()
-    assert data["initial_fen"] == "9/9/9/9/9/9/9/9/9/9"
     assert data["players"] == []
 
 
 @pytest.mark.django_db
-def test_get_game_pieces(client, game, pieces):
+def test_get_game_pieces(client, game):
     r = client.get("/api/game/{}".format(game.slug))
     assert r.status_code == 200
-
-    data = r.json()
-
-    expected_fen = "rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR"
-    assert data["initial_fen"] == expected_fen
-    assert data["players"] == []
+    assert r.json()["players"] == []
 
 
 @pytest.mark.django_db
@@ -77,7 +64,7 @@ def test_get_games_for_participant(client, game_with_players):
 
 
 @pytest.mark.django_db
-def test_post_move_201_then_get(client, game_with_players, pieces):
+def test_post_move_201_then_get(client, game_with_players):
     participant = game_with_players.participant_set.first()
     url = "/api/game/{}/moves".format(game_with_players.slug)
     data = {"player": participant.player.user.username, "move": "a1a2"}
