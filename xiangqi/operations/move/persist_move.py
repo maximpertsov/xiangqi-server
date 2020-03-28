@@ -8,21 +8,20 @@ from django.utils.functional import cached_property
 
 from xiangqi.queries.move.game_moves import GameMoves
 
-deserialize = partial(serializers.deserialize, 'json', use_natural_foreign_keys=True)
+deserialize = partial(serializers.deserialize, "json", use_natural_foreign_keys=True)
 
 CACHE_TTL = 3600
 
 
 class PersistMove:
-    def __init__(self, game, payload):
-        self._game = game
-        self._payload = payload
+    def __init__(self, event):
+        self._event = event
 
     def perform(self):
         self._persist_move()
 
     def _persist_move(self):
-        data = {'model': 'xiangqi.move', 'fields': self._update_attributes}
+        data = {"model": "xiangqi.move", "fields": self._update_attributes}
 
         try:
             deserialized = deserialize(json.dumps([data]))
@@ -39,20 +38,15 @@ class PersistMove:
     @cached_property
     def _update_attributes(self):
         return {
-            'participant': [self._slug, self._username],
-            'game': [self._slug],
-            'name': self._move_name,
+            "participant": [self._slug, self._username],
+            "game": [self._slug],
+            "name": self._move_name,
+            # "event": self._event,  # TODO: not json serializable
         }
 
-    # TODO: temporary
     @cached_property
     def _move_name(self):
-        return self._payload['move']
-
-    # TODO: temporary
-    @staticmethod
-    def rank_file_to_square(rank, file):
-        return '{file}{rank}'.format(rank=10 - rank, file='abcdefghi'[file])
+        return self._payload["move"]
 
     @cached_property
     def _cache_key(self):
@@ -70,4 +64,12 @@ class PersistMove:
 
     @cached_property
     def _username(self):
-        return self._payload['player']
+        return self._payload["player"]
+
+    @cached_property
+    def _game(self):
+        return self._event.game
+
+    @cached_property
+    def _payload(self):
+        return self._event.payload

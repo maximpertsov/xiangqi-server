@@ -2,10 +2,11 @@ from django.core.exceptions import ValidationError
 from django.utils.functional import cached_property
 
 from xiangqi.models import GameEvent
+from xiangqi.operations.move.persist_move import PersistMove
 
 
 class CreateGameEvent:
-    _EVENT_HANDLER_CLASSES = {}
+    _EVENT_HANDLER_CLASSES = {"move": PersistMove}
 
     def __init__(self, game, payload):
         self._game = game
