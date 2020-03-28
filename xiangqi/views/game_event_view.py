@@ -6,7 +6,7 @@ from xiangqi.views.game_mixin import GameMixin
 from xiangqi.views.payload_schema_mixin import PayloadSchemaMixin
 
 
-class GameMoveView(GameMixin, PayloadSchemaMixin, View):
+class GameEventView(GameMixin, PayloadSchemaMixin, View):
     def post(self, request, slug):
         try:
             self._create_event()
@@ -19,4 +19,4 @@ class GameMoveView(GameMixin, PayloadSchemaMixin, View):
 
     @property
     def payload_schema(self):
-        return {}
+        return {"name": "string"}
