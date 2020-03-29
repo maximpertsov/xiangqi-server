@@ -1,6 +1,7 @@
 from django.db import models
+from django.dispatch import receiver
 from django.utils.crypto import get_random_string
-from django_fsm import GET_STATE, FSMField, transition
+from django_fsm import GET_STATE, FSMField, post_transition, transition
 
 
 class GameManager(models.Manager):
@@ -15,6 +16,7 @@ class GameManager(models.Manager):
 
     def create(self, slug=None, **kwargs):
         kwargs["slug"] = self._generate_slug() if slug is None else slug
+        # TODO: save initial transition
         return super().create(**kwargs)
 
     def get_by_natural_key(self, slug):
@@ -52,7 +54,15 @@ class Game(models.Model):
     @transition(
         field=state,
         source=[State.NEW, State.RED_TURN, State.BLACK_TURN],
-        target=GET_STATE(lambda self: self._next(), [State.RED_TURN, State.BLACK_TURN])
+        target=GET_STATE(
+            lambda self: self._change_turn(), [State.RED_TURN, State.BLACK_TURN]
+        ),
     )
     def change_turn(self):
         pass
+
+
+@receiver(post_transition, sender=Game)
+def save_transition(sender, instance, source=None, target=None, **kwargs):
+    # TODO: save transition to_state: target
+    pass
