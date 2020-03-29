@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
@@ -26,6 +27,12 @@ class GameManager(models.Manager):
 
 
 class Game(models.Model):
+    class NoTransition(ValidationError):
+        pass
+
+    class TransitionError(ValidationError):
+        pass
+
     class State:
         RED_TURN = "red_turn"
         BLACK_TURN = "black_turn"
@@ -34,7 +41,7 @@ class Game(models.Model):
 
     objects = GameManager()
 
-    state = FSMField(default=State.RED_TURN, protected=True)
+    state = FSMField(default=State.RED_TURN)
 
     slug = models.CharField(max_length=64, unique=True, editable=False)
     participants = models.ManyToManyField(through="participant", to="player")
@@ -47,10 +54,24 @@ class Game(models.Model):
 
     # Transitions
 
+    # TODO: move into abstract state model?
+    def shuttle(self, event):
+        transition_count = 0
+        for available_transition in self.get_available_state_transitions():
+            try:
+                getattr(self, available_transition.name)(event)
+                transition_count += 1
+            except self.NoTransition:
+                pass
+
+        if not transition_count:
+            raise self.TransitionError
+
     @transition(field=state, source=State.RED_TURN, target=State.BLACK_TURN)
     @transition(field=state, source=State.BLACK_TURN, target=State.RED_TURN)
     def change_turn(self, event):
-        pass
+        if event.name != "move":
+            raise self.NoTransition("Invalid event")
 
 
 @receiver(post_transition, sender=Game)
@@ -58,4 +79,6 @@ def save_transition(sender, instance, target, method_args, **kwargs):
     (event,) = method_args
     with transaction.atomic():
         instance.save()
-        GameTransition.objects.create(game=instance, to_state=target, casual_event=event)
+        GameTransition.objects.create(
+            game=instance, to_state=target, casual_event=event
+        )

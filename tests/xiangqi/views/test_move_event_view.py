@@ -2,6 +2,8 @@ import json
 
 import pytest
 
+from xiangqi.models import Game
+
 
 @pytest.fixture
 def game_with_players(game, participant_factory, player_factory):
@@ -38,6 +40,8 @@ def post(client, url, payload):
 
 @pytest.mark.django_db
 def test_create_move(post, game_with_players):
+    assert game_with_players.state == Game.State.RED_TURN
+    assert game_with_players.transition_set.count() == 0
     assert game_with_players.move_set.count() == 0
     assert game_with_players.event_set.filter(name="move").count() == 0
 
@@ -45,5 +49,8 @@ def test_create_move(post, game_with_players):
     assert response.status_code == 201
     assert response.json() == {}
 
+    game_with_players.refresh_from_db()
+    assert game_with_players.state == Game.State.BLACK_TURN
+    assert game_with_players.transition_set.count() == 1
     assert game_with_players.move_set.count() == 1
     assert game_with_players.event_set.filter(name="move").count() == 1
