@@ -9,7 +9,7 @@ from xiangqi.views.game_mixin import GameMixin
 class MoveCountView(GameMixin, View):
     @classmethod
     def get_cache_key(cls, game_slug):
-        return "updated_at_{}".format(game_slug)
+        return "transition_count_{}".format(game_slug)
 
     def get(self, request, slug):
         return JsonResponse({"move_count": self.move_count}, status=200)
