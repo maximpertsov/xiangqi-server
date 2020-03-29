@@ -25,6 +25,8 @@ class GameTransitionManager(models.Manager):
             result = super().count(**kwargs)
             cache.set(cache_key, result, timeout=CACHE_TTL)
 
+        return result
+
 
 class GameTransition(models.Model):
     objects = GameTransitionManager()
