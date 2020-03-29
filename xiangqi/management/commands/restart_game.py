@@ -12,7 +12,12 @@ class Command(BaseCommand):
 
     def handle(self, game=None, *args, **kwargs):
         try:
-            Game.objects.get(slug=game).move_set.all().delete()
+            game = Game.objects.get(slug=game)
+
+            game.move_set.all().delete()
+            game.transition_set.all().delete()
+            game.event_set.all().delete()
+
             call_command("clear_cache")
             self.write_success("Reset Game {}".format(game))
         except Game.DoesNotExist as e:
