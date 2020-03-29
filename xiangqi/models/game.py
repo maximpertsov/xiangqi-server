@@ -1,7 +1,9 @@
-from django.db import models
+from django.db import models, transaction
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
 from django_fsm import FSMField, post_transition, transition
+
+from xiangqi.models import GameTransition
 
 
 class GameManager(models.Manager):
@@ -47,14 +49,13 @@ class Game(models.Model):
 
     @transition(field=state, source=State.RED_TURN, target=State.BLACK_TURN)
     @transition(field=state, source=State.BLACK_TURN, target=State.RED_TURN)
-    def change_turn(self):
+    def change_turn(self, event):
         pass
 
 
 @receiver(post_transition, sender=Game)
-def save_transition(
-    sender, instance, source=None, target=None, method_args=None, **kwargs
-):
-    # TODO: save transition to_state: target
-    print(instance, source, target, method_args, kwargs)
-    pass
+def save_transition(sender, instance, target, method_args, **kwargs):
+    (event,) = method_args
+    with transaction.atomic():
+        instance.save()
+        GameTransition.objects.create(game=instance, to_state=target, casual_event=event)
