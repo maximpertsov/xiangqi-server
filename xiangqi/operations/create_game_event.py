@@ -18,7 +18,7 @@ class CreateGameEvent:
     def _handle_event(self):
         try:
             handler = self._EVENT_HANDLER_CLASSES[self._event_name]
-            handler(self._event)
+            handler(event=self._event).perform()
         except KeyError as event_name:
             # TODO: make event model as failed?
             raise ValidationError("Unknown event {}".format(event_name))
@@ -31,4 +31,4 @@ class CreateGameEvent:
 
     @property
     def _event_name(self):
-        self._payload["name"]
+        return self._payload["name"]

@@ -27,12 +27,23 @@ def url(game_with_players):
 
 
 @pytest.fixture
-def post_response(client, url, payload):
-    return client.post(url, data=json.dumps(payload), content_type="application/json")
+def post(client, url, payload):
+    def wrapped():
+        return client.post(
+            url, data=json.dumps(payload), content_type="application/json"
+        )
+
+    return wrapped
 
 
 @pytest.mark.django_db
-def test_create_move(response, game_with_players):
+def test_create_move(post, game_with_players):
+    assert game_with_players.move_set.count() == 0
+    assert game_with_players.gameevent_set.filter(name="move").count() == 0
+
+    response = post()
     assert response.status_code == 201
     assert response.json() == {}
+
     assert game_with_players.move_set.count() == 1
+    assert game_with_players.gameevent_set.filter(name="move").count() == 1
