@@ -55,21 +55,6 @@ def test_get_games_for_participant(client, game_with_players):
 
 
 @pytest.mark.django_db
-def test_post_move_201_then_get(client, game_with_players):
-    participant = game_with_players.participant_set.first()
-    url = "/api/game/{}/moves".format(game_with_players.slug)
-    data = {"player": participant.player.user.username, "move": "a1a2"}
-    r = client.post(url, data=json.dumps(data), content_type="application/json")
-    assert r.status_code == 201
-    assert r.json()["move"]["move"] == "a1a2"
-
-    r = client.get(url)
-    assert r.status_code == 200
-    data = r.json()
-    assert len(data["moves"]) == 2
-
-
-@pytest.mark.django_db
 @pytest.mark.skip("Requires cookies in request")
 def test_authenticate(client, user):
     password = "s0_s0_secure"

@@ -10,7 +10,7 @@ class GameEventView(GameMixin, PayloadSchemaMixin, View):
     def post(self, request, slug):
         try:
             self._create_event()
-            return JsonResponse(status=201)
+            return JsonResponse({}, status=201)
         except ValidationError as e:
             return JsonResponse({"error": str(e)}, status=400)
 
