@@ -39,11 +39,11 @@ def post(client, url, payload):
 @pytest.mark.django_db
 def test_create_move(post, game_with_players):
     assert game_with_players.move_set.count() == 0
-    assert game_with_players.gameevent_set.filter(name="move").count() == 0
+    assert game_with_players.event_set.filter(name="move").count() == 0
 
     response = post()
     assert response.status_code == 201
     assert response.json() == {}
 
     assert game_with_players.move_set.count() == 1
-    assert game_with_players.gameevent_set.filter(name="move").count() == 1
+    assert game_with_players.event_set.filter(name="move").count() == 1
