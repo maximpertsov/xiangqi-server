@@ -31,7 +31,7 @@ class Game(models.Model):
 
     objects = GameManager()
 
-    state = FSMField(default=State.NEW)
+    state = FSMField(default=State.NEW, protected=True)
 
     slug = models.CharField(max_length=64, unique=True, editable=False)
     participants = models.ManyToManyField(through="participant", to="player")
