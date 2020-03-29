@@ -1,6 +1,8 @@
 from django.core.cache import cache
 from django.db import models
 
+CACHE_TTL = None
+
 
 def get_cache_key(game_slug):
     return "transition_count_{}".format(game_slug)
@@ -11,6 +13,17 @@ class GameTransitionManager(models.Manager):
         instance = super().create(**kwargs)
         cache.delete(get_cache_key(instance.game.slug))
         return instance
+
+    def count(self, **kwargs):
+        game = self.core_filters["game"]
+        if not game:
+            return super().count(**kwargs)
+
+        cache_key = get_cache_key(game.slug)
+        result = cache.get(cache_key)
+        if result is None:
+            result = super().count(**kwargs)
+            cache.set(cache_key, result, timeout=CACHE_TTL)
 
 
 class GameTransition(models.Model):
