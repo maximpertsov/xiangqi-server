@@ -25,7 +25,7 @@ class CreateGameEvent:
             raise ValidationError("No update")
 
     @property
-    def _hander(self):
+    def _handler(self):
         try:
             return self._EVENT_HANDLER_CLASSES[self._event_name]
         except KeyError as event_name:
