@@ -28,3 +28,6 @@ class Game(models.Model):
 
     def natural_key(self):
         return self.slug
+
+    def __str__(self):
+        return self.slug

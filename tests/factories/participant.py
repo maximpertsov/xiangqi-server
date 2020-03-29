@@ -1,5 +1,5 @@
 from factory import DjangoModelFactory, SubFactory
-from xiangqi.models.participant import Participant
+from xiangqi.models import Participant
 
 from .game import GameFactory
 

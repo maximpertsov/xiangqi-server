@@ -22,7 +22,7 @@ class Player(models.Model):
     natural_key.dependencies = [User._meta.app_label + '.' + User._meta.model_name]
 
     def __str__(self):
-        return self.get_username()
+        return self.user.username
 
 
 @receiver(post_save, sender=User)
