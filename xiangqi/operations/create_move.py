@@ -13,14 +13,14 @@ deserialize = partial(serializers.deserialize, "json", use_natural_foreign_keys=
 CACHE_TTL = 3600
 
 
-class PersistMove:
+class CreateMove:
     def __init__(self, event):
         self._event = event
 
     def perform(self):
-        self._persist_move()
+        self._create_move()
 
-    def _persist_move(self):
+    def _create_move(self):
         data = {"model": "xiangqi.move", "fields": self._update_attributes}
 
         try:

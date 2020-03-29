@@ -2,7 +2,7 @@ import pytest
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 
-from xiangqi.operations.move.persist_move import PersistMove
+from xiangqi.operations.create_move import CreateMove
 
 
 @pytest.fixture
@@ -34,7 +34,7 @@ def test_create_move(mocker, event, participant):
 
     assert event.game.move_set.count() == 0
 
-    PersistMove(event=event).perform()
+    CreateMove(event=event).perform()
     mock_cache_set.assert_called_once_with(
         "updated_at_{}".format(event.game.slug), 1, timeout=3600
     )
@@ -51,4 +51,4 @@ def event_with_non_player(game_with_players, payload, game_event_factory):
 @pytest.mark.django_db
 def test_create_move_non_participant(event_with_non_player):
     with pytest.raises(ValidationError):
-        PersistMove(event=event_with_non_player).perform()
+        CreateMove(event=event_with_non_player).perform()
