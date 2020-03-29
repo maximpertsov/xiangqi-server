@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.crypto import get_random_string
+from django_fsm import FSMField, transition
 
 
 class GameManager(models.Manager):
@@ -21,7 +22,16 @@ class GameManager(models.Manager):
 
 
 class Game(models.Model):
+    class State:
+        NEW = "new"
+        RED_TURN = "red_turn"
+        BLACK_TURN = "black_turn"
+        ABORTED = "aborted"
+        GAME_OVER = "game_over"
+
     objects = GameManager()
+
+    state = FSMField(default=State.NEW)
 
     slug = models.CharField(max_length=64, unique=True, editable=False)
     participants = models.ManyToManyField(through="participant", to="player")
