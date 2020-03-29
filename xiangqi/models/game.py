@@ -7,7 +7,7 @@ class GameManager(models.Manager):
     def _generate_slug(self):
         size = 8
         while True:
-            slug = get_random_string(size)
+            slug = get_random_string(size).lower()
             if self.filter(slug=slug).exists():
                 size += 1
                 continue
