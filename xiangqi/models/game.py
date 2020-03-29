@@ -1,7 +1,7 @@
 from django.db import models
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
-from django_fsm import GET_STATE, FSMField, post_transition, transition
+from django_fsm import FSMField, post_transition, transition
 
 
 class GameManager(models.Manager):
@@ -25,7 +25,6 @@ class GameManager(models.Manager):
 
 class Game(models.Model):
     class State:
-        NEW = "new"
         RED_TURN = "red_turn"
         BLACK_TURN = "black_turn"
         ABORTED = "aborted"
@@ -33,7 +32,7 @@ class Game(models.Model):
 
     objects = GameManager()
 
-    state = FSMField(default=State.NEW, protected=True)
+    state = FSMField(default=State.RED_TURN, protected=True)
 
     slug = models.CharField(max_length=64, unique=True, editable=False)
     participants = models.ManyToManyField(through="participant", to="player")
@@ -46,23 +45,16 @@ class Game(models.Model):
 
     # Transitions
 
-    def _change_turn(self):
-        if self.state == self.State.RED_TURN:
-            return self.State.BLACK_TURN
-        return self.State.RED_TURN
-
-    @transition(
-        field=state,
-        source=[State.NEW, State.RED_TURN, State.BLACK_TURN],
-        target=GET_STATE(
-            lambda self: self._change_turn(), [State.RED_TURN, State.BLACK_TURN]
-        ),
-    )
+    @transition(field=state, source=State.RED_TURN, target=State.BLACK_TURN)
+    @transition(field=state, source=State.BLACK_TURN, target=State.RED_TURN)
     def change_turn(self):
         pass
 
 
 @receiver(post_transition, sender=Game)
-def save_transition(sender, instance, source=None, target=None, **kwargs):
+def save_transition(
+    sender, instance, source=None, target=None, method_args=None, **kwargs
+):
     # TODO: save transition to_state: target
+    print(instance, source, target, method_args, kwargs)
     pass
