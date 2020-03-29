@@ -44,7 +44,7 @@ class Game(models.Model):
 
     # Transitions
 
-    def _next(self):
+    def _change_turn(self):
         if self.state == self.State.RED_TURN:
             return self.State.BLACK_TURN
         return self.State.RED_TURN
@@ -54,5 +54,5 @@ class Game(models.Model):
         source=[State.NEW, State.RED_TURN, State.BLACK_TURN],
         target=GET_STATE(lambda self: self._next(), [State.RED_TURN, State.BLACK_TURN])
     )
-    def next(self):
+    def change_turn(self):
         pass
