@@ -38,10 +38,9 @@ class CreateMove:
     @cached_property
     def _update_attributes(self):
         return {
-            "participant": [self._slug, self._username],
             "game": [self._slug],
             "name": self._move_name,
-            # "event_id": self._event.pk,  # TODO: add relationship
+            "player": [self._username],
         }
 
     @cached_property
