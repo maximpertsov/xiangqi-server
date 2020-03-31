@@ -1,7 +1,8 @@
 from django.core.exceptions import ValidationError
+from django.db.transaction import atomic
 from django.utils.functional import cached_property
 
-from xiangqi.models import GameEvent
+from xiangqi.models import Game, GameEvent
 from xiangqi.operations.create_move import CreateMove
 
 
@@ -15,12 +16,19 @@ class CreateGameEvent:
     def perform(self):
         self._handle_event()
 
+    @atomic
     def _handle_event(self):
         try:
-            handler = self._EVENT_HANDLER_CLASSES[self._event_name]
-            handler(event=self._event).perform()
+            self._game.shuttle(self._event)
+            self._handler(event=self._event).perform()
+        except Game.TransitionError:
+            raise ValidationError("No update")
+
+    @property
+    def _handler(self):
+        try:
+            return self._EVENT_HANDLER_CLASSES[self._event_name]
         except KeyError as event_name:
-            # TODO: make event model as failed?
             raise ValidationError("Unknown event {}".format(event_name))
 
     @cached_property
