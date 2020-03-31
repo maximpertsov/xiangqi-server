@@ -13,16 +13,12 @@ def game_with_players(game, participant_factory, move_factory, player_factory):
 
 @pytest.fixture
 def red_player(game_with_players):
-    return game_with_players.participant_set.filter(color="red").player
+    return game_with_players.participant_set.get(color="red").player
 
 
 @pytest.fixture
 def black_player(game_with_players):
-    return game_with_players.participant_set.filter(color="black").player
-
-    # move_factory(game=game, participant=participant1, name="a1a3")
-    # move_factory(game=game, participant=participant2, name="a10a9")
-    # move_factory(game=game, participant=participant1, name="i1i3")
+    return game_with_players.participant_set.get(color="black").player
 
 
 @pytest.fixture
@@ -34,7 +30,7 @@ def poll(client, game_with_players):
 
 
 @pytest.fixture
-def move(client, game_with_players):
+def make_move(client, game_with_players):
     def wrapped(move, player):
         payload = {"name": "move", "move": move, "player": player.user.username}
         return client.post(
@@ -47,16 +43,17 @@ def move(client, game_with_players):
 
 
 @pytest.mark.django_db
-def test_successful_response(poll, move_factory):
+def test_successful_response(poll, make_move, red_player, black_player):
     response = poll()
     assert response.status_code == 200
     assert response.json() == {"update_count": 0}
 
+    make_move("a1a3", red_player)
+    response = poll()
+    assert response.status_code == 200
+    assert response.json() == {"update_count": 1}
 
-# @pytest.mark.django_db
-# def test_only_count_moves_in_selected_game(get_response, move_factory):
-#     move_factory(name="a1a3")
-#
-#     response = get()
-#     assert response.status_code == 200
-#     assert response.json() == {"move_count": 3}
+    make_move("a10a9", black_player)
+    response = poll()
+    assert response.status_code == 200
+    assert response.json() == {"update_count": 2}
