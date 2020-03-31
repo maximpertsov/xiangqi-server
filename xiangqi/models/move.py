@@ -6,5 +6,4 @@ class Move(models.Model):
         ordering = ["pk"]
 
     game = models.ForeignKey("game", on_delete=models.CASCADE)
-    participant = models.ForeignKey("participant", on_delete=models.CASCADE)
     name = models.CharField(max_length=10)

@@ -44,7 +44,6 @@ class Game(models.Model):
     state = FSMField(default=State.RED_TURN)
 
     slug = models.CharField(max_length=64, unique=True, editable=False)
-    participants = models.ManyToManyField(through="participant", to="player")
     red_player = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
     black_player = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
 
