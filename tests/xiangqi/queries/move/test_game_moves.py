@@ -4,13 +4,12 @@ from xiangqi.queries.move.game_moves import GameMoves
 
 
 @pytest.fixture
-def game_with_moves(game, participant_factory, move_factory, player_factory):
-    p1, p2 = player_factory.create_batch(2)
-    participant1 = participant_factory(game=game, player=p1, color="red")
-    participant2 = participant_factory(game=game, player=p2, color="black")
-    move_factory(game=game, participant=participant1, name="a1a3")
-    move_factory(game=game, participant=participant2, name="a10a9")
-    move_factory(game=game, participant=participant1, name="i1i3")
+def game_with_moves(game_factory, move_factory, user_factory):
+    red_player, black_player = user_factory.create_batch(2)
+    game = game_factory(red_player=red_player, black_player=black_player)
+    move_factory(game=game, player=red_player, name="a1a3")
+    move_factory(game=game, player=black_player, name="a10a9")
+    move_factory(game=game, player=red_player, name="i1i3")
     return game
 
 

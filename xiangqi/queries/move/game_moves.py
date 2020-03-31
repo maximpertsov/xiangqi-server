@@ -2,10 +2,14 @@ from itertools import chain
 
 from django.utils.functional import cached_property
 
+from xiangqi.models.color import Color
 from xiangqi.queries.move.serialize_move import SerializeInitialPlacement, SerializeMove
 
 
 class GameMoves:
+    class InvalidPlayer(Exception):
+        pass
+
     def __init__(self, game):
         self._game = game
 
@@ -26,13 +30,20 @@ class GameMoves:
                 {
                     "move": move.name,
                     "player": {
-                        # TODO: cached get participants via lru cache?
-                        "name": move.participant.player.user.username,
-                        "color": move.participant.color,
+                        "name": move.player.username,
+                        "color": self._player_color(move),
                     },
                 }
             )
         return result
+
+    def _player_color(self, move):
+        if move.player == self._game.red_player:
+            return Color.RED
+        if move.player == self._game.black_player:
+            return Color.BLACK
+
+        raise self.InvalidPlayer
 
     @property
     def _new_moves(self):
