@@ -1,5 +1,4 @@
 import pytest
-from django.core.cache import cache
 from django.core.exceptions import ValidationError
 
 from xiangqi.operations.create_move import CreateMove
@@ -31,15 +30,10 @@ def event(game_with_players, payload, game_event_factory):
 
 
 @pytest.mark.django_db
-def test_create_move(mocker, event):
-    mock_cache_set = mocker.patch.object(cache, "set")
-
+def test_create_move(event):
     assert event.game.move_set.count() == 0
 
     CreateMove(event=event).perform()
-    mock_cache_set.assert_called_once_with(
-        "updated_at_{}".format(event.game.slug), 1, timeout=3600
-    )
     assert event.game.move_set.first().name == "b10c8"
     assert event.game.move_set.count() == 1
 
