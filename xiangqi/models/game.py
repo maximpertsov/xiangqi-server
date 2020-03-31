@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
@@ -27,10 +26,10 @@ class GameManager(models.Manager):
 
 
 class Game(models.Model):
-    class NoTransition(ValidationError):
+    class NoTransition(Exception):
         pass
 
-    class TransitionError(ValidationError):
+    class TransitionError(Exception):
         pass
 
     class State:
@@ -71,7 +70,7 @@ class Game(models.Model):
     @transition(field=state, source=State.BLACK_TURN, target=State.RED_TURN)
     def change_turn(self, event):
         if event.name != "move":
-            raise self.NoTransition("Invalid event")
+            raise self.NoTransition
 
 
 @receiver(post_transition, sender=Game)
