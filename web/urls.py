@@ -26,7 +26,6 @@ urlpatterns = [
     path("api/player/<str:username>/games", views.GameListView.as_view()),
     path("api/game/<str:slug>/moves", views.GameMoveView.as_view()),
     path("api/game/<str:slug>/events", views.GameEventView.as_view()),
-    path("api/game/<str:slug>/move-count", views.MoveCountView.as_view()),
     path("api/game/<str:slug>/poll", views.PollView.as_view()),
     path("api/game/<str:slug>", views.GameView.as_view()),
     path("admin/", admin.site.urls),
