@@ -38,10 +38,11 @@ class GameMoves:
         return result
 
     def _player_color(self, move):
+        # TODO: .value?
         if move.player == self._game.red_player:
-            return Color.RED
+            return Color.RED.value
         if move.player == self._game.black_player:
-            return Color.BLACK
+            return Color.BLACK.value
 
         raise self.InvalidPlayer
 

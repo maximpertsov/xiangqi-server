@@ -17,8 +17,15 @@ def game_with_moves(game_factory, move_factory, user_factory):
 def test_game_moves(game_with_moves):
     result = GameMoves(game_with_moves).result()
     assert len(result) == 4
-    for serialized in result:
+    for index, serialized in enumerate(result):
         assert "fen" in serialized
         assert "legal_moves" in serialized
         assert "gives_check" in serialized
         assert "move" in serialized
+
+        if index == 0:
+            assert serialized['player'] is None
+        elif index % 2 == 1:
+            assert serialized['player']['color'] == 'red'
+        else:
+            assert serialized['player']['color'] == 'black'
