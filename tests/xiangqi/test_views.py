@@ -11,27 +11,6 @@ def game_with_players(game, participant_factory, player_factory):
     return game
 
 
-@pytest.mark.django_db
-def test_get_game_404(client):
-    r = client.get("/api/game/FAKEGAME")
-    assert r.status_code == 404
-
-
-@pytest.mark.django_db
-def test_get_game_200(client, game):
-    r = client.get("/api/game/{}".format(game.slug))
-    assert r.status_code == 200
-
-    data = r.json()
-    assert data["players"] == []
-
-
-@pytest.mark.django_db
-def test_get_game_pieces(client, game):
-    r = client.get("/api/game/{}".format(game.slug))
-    assert r.status_code == 200
-    assert r.json()["players"] == []
-
 
 @pytest.mark.django_db
 def test_get_games_for_non_participant(client, game_with_players):
