@@ -1,40 +1,10 @@
 import json
 
-import pytest
+from pytest import mark
 
 
-@pytest.fixture
-def game_with_players(game, participant_factory, player_factory):
-    p1, p2 = player_factory.create_batch(2)
-    participant_factory(game=game, player=p1, color="red")
-    participant_factory(game=game, player=p2, color="black")
-    return game
-
-
-
-@pytest.mark.django_db
-def test_get_games_for_non_participant(client, game_with_players):
-    url = "/api/player/{}/games".format("FAKE")
-    r = client.get(url)
-    assert r.status_code == 200
-
-    data = r.json()
-    assert data["games"] == []
-
-
-@pytest.mark.django_db
-def test_get_games_for_participant(client, game_with_players):
-    username = game_with_players.participant_set.first().player.user.username
-    url = "/api/player/{}/games".format(username)
-    r = client.get(url)
-    assert r.status_code == 200
-
-    data = r.json()
-    assert data["games"] == [{"slug": game_with_players.slug}]
-
-
-@pytest.mark.django_db
-@pytest.mark.skip("Requires cookies in request")
+@mark.django_db
+@mark.skip("Requires cookies in request")
 def test_authenticate(client, user):
     password = "s0_s0_secure"
     user.set_password(password)
@@ -50,7 +20,7 @@ def test_authenticate(client, user):
     assert "access_token" in response_data
 
 
-@pytest.mark.django_db
+@mark.django_db
 def test_login(client, user):
     password = "s0_s0_secure"
     user.set_password(password)

@@ -1,25 +1,30 @@
-import json
-from functools import partial
-
-from django.core import serializers
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
+from django.utils.functional import cached_property
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.generic import ListView
+from django.views.generic.detail import SingleObjectMixin, View
 
-from xiangqi.models import Game
-
-serialize = partial(serializers.serialize, "json", use_natural_foreign_keys=True)
+from xiangqi.models import User
 
 
 @method_decorator(ensure_csrf_cookie, name="dispatch")
-class GameListView(ListView):
-    model = Game
+class GameListView(SingleObjectMixin, View):
+    model = User
+    slug_field = "username"
+    slug_url_kwarg = "username"
 
     def get(self, request, username):
-        queryset = self.get_queryset().filter(
-            participant__player__user__username=username
-        )
-        serialized = serialize(queryset)
-        games = [{"slug": data["fields"]["slug"]} for data in json.loads(serialized)]
-        return JsonResponse({"games": games}, status=200)
+        return JsonResponse({"games": list(self._games_data)}, status=200)
+
+    @property
+    def _games_data(self):
+        for game in self._games:
+            yield {"slug": game.slug}
+
+    @cached_property
+    def _games(self):
+        return self._player.games
+
+    @property
+    def _player(self):
+        return self.get_object()
