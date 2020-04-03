@@ -15,7 +15,7 @@ def game_with_moves(game_factory, move_factory, user_factory):
 
 @pytest.mark.django_db
 def test_game_moves(game_with_moves):
-    result = GameMoves(game_with_moves).result()
+    result = GameMoves(game=game_with_moves).result()
     assert len(result) == 4
     for index, serialized in enumerate(result):
         assert "fen" in serialized

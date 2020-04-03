@@ -1,17 +1,18 @@
 from itertools import chain
 
+import attr
 from django.utils.functional import cached_property
 
 from xiangqi.models.color import Color
 from xiangqi.queries.move.serialize_move import SerializeInitialPlacement, SerializeMove
 
 
+@attr.s(kw_only=True)
 class GameMoves:
     class InvalidPlayer(Exception):
         pass
 
-    def __init__(self, game):
-        self._game = game
+    _game = attr.ib()
 
     def result(self):
         result = []
