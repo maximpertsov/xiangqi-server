@@ -7,11 +7,13 @@ def recreate_game(apps, schema_editor):
     Game = apps.get_model("xiangqi", "Game")
     User = apps.get_model("auth", "User")
 
-    red_player = User.objects.get(username="bycepto")
-    black_player = User.objects.get(username="jkalltheway")
-    Game.objects.filter(slug="ABC123").update(
-        red_player=red_player, black_player=black_player
-    )
+    red_player = User.objects.filter(username="bycepto").first()
+    black_player = User.objects.filter(username="jkalltheway").first()
+
+    if red_player and black_player:
+        Game.objects.filter(slug="ABC123").update(
+            red_player=red_player, black_player=black_player
+        )
 
 
 class Migration(migrations.Migration):
