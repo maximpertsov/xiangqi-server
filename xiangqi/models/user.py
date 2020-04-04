@@ -1,17 +1,14 @@
 from django.contrib.auth import get_user_model
-from django.db import models
-
-
-class UserManager(models.Manager):
-    def get_by_natural_key(self, username):
-        return self.get(username=username)
 
 
 class User(get_user_model()):
     class Meta:
         proxy = True
 
-    objects = UserManager()
+    @property
+    def games(self):
+        from xiangqi.models import Game
 
-    def natural_key(self):
-        return self.username
+        return Game.objects.filter(red_player=self).union(
+            Game.objects.filter(black_player=self)
+        )

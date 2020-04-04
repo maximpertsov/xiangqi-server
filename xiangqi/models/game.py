@@ -4,6 +4,7 @@ from django.utils.crypto import get_random_string
 from django_fsm import FSMField, post_transition, transition
 
 from xiangqi.models import GameTransition
+from xiangqi.models import User
 
 
 class GameManager(models.Manager):
@@ -43,7 +44,8 @@ class Game(models.Model):
     state = FSMField(default=State.RED_TURN)
 
     slug = models.CharField(max_length=64, unique=True, editable=False)
-    participants = models.ManyToManyField(through="participant", to="player")
+    red_player = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
+    black_player = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
 
     def natural_key(self):
         return self.slug

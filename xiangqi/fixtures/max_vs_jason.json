@@ -20,54 +20,16 @@
     }
   },
   {
-    "model": "xiangqi.player",
-    "pk": 1,
-    "fields": {
-      "user": [
-        "jkalltheway"
-      ],
-      "rating": 1500
-    }
-  },
-  {
-    "model": "xiangqi.player",
-    "pk": 2,
-    "fields": {
-      "user": [
-        "bycepto"
-      ],
-      "rating": 1500
-    }
-  },
-  {
     "model": "xiangqi.game",
     "pk": 2,
     "fields": {
-      "slug": "ABC123"
-    }
-  },
-  {
-    "model": "xiangqi.participant",
-    "pk": 1,
-    "fields": {
-      "player": [
-        "jkalltheway"
-      ],
-      "game_id": 2,
-      "score": 0,
-      "color": "black"
-    }
-  },
-  {
-    "model": "xiangqi.participant",
-    "pk": 2,
-    "fields": {
-      "player": [
+      "slug": "ABC123",
+      "red_player": [
         "bycepto"
       ],
-      "game_id": 2,
-      "score": 0,
-      "color": "red"
+      "black_player": [
+        "jkalltheway"
+      ]
     }
   }
 ]

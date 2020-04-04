@@ -1,40 +1,22 @@
 import json
 
-import pytest
+from pytest import fixture, mark
 
 
-@pytest.fixture
-def game_with_players(game, participant_factory, move_factory, player_factory):
-    p1, p2 = player_factory.create_batch(2)
-    participant_factory(game=game, player=p1, color="red")
-    participant_factory(game=game, player=p2, color="black")
-    return game
-
-
-@pytest.fixture
-def red_player(game_with_players):
-    return game_with_players.participant_set.get(color="red").player
-
-
-@pytest.fixture
-def black_player(game_with_players):
-    return game_with_players.participant_set.get(color="black").player
-
-
-@pytest.fixture
-def poll(client, game_with_players):
+@fixture
+def poll(client, game):
     def wrapped():
-        return client.get("/api/game/{}/poll".format(game_with_players.slug))
+        return client.get("/api/game/{}/poll".format(game.slug))
 
     return wrapped
 
 
-@pytest.fixture
-def make_move(client, game_with_players):
+@fixture
+def make_move(client, game):
     def wrapped(move, player):
-        payload = {"name": "move", "move": move, "player": player.user.username}
+        payload = {"name": "move", "move": move, "player": player.username}
         return client.post(
-            "/api/game/{}/events".format(game_with_players.slug),
+            "/api/game/{}/events".format(game.slug),
             data=json.dumps(payload),
             content_type="application/json",
         )
@@ -42,18 +24,18 @@ def make_move(client, game_with_players):
     return wrapped
 
 
-@pytest.mark.django_db
-def test_successful_response(poll, make_move, red_player, black_player):
+@mark.django_db
+def test_successful_response(poll, make_move, game):
     response = poll()
     assert response.status_code == 200
     assert response.json() == {"update_count": 0}
 
-    make_move("a1a3", red_player)
+    make_move("a1a3", game.red_player)
     response = poll()
     assert response.status_code == 200
     assert response.json() == {"update_count": 1}
 
-    make_move("a10a9", black_player)
+    make_move("a10a9", game.black_player)
     response = poll()
     assert response.status_code == 200
     assert response.json() == {"update_count": 2}
