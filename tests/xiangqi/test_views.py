@@ -5,12 +5,12 @@ from pytest import mark
 
 @mark.django_db
 @mark.skip("Requires cookies in request")
-def test_authenticate(client, user):
+def test_authenticate(client, player):
     password = "s0_s0_secure"
-    user.set_password(password)
-    user.save()
+    player.set_password(password)
+    player.save()
 
-    data = {"username": user.username, "password": password}
+    data = {"username": player.username, "password": password}
 
     r = client.post(
         "/api/authenticate", data=json.dumps(data), content_type="application/json"
@@ -21,15 +21,15 @@ def test_authenticate(client, user):
 
 
 @mark.django_db
-def test_login(client, user):
+def test_login(client, player):
     password = "s0_s0_secure"
-    user.set_password(password)
-    user.save()
+    player.set_password(password)
+    player.save()
 
-    assert user.accesstoken_set.count() == 0
-    assert user.refreshtoken_set.count() == 0
+    assert player.accesstoken_set.count() == 0
+    assert player.refreshtoken_set.count() == 0
 
-    data = {"username": user.username, "password": password}
+    data = {"username": player.username, "password": password}
 
     response = client.post(
         "/api/login", data=json.dumps(data), content_type="application/json"
@@ -40,5 +40,5 @@ def test_login(client, user):
     assert "access_token" in cookies
     assert "refresh_token" in cookies
 
-    assert user.accesstoken_set.count() == 1
-    assert user.refreshtoken_set.count() == 1
+    assert player.accesstoken_set.count() == 1
+    assert player.refreshtoken_set.count() == 1

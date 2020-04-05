@@ -1,10 +1,10 @@
 from factory import DjangoModelFactory, Faker, LazyAttribute
-from xiangqi.models import User
+from xiangqi.models import Player
 
 
-class UserFactory(DjangoModelFactory):
+class PlayerFactory(DjangoModelFactory):
     class Meta:
-        model = User
+        model = Player
         django_get_or_create = ("username",)
 
     first_name = Faker("first_name")

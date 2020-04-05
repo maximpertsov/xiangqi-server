@@ -4,12 +4,12 @@ from django.utils.functional import cached_property
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.detail import SingleObjectMixin, View
 
-from xiangqi.models import User
+from xiangqi.models import Player
 
 
 @method_decorator(ensure_csrf_cookie, name="dispatch")
 class GameListView(SingleObjectMixin, View):
-    model = User
+    model = Player
     slug_field = "username"
     slug_url_kwarg = "username"
 

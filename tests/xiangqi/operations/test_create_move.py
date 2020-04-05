@@ -5,13 +5,13 @@ from xiangqi.operations.create_move import CreateMove
 
 
 @pytest.fixture
-def red_player(user_factory):
-    return user_factory()
+def red_player(player_factory):
+    return player_factory()
 
 
 @pytest.fixture
-def black_player(user_factory):
-    return user_factory()
+def black_player(player_factory):
+    return player_factory()
 
 
 @pytest.fixture
