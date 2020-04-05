@@ -44,8 +44,9 @@ class Game(models.Model):
     state = FSMField(default=State.RED_TURN)
 
     slug = models.CharField(max_length=64, unique=True, editable=False)
-    red_player = models.ForeignKey('auth.user', on_delete=models.CASCADE, related_name='+')
-    black_player = models.ForeignKey('auth.user', on_delete=models.CASCADE, related_name='+')
+    # TODO validate that red_player != black_player
+    red_player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='+')
+    black_player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='+')
 
     def natural_key(self):
         return self.slug
