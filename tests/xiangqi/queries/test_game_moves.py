@@ -22,8 +22,8 @@ def test_game_moves(game_with_moves):
         assert "move" in serialized
 
         if index == 0:
-            assert serialized['player'] is None
+            assert serialized['player_name'] is None
         elif index % 2 == 1:
-            assert serialized['player']['color'] == 'red'
+            assert serialized['player_name'] == 'rosie'
         else:
-            assert serialized['player']['color'] == 'black'
+            assert serialized['player_name'] == 'bob'

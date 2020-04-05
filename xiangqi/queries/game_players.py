@@ -8,4 +8,7 @@ class GamePlayers:
     _game = attr.ib()
 
     def result(self):
-        pass
+        return [
+            {"name": self._game.red_player.username, "color": Color.RED.value},
+            {"name": self._game.black_player.username, "color": Color.BLACK.value},
+        ]
