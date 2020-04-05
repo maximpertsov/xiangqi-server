@@ -8,7 +8,7 @@ from tests.factories.player import PlayerFactory
 register(GameEventFactory)
 register(MoveFactory)
 register(PlayerFactory)
-register(PlayerFactory, "red_player", username="alice")
+register(PlayerFactory, "red_player", username="rosie")
 register(PlayerFactory, "black_player", username="bob")
 register(
     GameFactory,
