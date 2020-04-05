@@ -1,7 +1,7 @@
 import pytest
 
-from xiangqi.queries.move.legal_moves import LegalMoves
-from xiangqi.queries.move.serialize_move import SerializeMove
+from xiangqi.queries.legal_moves import LegalMoves
+from xiangqi.queries.serialize_move import SerializeMove
 
 
 @pytest.fixture

@@ -1,6 +1,6 @@
 import pytest
 
-from xiangqi.queries.move.game_moves import GameMoves
+from xiangqi.queries.game_moves import GameMoves
 
 
 @pytest.fixture

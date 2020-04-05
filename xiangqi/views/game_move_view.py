@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views import View
 
-from xiangqi.queries.move.game_moves import GameMoves
+from xiangqi.queries.game_moves import GameMoves
 from xiangqi.views.game_mixin import GameMixin
 
 

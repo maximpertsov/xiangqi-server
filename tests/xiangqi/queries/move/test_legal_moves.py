@@ -1,6 +1,6 @@
 import pytest
 
-from xiangqi.queries.move.legal_moves import LegalMoves
+from xiangqi.queries.legal_moves import LegalMoves
 
 
 @pytest.fixture

@@ -4,7 +4,7 @@ import attr
 from django.utils.functional import cached_property
 
 from xiangqi.models.color import Color
-from xiangqi.queries.move.serialize_move import SerializeInitialPlacement, SerializeMove
+from xiangqi.queries.serialize_move import SerializeInitialPlacement, SerializeMove
 
 
 @attr.s(kw_only=True)

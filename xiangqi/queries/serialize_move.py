@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 import pyffish
 
-from xiangqi.queries.move.legal_moves import LegalMoves
+from xiangqi.queries.legal_moves import LegalMoves
 
 
 class BaseSerializeMove(ABC):
