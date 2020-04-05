@@ -4,7 +4,7 @@ from django.db import models
 from django.utils import timezone
 
 from xiangqi.lib import jwt
-from xiangqi.models import User
+from xiangqi.models import Player
 
 ACCESS_TOKEN_LIFE = 60 * 60
 REFRESH_TOKEN_LIFE = 60 * 60 * 24 * 60
@@ -17,21 +17,21 @@ class BaseToken(models.Model):
     created_at = models.DateTimeField()
     expires_at = models.DateTimeField()
     token = models.CharField(max_length=255, unique=True)
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    player = models.ForeignKey('auth.user', null=True, on_delete=models.SET_NULL)
 
 
 class AccessTokenManager(models.Manager):
-    def create(self, user, **kwargs):
+    def create(self, player, **kwargs):
         created_at = timezone.now()
         expires_at = created_at + timezone.timedelta(seconds=ACCESS_TOKEN_LIFE)
         payload = {
             "exp": int(expires_at.timestamp()),
             "iss": int(created_at.timestamp()),
-            "sub": user.username,
+            "sub": player.username,
         }
         token = jwt.encode(payload).decode()
         kwargs.update(
-            created_at=created_at, expires_at=expires_at, token=token, user=user
+            created_at=created_at, expires_at=expires_at, token=token, player=player
         )
         return super().create(**kwargs)
 
@@ -41,13 +41,13 @@ class AccessToken(BaseToken):
 
 
 class RefreshTokenManager(models.Manager):
-    def create(self, user, **kwargs):
+    def create(self, player, **kwargs):
         created_at = timezone.now()
         kwargs.update(
             created_at=created_at,
             expires_at=created_at + timezone.timedelta(seconds=REFRESH_TOKEN_LIFE),
             token=uuid4(),
-            user=user,
+            player=player,
         )
         return super().create(**kwargs)
 

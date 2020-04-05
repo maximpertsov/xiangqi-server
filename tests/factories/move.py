@@ -3,7 +3,7 @@ from factory import DjangoModelFactory, SubFactory
 from xiangqi.models import Move
 
 from .game import GameFactory
-from .user import UserFactory
+from .player import PlayerFactory
 
 
 class MoveFactory(DjangoModelFactory):
@@ -12,4 +12,4 @@ class MoveFactory(DjangoModelFactory):
 
     game = SubFactory(GameFactory)
     name = "a10a9"
-    player = SubFactory(UserFactory)
+    player = SubFactory(PlayerFactory)

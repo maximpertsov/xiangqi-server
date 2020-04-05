@@ -16,14 +16,14 @@ class AuthenticationFailedResponse(JsonResponse):
         super().__init__({"error": "Authentication failed"}, status=401)
 
 
-def create_access_token(user):
+def create_access_token(player):
     # TODO: invalidate active tokens?
-    return AccessToken.objects.create(user)
+    return AccessToken.objects.create(player)
 
 
-def create_refresh_token(user):
+def create_refresh_token(player):
     # TODO: invalidate active tokens?
-    return RefreshToken.objects.create(user)
+    return RefreshToken.objects.create(player)
 
 
 class LoginView(PayloadSchemaMixin, View):
@@ -42,16 +42,16 @@ class LoginView(PayloadSchemaMixin, View):
 
     def post(self, request):
         try:
-            user = authenticate(**self.payload)
+            player = authenticate(**self.payload)
         except ValidationError as e:
             return JsonResponse({"error": e.message}, status=400)
 
-        if user is None:
+        if player is None:
             return AuthenticationFailedResponse()
 
         tokens = {
-            ACCESS_TOKEN_KEY: create_access_token(user).token,
-            REFRESH_TOKEN_KEY: create_refresh_token(user).token,
+            ACCESS_TOKEN_KEY: create_access_token(player).token,
+            REFRESH_TOKEN_KEY: create_refresh_token(player).token,
         }
 
         response = JsonResponse(tokens, status=201)
@@ -69,8 +69,8 @@ class AuthenticateView(View):
         try:
             access_token = request.COOKIES[ACCESS_TOKEN_KEY]
             refresh_token = request.COOKIES[REFRESH_TOKEN_KEY]
-            user = AccessToken.objects.get(token=access_token).user
-            if user is None:
+            player = AccessToken.objects.get(token=access_token).player
+            if player is None:
                 return AuthenticationFailedResponse()
         except (AccessToken.DoesNotExist, KeyError):
             return AuthenticationFailedResponse()

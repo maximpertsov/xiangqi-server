@@ -4,8 +4,8 @@ from xiangqi.queries.move.game_moves import GameMoves
 
 
 @pytest.fixture
-def game_with_moves(game_factory, move_factory, user_factory):
-    red_player, black_player = user_factory.create_batch(2)
+def game_with_moves(game_factory, move_factory, player_factory):
+    red_player, black_player = player_factory.create_batch(2)
     game = game_factory(red_player=red_player, black_player=black_player)
     move_factory(game=game, player=red_player, name="a1a3")
     move_factory(game=game, player=black_player, name="a10a9")

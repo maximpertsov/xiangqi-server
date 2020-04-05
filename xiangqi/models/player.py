@@ -1,7 +1,7 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 
-class User(get_user_model()):
+class Player(User):
     class Meta:
         proxy = True
 
