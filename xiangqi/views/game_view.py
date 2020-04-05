@@ -3,7 +3,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from xiangqi.models.color import Color
+from xiangqi.queries.game_players import GamePlayers
 from xiangqi.views.game_mixin import GameMixin
 
 
@@ -15,7 +15,4 @@ class GameView(GameMixin, View):
 
     @property
     def _players(self):
-        return [
-            {"name": self.game.red_player.username, "color": Color.RED.value},
-            {"name": self.game.black_player.username, "color": Color.BLACK.value},
-        ]
+        return GamePlayers(game=self.game).result()
