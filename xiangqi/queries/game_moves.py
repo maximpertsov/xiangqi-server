@@ -21,10 +21,9 @@ class GameMoves:
         return result
 
     def _move_data(self, move=None):
-        result = {"move": None, "player_name": None}
-        if move:
-            result.update({"move": move.name, "player_name": move.player.username})
-        return result
+        if not move:
+            return {"id": 0, "move": None, "player_name": None}
+        return {"id": move.pk, "move": move.name, "player_name": move.player.username}
 
     @property
     def _new_moves(self):
