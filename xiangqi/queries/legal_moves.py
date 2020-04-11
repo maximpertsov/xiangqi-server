@@ -6,7 +6,6 @@ from xiangqi.lib import pyffish
 @attr.s(kw_only=True)
 class LegalMoves:
     _fen = attr.ib()
-    _moves = attr.ib()
 
     def result(self):
-        return pyffish.legal_moves(self._fen, self._moves)
+        return pyffish.legal_moves(self._fen, [])

@@ -32,7 +32,7 @@ class BaseSerializeMove(ABC):
 
     @property
     def _legal_moves(self):
-        return LegalMoves(fen=self.fen, moves=[]).result()
+        return LegalMoves(fen=self.fen).result()
 
 
 class SerializeMove(BaseSerializeMove):
