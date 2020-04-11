@@ -1,5 +1,6 @@
 import attr
-import pyffish
+
+from xiangqi.lib import pyffish
 
 
 @attr.s(kw_only=True)
@@ -8,4 +9,4 @@ class LegalMoves:
     _moves = attr.ib()
 
     def result(self):
-        return pyffish.legal_moves("xiangqi", self._fen, self._moves)
+        return pyffish.legal_moves(self._fen, self._moves)
