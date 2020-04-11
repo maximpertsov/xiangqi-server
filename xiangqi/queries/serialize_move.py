@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
-import pyffish
-
+from xiangqi.lib import pyffish
 from xiangqi.queries.legal_moves import LegalMoves
 
 
@@ -42,7 +41,7 @@ class SerializeMove(BaseSerializeMove):
 
     @property
     def fen(self):
-        return pyffish.get_fen("xiangqi", self._fen, [self._move_name])
+        return pyffish.get_fen(self._fen, [self._move_name])
 
     @property
     def legal_moves(self):
@@ -50,7 +49,7 @@ class SerializeMove(BaseSerializeMove):
 
     @property
     def gives_check(self):
-        return pyffish.gives_check("xiangqi", self._fen, [self._move_name])
+        return pyffish.gives_check(self._fen, [self._move_name])
 
     @property
     def move_name(self):
@@ -60,7 +59,7 @@ class SerializeMove(BaseSerializeMove):
 class SerializeInitialPlacement(BaseSerializeMove):
     @property
     def fen(self):
-        return pyffish.start_fen("xiangqi")
+        return pyffish.start_fen()
 
     @property
     def legal_moves(self):
