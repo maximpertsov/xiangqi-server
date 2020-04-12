@@ -7,6 +7,5 @@ from .csrf_view import ping
 from .fen_move_view import FenMoveView
 from .game_view import GameView
 from .game_event_view import GameEventView
-from .game_move_view import GameMoveView
 from .poll_view import PollView
 from .player_game_view import GameListView

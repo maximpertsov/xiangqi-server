@@ -1,10 +1,10 @@
+from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
 from django_fsm import FSMField, post_transition, transition
 
-from xiangqi.models import GameTransition
-from xiangqi.models import Player
+from xiangqi.models import GameTransition, Player
 
 
 class GameManager(models.Manager):
@@ -44,14 +44,19 @@ class Game(models.Model):
     state = FSMField(default=State.RED_TURN)
 
     slug = models.CharField(max_length=64, unique=True, editable=False)
-    red_player = models.ForeignKey('auth.user', on_delete=models.CASCADE, related_name='+')
-    black_player = models.ForeignKey('auth.user', on_delete=models.CASCADE, related_name='+')
+    # TODO validate that red_player != black_player
+    red_player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="+")
+    black_player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="+")
 
     def natural_key(self):
         return self.slug
 
     def __str__(self):
         return self.slug
+
+    def clean(self):
+        if self.red_player == self.black_player:
+            raise ValidationError("Red and black players cannot be the same")
 
     # Transitions
 

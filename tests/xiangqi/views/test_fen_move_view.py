@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from xiangqi.queries.move.serialize_move import SerializeInitialPlacement, SerializeMove
+from xiangqi.queries.serialize_move import SerializeInitialPlacement, SerializeMove
 
 
 @pytest.fixture

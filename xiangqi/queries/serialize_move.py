@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 
-import pyffish
+from django.utils.functional import cached_property
 
-from xiangqi.queries.move.legal_moves import LegalMoves
+from xiangqi.lib import pyffish
+from xiangqi.queries.legal_moves import LegalMoves
 
 
 class BaseSerializeMove(ABC):
@@ -10,7 +11,7 @@ class BaseSerializeMove(ABC):
         return {
             "fen": self.fen,
             "gives_check": self.gives_check,
-            "legal_moves": self.legal_moves,
+            "legal_moves": self._legal_moves,
             "move": self.move_name,
         }
 
@@ -21,11 +22,6 @@ class BaseSerializeMove(ABC):
 
     @property
     @abstractmethod
-    def legal_moves(self):
-        pass
-
-    @property
-    @abstractmethod
     def gives_check(self):
         pass
 
@@ -33,6 +29,10 @@ class BaseSerializeMove(ABC):
     @abstractmethod
     def move_name(self):
         pass
+
+    @property
+    def _legal_moves(self):
+        return LegalMoves(fen=self.fen).result()
 
 
 class SerializeMove(BaseSerializeMove):
@@ -40,17 +40,13 @@ class SerializeMove(BaseSerializeMove):
         self._fen = fen
         self._move_name = move_name
 
-    @property
+    @cached_property
     def fen(self):
-        return pyffish.get_fen("xiangqi", self._fen, [self._move_name])
-
-    @property
-    def legal_moves(self):
-        return LegalMoves(fen=self._fen, moves=[self._move_name]).result()
+        return pyffish.get_fen(self._fen, [self._move_name])
 
     @property
     def gives_check(self):
-        return pyffish.gives_check("xiangqi", self._fen, [self._move_name])
+        return pyffish.gives_check(self._fen, [self._move_name])
 
     @property
     def move_name(self):
@@ -58,13 +54,9 @@ class SerializeMove(BaseSerializeMove):
 
 
 class SerializeInitialPlacement(BaseSerializeMove):
-    @property
+    @cached_property
     def fen(self):
-        return pyffish.start_fen("xiangqi")
-
-    @property
-    def legal_moves(self):
-        return LegalMoves(fen=self.fen, moves=[]).result()
+        return pyffish.start_fen()
 
     @property
     def gives_check(self):

@@ -17,7 +17,7 @@ class BaseToken(models.Model):
     created_at = models.DateTimeField()
     expires_at = models.DateTimeField()
     token = models.CharField(max_length=255, unique=True)
-    player = models.ForeignKey('auth.user', null=True, on_delete=models.SET_NULL)
+    player = models.ForeignKey(Player, null=True, on_delete=models.SET_NULL)
 
 
 class AccessTokenManager(models.Manager):

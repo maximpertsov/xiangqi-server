@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views import View
 
-from xiangqi.queries.move.serialize_move import SerializeInitialPlacement, SerializeMove
+from xiangqi.queries.serialize_move import SerializeInitialPlacement, SerializeMove
 from xiangqi.views.payload_schema_mixin import PayloadSchemaMixin
 
 

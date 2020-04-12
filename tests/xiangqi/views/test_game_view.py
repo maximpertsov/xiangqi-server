@@ -1,5 +1,7 @@
 from pytest import fixture, mark
 
+from xiangqi.queries.game_moves import GameMoves
+
 
 @fixture
 def url(game):
@@ -14,6 +16,11 @@ def get(client, url):
     return wrapped
 
 
+@fixture
+def game_moves(mocker):
+    return mocker.patch.object(GameMoves, "result", return_value=[])
+
+
 @mark.django_db
 def test_get_game_404(client):
     response = client.get("/api/game/FAKEGAME")
@@ -21,12 +28,15 @@ def test_get_game_404(client):
 
 
 @mark.django_db
-def test_get_game_200(get, game):
+def test_get_game_200(get, game, game_moves):
     response = get()
     assert response.status_code == 200
+
+    game_moves.assert_called_once_with()
     assert response.json() == {
+        "moves": [],
         "players": [
             {"name": game.red_player.username, "color": "red"},
             {"name": game.black_player.username, "color": "black"},
-        ]
+        ],
     }
