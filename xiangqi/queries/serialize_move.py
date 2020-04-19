@@ -1,67 +1,30 @@
-from abc import ABC, abstractmethod
-
-from django.utils.functional import cached_property
+import attr
 
 from xiangqi.lib.pyffish import xiangqi
-from xiangqi.queries.legal_moves import LegalMoves
+from xiangqi.queries.serialize_fen import SerializeFen, SerializeInitialFen
 
 
-class BaseSerializeMove(ABC):
+@attr.s(kw_only=True)
+class SerializeMove:
+    _fen = attr.ib()
+    _move_name = attr.ib()
+
     def result(self):
-        return {
-            "fen": self.fen,
-            "gives_check": self.gives_check,
-            "legal_moves": self._legal_moves,
-            "move": self.move_name,
-        }
+        return {**self._fen_data, "move": self._move_name}
 
     @property
-    @abstractmethod
-    def fen(self):
-        pass
+    def _fen_data(self):
+        return SerializeFen(fen=self._next_fen).result()
 
     @property
-    @abstractmethod
-    def gives_check(self):
-        pass
-
-    @property
-    @abstractmethod
-    def move_name(self):
-        pass
-
-    @property
-    def _legal_moves(self):
-        return LegalMoves(fen=self.fen).result()
-
-
-class SerializeMove(BaseSerializeMove):
-    def __init__(self, fen, move_name):
-        self._fen = fen
-        self._move_name = move_name
-
-    @cached_property
-    def fen(self):
+    def _next_fen(self):
         return xiangqi.get_fen(self._fen, [self._move_name])
 
-    @property
-    def gives_check(self):
-        return xiangqi.gives_check(self._fen, [self._move_name])
+
+class SerializeInitialPlacement:
+    def result(self):
+        return {**self._fen_data, "move": None}
 
     @property
-    def move_name(self):
-        return self._move_name
-
-
-class SerializeInitialPlacement(BaseSerializeMove):
-    @cached_property
-    def fen(self):
-        return xiangqi.start_fen()
-
-    @property
-    def gives_check(self):
-        return False
-
-    @property
-    def move_name(self):
-        return None
+    def _fen_data(self):
+        return SerializeInitialFen().result()

@@ -38,5 +38,5 @@ def test_serialize_move(mocker, move__name, fen, new_fen, new_legal_moves):
         "move": move__name,
     }
     mock_get_fen.assert_called_once_with(fen, [move__name])
-    mock_gives_check.assert_called_once_with(fen, [move__name])
+    mock_gives_check.assert_called_once_with(new_fen, [])
     mock_query_legal_moves.assert_called_once_with()
