@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from django.utils.functional import cached_property
 
-from xiangqi.lib import pyffish
+from xiangqi.lib.pyffish import xiangqi
 from xiangqi.queries.legal_moves import LegalMoves
 
 
@@ -42,11 +42,11 @@ class SerializeMove(BaseSerializeMove):
 
     @cached_property
     def fen(self):
-        return pyffish.get_fen(self._fen, [self._move_name])
+        return xiangqi.get_fen(self._fen, [self._move_name])
 
     @property
     def gives_check(self):
-        return pyffish.gives_check(self._fen, [self._move_name])
+        return xiangqi.gives_check(self._fen, [self._move_name])
 
     @property
     def move_name(self):
@@ -56,7 +56,7 @@ class SerializeMove(BaseSerializeMove):
 class SerializeInitialPlacement(BaseSerializeMove):
     @cached_property
     def fen(self):
-        return pyffish.start_fen()
+        return xiangqi.start_fen()
 
     @property
     def gives_check(self):
