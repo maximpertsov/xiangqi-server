@@ -1,10 +1,17 @@
 from functools import partial
+from inspect import getmembers
+from types import SimpleNamespace
 
 import pyffish
 
 VARIANT = "xiangqi"
 
-get_fen = partial(pyffish.get_fen, VARIANT)
-gives_check = partial(pyffish.gives_check, VARIANT)
-legal_moves = partial(pyffish.legal_moves, VARIANT)
-start_fen = partial(pyffish.start_fen, VARIANT)
+export_functions = ["get_fen", "gives_check", "legal_moves", "start_fen"]
+
+xiangqi = SimpleNamespace(
+    **{
+        key: partial(func, VARIANT)
+        for key, func in getmembers(pyffish)
+        if key in export_functions
+    }
+)
