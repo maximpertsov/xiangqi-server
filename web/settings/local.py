@@ -18,7 +18,6 @@ DATABASES = {'default': dj_database_url.config(conn_max_age=600)}
 CACHES = {'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}}
 
 # CORS configuration
-CLIENT_DOMAIN = 'localhost'
 CORS_ORIGIN_WHITELIST = [
-    url.format(CLIENT_DOMAIN) for url in ('http://{}:3000', 'http://{}:5000')
+    'http://localhost:{}'.format(port) for port in [3000, 3002, 5000]
 ]
