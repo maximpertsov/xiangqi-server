@@ -9,5 +9,3 @@ from .game_event import GameEvent
 from .game_transition import GameTransition
 from .game import Game
 from .move import Move
-
-from .token import AccessToken, RefreshToken

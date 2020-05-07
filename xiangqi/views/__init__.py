@@ -2,7 +2,7 @@
 isort:skip_file
 """
 
-from .authenticate_view import AuthenticateView, LoginView
+from .authenticate_view import TokenObtainPairView, TokenRefreshView
 from .csrf_view import ping
 from .fen_move_view import FenMoveView
 from .game_view import GameView
