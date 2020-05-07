@@ -4,15 +4,15 @@ from http.cookies import SimpleCookie
 from pytest import mark
 
 
+# TODO: mock successfully refreshed access token
+
 @mark.django_db
-def test_authenticate(client, player):
+def test_refresh_failed(client, player):
     client.cookies = SimpleCookie({"refresh": "REFRESH_TOKEN"})
     response = client.post(
         "/api/token/refresh", data=None, content_type="application/json"
     )
-    assert response.status_code == 200
-    print(response.json())
-    assert "access_token" in response.json()
+    assert response.status_code == 401
 
 
 @mark.django_db
