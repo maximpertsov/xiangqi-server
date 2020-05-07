@@ -19,8 +19,6 @@ from django.urls import path
 from xiangqi import views
 
 urlpatterns = [
-    path("api/login", views.LoginView.as_view()),
-    path("api/authenticate", views.AuthenticateView.as_view()),  # TODO: remove
     path("api/token/obtain", views.TokenObtainPairView.as_view(), name="token_create"),
     path("api/token/refresh", views.TokenRefreshView.as_view(), name="token_refresh"),
     path("api/fen", views.FenMoveView.as_view()),
