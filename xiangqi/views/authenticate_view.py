@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views import View
+from rest_framework_simplejwt import serializers as jwt_serializers
+from rest_framework_simplejwt import views as jwt_views
 
 from xiangqi.models import AccessToken, RefreshToken
 from xiangqi.views.payload_schema_mixin import PayloadSchemaMixin
@@ -24,6 +26,17 @@ def create_access_token(player):
 def create_refresh_token(player):
     # TODO: invalidate active tokens?
     return RefreshToken.objects.create(player)
+
+
+class TokenObtainPairView(jwt_views.TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+
+        for cookie, token in response.data.items():
+            response.set_cookie(
+                cookie, token, domain=settings.CLIENT_DOMAIN, httponly=True
+            )
+        return response
 
 
 class LoginView(PayloadSchemaMixin, View):
@@ -56,6 +69,30 @@ class LoginView(PayloadSchemaMixin, View):
 
         response = JsonResponse(tokens, status=201)
         for cookie, token in tokens.items():
+            response.set_cookie(
+                cookie, token, domain=settings.CLIENT_DOMAIN, httponly=True
+            )
+        return response
+
+
+class TokenRefreshSerializer(jwt_serializers.TokenRefreshSerializer):
+    def get_fields(self):
+        fields = super().get_fields()
+        del fields["refresh"]
+        return fields
+
+    def validate(self, attrs):
+        attrs.update(refresh=self.context["request"].COOKIES["refresh"])
+        return super().validate(attrs)
+
+
+class TokenRefreshView(jwt_views.TokenRefreshView):
+    serializer_class = TokenRefreshSerializer
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+
+        for cookie, token in response.data.items():
             response.set_cookie(
                 cookie, token, domain=settings.CLIENT_DOMAIN, httponly=True
             )
