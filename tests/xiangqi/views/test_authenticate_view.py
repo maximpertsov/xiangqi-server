@@ -10,14 +10,14 @@ def test_authenticate(client, player):
     response = client.post(
         "/api/token/refresh", data=None, content_type="application/json"
     )
-    assert response.status_code == 201
+    assert response.status_code == 200
     print(response.json())
     assert "access_token" in response.json()
 
 
 @mark.django_db
 def test_obtain_token(client, player):
-    password = "s0_s0_secure"
+    password = "pass123"
     player.set_password(password)
     player.save()
 
@@ -32,7 +32,7 @@ def test_obtain_token(client, player):
 
 @mark.django_db
 def test_obtain_token_failed(client, player):
-    password = "s0_s0_secure"
+    password = "pass123"
     player.set_password(password)
     player.save()
 
