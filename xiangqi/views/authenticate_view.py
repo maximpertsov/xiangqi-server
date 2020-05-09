@@ -1,8 +1,9 @@
 from django.conf import settings
-from rest_framework_simplejwt import serializers, views
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
-class TokenObtainPairView(views.TokenObtainPairView):
+class TokenCookieObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
 
@@ -13,7 +14,7 @@ class TokenObtainPairView(views.TokenObtainPairView):
         return response
 
 
-class TokenRefreshSerializer(serializers.TokenRefreshSerializer):
+class TokenCookieRefreshSerializer(TokenRefreshSerializer):
     def get_fields(self):
         fields = super().get_fields()
         del fields["refresh"]
@@ -24,8 +25,8 @@ class TokenRefreshSerializer(serializers.TokenRefreshSerializer):
         return super().validate(attrs)
 
 
-class TokenRefreshView(views.TokenRefreshView):
-    serializer_class = TokenRefreshSerializer
+class TokenCookieRefreshView(TokenRefreshView):
+    serializer_class = TokenCookieRefreshSerializer
 
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)

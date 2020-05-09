@@ -19,8 +19,16 @@ from django.urls import path
 from xiangqi import views
 
 urlpatterns = [
-    path("api/token/obtain", views.TokenObtainPairView.as_view(), name="token_create"),
-    path("api/token/refresh", views.TokenRefreshView.as_view(), name="token_refresh"),
+    path(
+        "api/token/obtain",
+        views.TokenCookieObtainPairView.as_view(),
+        name="token_create",
+    ),
+    path(
+        "api/token/refresh",
+        views.TokenCookieRefreshView.as_view(),
+        name="token_refresh",
+    ),
     path("api/fen", views.FenMoveView.as_view()),
     path("api/ping", views.ping),
     path("api/player/<str:username>/games", views.GameListView.as_view()),
