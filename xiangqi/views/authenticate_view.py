@@ -21,7 +21,7 @@ class TokenCookieRefreshSerializer(TokenRefreshSerializer):
         return fields
 
     def validate(self, attrs):
-        attrs.update(refresh=self.context["request"].COOKIES["refresh"])
+        attrs.update(refresh=self.context["request"].COOKIES.get("refresh"))
         return super().validate(attrs)
 
 
