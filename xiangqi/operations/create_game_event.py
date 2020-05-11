@@ -1,5 +1,4 @@
 from django.core.exceptions import ValidationError
-from django.db.transaction import atomic
 from django.utils.functional import cached_property
 
 from xiangqi.models import Game, GameEvent
@@ -16,13 +15,9 @@ class CreateGameEvent:
     def perform(self):
         self._handle_event()
 
-    @atomic
     def _handle_event(self):
-        try:
-            self._game.shuttle(self._event)
-            self._handler(event=self._event).perform()
-        except Game.TransitionError:
-            raise ValidationError("No update")
+        self._handler(event=self._event).perform()
+        # TODO: mark event as rogue on failure
 
     @property
     def _handler(self):
