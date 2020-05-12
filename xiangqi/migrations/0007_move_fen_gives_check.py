@@ -15,6 +15,7 @@ def backfill(apps, schema_editor):
                 move.previous_move.fen if move.previous_move else xiangqi.start_fen()
             )
             move.fen = xiangqi.get_fen(previous_fen, [move.name])
+            move.gives_check = xiangqi.gives_check(move.fen, [])
             move.save()
 
 
@@ -27,6 +28,12 @@ class Migration(migrations.Migration):
             model_name="move",
             name="fen",
             field=models.CharField(default="x", max_length=128),
+            preserve_default=False,
+        ),
+        migrations.AddField(
+            model_name='move',
+            name='gives_check',
+            field=models.BooleanField(default=False),
             preserve_default=False,
         ),
         migrations.RunPython(backfill, migrations.RunPython.noop),
