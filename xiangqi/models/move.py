@@ -10,4 +10,6 @@ class Move(models.Model):
     game = models.ForeignKey("game", on_delete=models.CASCADE)
     name = models.CharField(max_length=10)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
-    previous_move = models.ForeignKey("move", null=True, on_delete=models.SET_NULL)
+    previous_move = models.ForeignKey(
+        "move", null=True, on_delete=models.SET_NULL, related_name="next_move_set"
+    )
