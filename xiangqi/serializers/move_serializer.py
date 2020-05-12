@@ -1,12 +1,8 @@
 from rest_framework.serializers import ModelSerializer
 
-from xiangqi.models import Move, Player
+from xiangqi.models import Move
 
-
-class PlayerSerializer(ModelSerializer):
-    class Meta:
-        model = Player
-        fields = ["username"]
+from .player_serializer import PlayerSerializer
 
 
 class MoveSerializer(ModelSerializer):
