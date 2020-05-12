@@ -40,6 +40,6 @@ class GameMoves:
     def _game_moves(self):
         return self._game.move_set.all()
 
-    @property
+    @cached_property
     def _initial_move(self):
         return SerializeInitialPlacement().result()
