@@ -26,6 +26,7 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 null=True,
                 on_delete=django.db.models.deletion.SET_NULL,
+                related_name="next_move_set",
                 to="xiangqi.Move",
             ),
         ),
