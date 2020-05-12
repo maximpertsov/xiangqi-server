@@ -18,6 +18,8 @@ class CreateMove:
     def _create_move(self):
         try:
             for obj in self._deserialized_update:
+                if self._previous_move:
+                    obj.previous_move = self._previous_move
                 obj.object.save()
         except serializers.base.DeserializationError:
             raise ValidationError("Could not save move")
@@ -49,6 +51,10 @@ class CreateMove:
     @cached_property
     def _username(self):
         return self._payload["player"]
+
+    @cached_property
+    def _previous_move(self):
+        return self._game.move_set.order_by('-pk').first()
 
     @cached_property
     def _game(self):
