@@ -5,6 +5,8 @@ from django.core import serializers
 from django.core.exceptions import ValidationError
 from django.utils.functional import cached_property
 
+from xiangqi.lib.pyffish import xiangqi
+
 deserialize = partial(serializers.deserialize, "json", use_natural_foreign_keys=True)
 
 
@@ -17,12 +19,18 @@ class CreateMove:
 
     def _create_move(self):
         try:
-            for obj in self._deserialized_update:
-                if self._previous_move:
-                    obj.previous_move = self._previous_move
-                obj.object.save()
+            for update in self._deserialized_update:
+                self._update_with_derived_data(update.object)
+                update.object.save()
         except serializers.base.DeserializationError:
             raise ValidationError("Could not save move")
+
+    def _update_with_derived_data(self, move):
+        previous_fen = (
+            move.previous_move.fen if move.previous_move else xiangqi.start_fen()
+        )
+        move.fen = xiangqi.get_fen(previous_fen, [move.name])
+        move.gives_check = xiangqi.gives_check(move.fen, [])
 
     @property
     def _deserialized_update(self):
@@ -54,7 +62,7 @@ class CreateMove:
 
     @cached_property
     def _previous_move(self):
-        return self._game.move_set.order_by('-pk').first()
+        return self._game.move_set.order_by("-pk").first()
 
     @cached_property
     def _game(self):
