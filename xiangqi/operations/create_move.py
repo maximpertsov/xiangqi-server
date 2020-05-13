@@ -20,17 +20,14 @@ class CreateMove:
     def _create_move(self):
         try:
             for update in self._deserialized_update:
-                self._update_with_derived_data(update.object)
-                update.object.save()
+                self._save_move(update.object)
         except serializers.base.DeserializationError:
             raise ValidationError("Could not save move")
 
-    def _update_with_derived_data(self, move):
-        previous_fen = (
-            move.previous_move.fen if move.previous_move else xiangqi.start_fen()
-        )
-        move.fen = xiangqi.get_fen(previous_fen, [move.name])
+    def _save_move(self, move):
+        move.fen = xiangqi.get_fen(self._previous_move_fen, [move.name])
         move.gives_check = xiangqi.gives_check(move.fen, [])
+        move.save()
 
     @property
     def _deserialized_update(self):
@@ -59,6 +56,10 @@ class CreateMove:
     @cached_property
     def _username(self):
         return self._payload["player"]
+
+    @cached_property
+    def _previous_move_fen(self):
+        return (self._previous_move and self._previous_move.fen) or xiangqi.start_fen()
 
     @cached_property
     def _previous_move(self):
