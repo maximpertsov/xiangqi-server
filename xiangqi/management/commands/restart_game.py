@@ -21,10 +21,8 @@ class Command(BaseCommand):
 
     def reset_game(self, game):
         game.move_set.all().delete()
-        game.transition_set.all().delete()
         game.event_set.all().delete()
 
-        game.state = Game.State.RED_TURN
         game.save()
 
         call_command("clear_cache")

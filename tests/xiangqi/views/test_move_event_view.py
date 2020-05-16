@@ -2,8 +2,6 @@ import json
 
 from pytest import fixture, mark
 
-from xiangqi.models import Game
-
 
 @fixture
 def payload(game):
@@ -27,8 +25,6 @@ def post(client, url, payload):
 
 @mark.django_db
 def test_create_move(post, game):
-    assert game.state == Game.State.RED_TURN
-    assert game.transition_set.count() == 0
     assert game.move_set.count() == 0
     assert game.event_set.filter(name="move").count() == 0
 
@@ -37,7 +33,5 @@ def test_create_move(post, game):
     assert response.json() == {}
 
     game.refresh_from_db()
-    assert game.state == Game.State.BLACK_TURN
-    assert game.transition_set.count() == 1
     assert game.move_set.count() == 1
     assert game.event_set.filter(name="move").count() == 1
