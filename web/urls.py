@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 
 from xiangqi import views
+from xiangqi.views.game_event_view import GameEventCreateView
 
 urlpatterns = [
     path(
@@ -31,7 +32,11 @@ urlpatterns = [
     ),
     path("api/fen", views.FenMoveView.as_view()),
     path("api/player/<str:username>/games", views.GameListView.as_view()),
+
+    # TODO: replace /events with /events/create
     path("api/game/<str:slug>/events", views.GameEventView.as_view()),
+    path("api/game/<str:slug>/events/create", GameEventCreateView.as_view()),
+
     path("api/game/<str:slug>/poll", views.PollView.as_view()),
     path("api/game/<str:slug>", views.GameView.as_view()),
     path("admin/", admin.site.urls),
