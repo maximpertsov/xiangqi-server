@@ -13,6 +13,7 @@ class CreateMove:
         self._event = event
 
     def perform(self):
+        print("creating move")
         self._create_move()
 
     def _create_move(self):
