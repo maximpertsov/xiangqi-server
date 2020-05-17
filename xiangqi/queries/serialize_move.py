@@ -10,7 +10,8 @@ class SerializeMove:
     _move_name = attr.ib()
 
     def result(self):
-        return {**self._fen_data, "move": self._move_name}
+        # TODO: remove "move" after data model update
+        return {**self._fen_data, "move": self._move_name, "fan": self._move_name}
 
     @property
     def _fen_data(self):
