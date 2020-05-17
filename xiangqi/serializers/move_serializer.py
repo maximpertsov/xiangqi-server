@@ -10,3 +10,6 @@ class MoveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Move
         fields = ["game", "name", "player"]
+
+    # def validate(self, data):
+    #     return super().validate(data)
