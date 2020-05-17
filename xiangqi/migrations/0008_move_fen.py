@@ -14,13 +14,13 @@ def backfill(apps, schema_editor):
             previous_fen = (
                 move.previous_move.fen if move.previous_move else xiangqi.start_fen()
             )
-            move.fen = xiangqi.get_fen(previous_fen, [move.name])
+            move.fen = xiangqi.get_fen(previous_fen, [move.fan])
             move.save()
 
 
 class Migration(migrations.Migration):
 
-    dependencies = [("xiangqi", "0006_move_previous_move")]
+    dependencies = [("xiangqi", "0007_move_previous_move")]
 
     operations = [
         migrations.AddField(

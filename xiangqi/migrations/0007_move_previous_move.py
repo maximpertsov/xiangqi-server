@@ -17,7 +17,7 @@ def backfill(apps, schema_editor):
 
 class Migration(migrations.Migration):
 
-    dependencies = [("xiangqi", "0005_delete_gametransition")]
+    dependencies = [("xiangqi", "0006_auto_20200517_1536")]
 
     operations = [
         migrations.AddField(
