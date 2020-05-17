@@ -19,8 +19,6 @@ class CreateMove:
     def _create_move(self):
         try:
             for obj in self._deserialized_update:
-                if self._previous_move:
-                    obj.previous_move = self._previous_move
                 obj.object.save()
         except serializers.base.DeserializationError:
             raise ValidationError("Could not save move")
