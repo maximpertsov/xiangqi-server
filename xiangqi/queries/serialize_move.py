@@ -1,6 +1,6 @@
 import attr
 
-from xiangqi.lib.pyffish import xiangqi
+from lib.pyffish import xiangqi
 from xiangqi.queries.serialize_fen import SerializeFen, SerializeInitialFen
 
 

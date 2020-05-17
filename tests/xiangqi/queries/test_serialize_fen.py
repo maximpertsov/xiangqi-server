@@ -17,7 +17,7 @@ def legal_moves():
 @pytest.fixture
 def mock_gives_check(mocker):
     return mocker.patch(
-        "xiangqi.lib.pyffish.xiangqi.gives_check", mocker.MagicMock(return_value=True)
+        "lib.pyffish.xiangqi.gives_check", mocker.MagicMock(return_value=True)
     )
 
 

@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 
-from xiangqi.lib.pyffish import xiangqi
+from lib.pyffish import xiangqi
 
 
 def backfill(apps, schema_editor):

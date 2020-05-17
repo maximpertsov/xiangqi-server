@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from django.utils.functional import cached_property
 
-from xiangqi.lib.pyffish import xiangqi
+from lib.pyffish import xiangqi
 from xiangqi.queries.legal_moves import LegalMoves
 
 

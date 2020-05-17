@@ -22,10 +22,10 @@ def new_legal_moves():
 @pytest.mark.django_db
 def test_serialize_move(mocker, move__name, fen, new_fen, new_legal_moves):
     mock_get_fen = mocker.patch(
-        "xiangqi.lib.pyffish.xiangqi.get_fen", mocker.MagicMock(return_value=new_fen)
+        "lib.pyffish.xiangqi.get_fen", mocker.MagicMock(return_value=new_fen)
     )
     mock_gives_check = mocker.patch(
-        "xiangqi.lib.pyffish.xiangqi.gives_check", mocker.MagicMock(return_value=True)
+        "lib.pyffish.xiangqi.gives_check", mocker.MagicMock(return_value=True)
     )
     mock_query_legal_moves = mocker.patch.object(
         LegalMoves, "result", return_value=new_legal_moves

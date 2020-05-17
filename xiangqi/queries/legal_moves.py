@@ -1,6 +1,6 @@
 import attr
 
-from xiangqi.lib.pyffish import xiangqi
+from lib.pyffish import xiangqi
 
 
 @attr.s(kw_only=True)
