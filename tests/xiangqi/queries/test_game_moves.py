@@ -5,9 +5,9 @@ from xiangqi.queries.game_moves import GameMoves
 
 @pytest.fixture
 def game_with_moves(game, move_factory):
-    move_factory(game=game, player=game.red_player, name="a1a3")
-    move_factory(game=game, player=game.black_player, name="a10a9")
-    move_factory(game=game, player=game.red_player, name="i1i3")
+    move_factory(game=game, player=game.red_player, fan="a1a3")
+    move_factory(game=game, player=game.black_player, fan="a10a9")
+    move_factory(game=game, player=game.red_player, fan="i1i3")
     return game
 
 
@@ -19,11 +19,11 @@ def test_game_moves(game_with_moves):
         assert "fen" in serialized
         assert "legal_moves" in serialized
         assert "gives_check" in serialized
-        assert "move" in serialized
+        assert "fan" in serialized
 
         if index == 0:
-            assert serialized['player_name'] is None
+            assert serialized["player_name"] is None
         elif index % 2 == 1:
-            assert serialized['player_name'] == 'rosie'
+            assert serialized["player_name"] == "rosie"
         else:
-            assert serialized['player_name'] == 'bob'
+            assert serialized["player_name"] == "bob"
