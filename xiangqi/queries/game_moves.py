@@ -21,9 +21,9 @@ class GameMoves:
         return result
 
     def _move_data(self, move=None):
-        result = {"move": None, "player_name": None}
+        result = {"fan": None, "player_name": None}
         if move:
-            result.update({"move": move.name, "player_name": move.player.username})
+            result.update({"fan": move.fan, "player_name": move.player.username})
         return result
 
     @property
@@ -31,7 +31,7 @@ class GameMoves:
         result = [self._initial_move]
         for move in self._game_moves:
             previous_fen = result[-1]["fen"]
-            new_move = SerializeMove(fen=previous_fen, move_name=move.name).result()
+            new_move = SerializeMove(fan=move.fan, fen=previous_fen).result()
             result.append(new_move)
 
         return result

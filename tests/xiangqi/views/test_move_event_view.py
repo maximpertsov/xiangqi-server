@@ -5,7 +5,7 @@ from pytest import fixture, mark
 
 @fixture
 def payload(game):
-    return {"name": "move", "player": game.red_player.username, "move": "a1a2"}
+    return {"name": "move", "player": game.red_player.username, "fan": "a1a2"}
 
 
 @fixture

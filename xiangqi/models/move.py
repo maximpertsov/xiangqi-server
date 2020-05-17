@@ -9,5 +9,5 @@ class Move(models.Model):
 
     fen = models.CharField(max_length=128)
     game = models.ForeignKey("game", on_delete=models.CASCADE)
-    name = models.CharField(max_length=10)
+    fan = models.CharField(max_length=10)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)

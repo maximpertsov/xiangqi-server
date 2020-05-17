@@ -21,7 +21,7 @@ def game_with_players(game_factory, red_player, black_player):
 
 @pytest.fixture
 def payload(red_player):
-    return {"move": "b10c8", "player": red_player.username}
+    return {"fan": "b10c8", "player": red_player.username}
 
 
 @pytest.fixture
@@ -34,7 +34,7 @@ def test_create_move(event):
     assert event.game.move_set.count() == 0
 
     CreateMove(event=event).perform()
-    assert event.game.move_set.first().name == "b10c8"
+    assert event.game.move_set.first().fan == "b10c8"
     assert event.game.move_set.count() == 1
 
 
