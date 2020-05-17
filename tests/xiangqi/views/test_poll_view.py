@@ -13,8 +13,8 @@ def poll(client, game):
 
 @fixture
 def make_move(client, game):
-    def wrapped(move, player):
-        payload = {"name": "move", "move": move, "player": player.username}
+    def wrapped(fan, player):
+        payload = {"name": "move", "fan": fan, "player": player.username}
         return client.post(
             "/api/game/{}/events".format(game.slug),
             data=json.dumps(payload),

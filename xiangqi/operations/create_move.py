@@ -34,13 +34,13 @@ class CreateMove:
     def _update_attributes(self):
         return {
             "game": [self._slug],
-            "name": self._move_name,
+            "fan": self._fan,
             "player": [self._username],
         }
 
     @cached_property
-    def _move_name(self):
-        return self._payload["move"]
+    def _fan(self):
+        return self._payload["fan"]
 
     @cached_property
     def _slug(self):
