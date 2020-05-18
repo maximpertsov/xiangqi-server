@@ -12,5 +12,4 @@ DATABASES = {"default": dj_database_url.config(conn_max_age=600)}
 CACHES = {"default": {"BACKEND": "django.core.cache.backends.dummy.DummyCache"}}
 
 # JWT
-JWT_SECRET = "TEST"  # TODO: delete this one
-SIMPLE_JWT["SIGNING_KEY"] = "TEST"
+JWT_AUTH["JWT_SECRET_KEY"] = "TEST"

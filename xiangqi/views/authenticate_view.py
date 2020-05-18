@@ -1,38 +1,21 @@
 from django.conf import settings
-from rest_framework_simplejwt.serializers import TokenRefreshSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_jwt.views import RefreshJSONWebToken, RefreshJSONWebTokenSerializer
 
 
-class TokenCookieObtainPairView(TokenObtainPairView):
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-
-        for cookie, token in response.data.items():
-            response.set_cookie(
-                cookie, token, domain=settings.CLIENT_DOMAIN, httponly=True
-            )
-        return response
-
-
-class TokenCookieRefreshSerializer(TokenRefreshSerializer):
+class RefreshJSONWebTokenFromCookieSerializer(RefreshJSONWebTokenSerializer):
     def get_fields(self):
         fields = super().get_fields()
-        del fields["refresh"]
+        del fields["token"]
         return fields
 
     def validate(self, attrs):
-        attrs.update(refresh=self.context["request"].COOKIES.get("refresh"))
+        attrs.update(
+            token=self.context["request"].COOKIES.get(
+                settings.JWT_AUTH["JWT_AUTH_COOKIE"]
+            )
+        )
         return super().validate(attrs)
 
 
-class TokenCookieRefreshView(TokenRefreshView):
-    serializer_class = TokenCookieRefreshSerializer
-
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-
-        for cookie, token in response.data.items():
-            response.set_cookie(
-                cookie, token, domain=settings.CLIENT_DOMAIN, httponly=True
-            )
-        return response
+class RefreshJSONWebTokenFromCookie(RefreshJSONWebToken):
+    serializer_class = RefreshJSONWebTokenFromCookieSerializer

@@ -15,18 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework_jwt.views import obtain_jwt_token
 
 from xiangqi import views
 
 urlpatterns = [
-    path(
-        "api/token/obtain",
-        views.TokenCookieObtainPairView.as_view(),
-        name="token_create",
-    ),
+    path("api/token/obtain", obtain_jwt_token, name="token_create"),
     path(
         "api/token/refresh",
-        views.TokenCookieRefreshView.as_view(),
+        views.RefreshJSONWebTokenFromCookie.as_view(),
         name="token_refresh",
     ),
     path("api/fen", views.FenMoveView.as_view()),

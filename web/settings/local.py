@@ -21,5 +21,4 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 # JWT
-JWT_SECRET = os.environ["JWT_SECRET"]  # TODO: delete this one
-SIMPLE_JWT["SIGNING_KEY"] = os.environ["JWT_SECRET"]
+JWT_AUTH["JWT_SECRET_KEY"] = os.environ["JWT_SECRET"]
