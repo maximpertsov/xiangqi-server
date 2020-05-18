@@ -4,6 +4,15 @@ from pytest import fixture, mark
 
 
 @fixture
+def payload(game):
+    return {
+        "game": game.slug,
+        "name": "move",
+        "payload": {"fan": "a1a2", "fen": "FEN", "player": game.red_player.username},
+    }
+
+
+@fixture
 def poll(client, game):
     def wrapped():
         return client.get("/api/game/{}/poll".format(game.slug))
@@ -12,9 +21,8 @@ def poll(client, game):
 
 
 @fixture
-def make_move(client, game):
+def make_move(client, game, payload):
     def wrapped(fan, player):
-        payload = {"name": "move", "fan": fan, "player": player.username}
         return client.post(
             "/api/game/{}/events".format(game.slug),
             data=json.dumps(payload),

@@ -5,7 +5,11 @@ from pytest import fixture, mark
 
 @fixture
 def payload(game):
-    return {"name": "move", "player": game.red_player.username, "fan": "a1a2"}
+    return {
+        "game": game.slug,
+        "name": "move",
+        "payload": {"fan": "a1a2", "fen": "FEN", "player": game.red_player.username},
+    }
 
 
 @fixture
@@ -30,7 +34,6 @@ def test_create_move(post, game):
 
     response = post()
     assert response.status_code == 201
-    assert response.json() == {}
 
     game.refresh_from_db()
     assert game.move_set.count() == 1
