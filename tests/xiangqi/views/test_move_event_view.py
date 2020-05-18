@@ -13,8 +13,8 @@ def payload(game):
 
 
 @fixture
-def url(game):
-    return "/api/game/{}/events".format(game.slug)
+def url():
+    return "/api/game/events"
 
 
 @fixture
