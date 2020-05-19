@@ -1,6 +1,9 @@
 import json
 
 from pytest import fixture, mark
+from rest_framework.test import force_authenticate
+
+from xiangqi.views import GameEventView
 
 
 @fixture
@@ -21,13 +24,15 @@ def poll(client, game):
 
 
 @fixture
-def make_move(client, payload):
+def make_move(rf, payload):
     def wrapped(fan, player):
-        return client.post(
+        request = rf.post(
             "/api/game/events",
             data=json.dumps(payload),
             content_type="application/json",
         )
+        force_authenticate(request, user=player)
+        return GameEventView.as_view()(request)
 
     return wrapped
 
