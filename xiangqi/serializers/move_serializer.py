@@ -6,7 +6,9 @@ from xiangqi.queries.legal_moves import LegalMoves
 
 
 class MoveSerializer(serializers.ModelSerializer):
-    game = serializers.SlugRelatedField("slug", queryset=Game.objects.all())
+    game = serializers.SlugRelatedField(
+        "slug", write_only=True, queryset=Game.objects.all()
+    )
     player = serializers.SlugRelatedField("username", queryset=Player.objects.all())
 
     # def validate(self, data):
