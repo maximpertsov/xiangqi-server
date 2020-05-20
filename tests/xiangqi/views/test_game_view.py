@@ -1,38 +1,25 @@
 from pytest import fixture, mark
+from rest_framework.test import force_authenticate
 
-from xiangqi.queries.game_moves import GameMoves
-
-
-@fixture
-def url(game):
-    return "/api/game/{}".format(game.slug)
+from xiangqi.views import GameView
 
 
 @fixture
-def get(client, url):
+def get(rf, game, player):
     def wrapped():
-        return client.get(url)
+        request = rf.get("/api/game")
+        force_authenticate(request, user=player)
+        return GameView.as_view()(request, slug=game.slug)
 
     return wrapped
 
 
-@fixture
-def game_moves(mocker):
-    return mocker.patch.object(GameMoves, "result", return_value=[])
-
-
 @mark.django_db
-def test_get_game_404(client):
-    response = client.get("/api/game/FAKEGAME")
-    assert response.status_code == 404
-
-
-@mark.django_db
-def test_get_game_200(get, game, game_moves):
+def test_get_game_200(get, game):
     response = get()
     assert response.status_code == 200
 
-    assert response.json() == {
+    assert response.data == {
         "moves": [],
         "players": [
             {"name": game.red_player.username, "color": "red"},
