@@ -11,16 +11,6 @@ class MoveSerializer(serializers.ModelSerializer):
     )
     player = serializers.SlugRelatedField("username", queryset=Player.objects.all())
 
-    # def validate(self, data):
-    #     game = (
-    #         Game.objects.filter(slug=data["game"])
-    #         .select_related("red_player", "black_player")
-    #         .first()
-    #     )
-    #     if data["player"] not in [game.red_player.username, game.black_player.username]:
-    #         raise serializers.ValidationError("Move made by non-game player")
-    #     return data
-
     def to_representation(self, instance):
         result = super().to_representation(instance)
         result.update(

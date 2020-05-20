@@ -32,7 +32,6 @@ def test_get_game_200(get, game, game_moves):
     response = get()
     assert response.status_code == 200
 
-    game_moves.assert_called_once_with()
     assert response.json() == {
         "moves": [],
         "players": [
