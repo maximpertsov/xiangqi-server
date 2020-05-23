@@ -1,11 +1,8 @@
-from collections import OrderedDict
-
 from rest_framework import serializers
 
 from lib.pyffish import xiangqi
 from xiangqi.models import Game
 from xiangqi.models.color import Color
-from xiangqi.queries.legal_moves import LegalMoves
 from xiangqi.serializers.move_serializer import MoveSerializer, PositionSerializer
 from xiangqi.serializers.player_serializer import PlayerSerializer
 
