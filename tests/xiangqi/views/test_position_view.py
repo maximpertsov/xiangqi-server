@@ -18,7 +18,7 @@ def mock_pyffish(mocker):
 @pytest.fixture
 def post(rf, player):
     def wrapped(url, data=None):
-        request = rf.post(url, data=data)
+        request = rf.post(url, data=data, content_type="application/json")
         force_authenticate(request, user=player)
         if url == "/api/position":
             return PositionView.as_view()(request)
