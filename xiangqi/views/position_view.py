@@ -7,9 +7,6 @@ from xiangqi.serializers.move_serializer import PositionSerializer
 
 
 class PositionView(GenericAPIView):
-    authentication_classes = []
-    permission_classes = []
-
     serializer_class = PositionSerializer
 
     def post(self, request, *args, **kwargs):
