@@ -1,40 +1,36 @@
-from pytest import fixture, mark
+import pytest
+from rest_framework.test import force_authenticate
 
-from xiangqi.queries.game_moves import GameMoves
-
-
-@fixture
-def url(game):
-    return "/api/game/{}".format(game.slug)
+from xiangqi.views import GameView
 
 
-@fixture
-def get(client, url):
+@pytest.fixture
+def mock_pyffish(mocker):
+    return mocker.patch.multiple(
+        "lib.pyffish.xiangqi",
+        gives_check=mocker.MagicMock(return_value=False),
+        start_fen=mocker.MagicMock(return_value="START_FEN"),
+        legal_moves=mocker.MagicMock(return_value=[]),
+    )
+
+
+@pytest.fixture
+def get(rf, game, player):
     def wrapped():
-        return client.get(url)
+        request = rf.get("/api/game")
+        force_authenticate(request, user=player)
+        return GameView.as_view()(request, slug=game.slug)
 
     return wrapped
 
 
-@fixture
-def game_moves(mocker):
-    return mocker.patch.object(GameMoves, "result", return_value=[])
-
-
-@mark.django_db
-def test_get_game_404(client):
-    response = client.get("/api/game/FAKEGAME")
-    assert response.status_code == 404
-
-
-@mark.django_db
-def test_get_game_200(get, game, game_moves):
+@pytest.mark.django_db
+def test_get_game_200(get, game, mock_pyffish):
     response = get()
     assert response.status_code == 200
 
-    game_moves.assert_called_once_with()
-    assert response.json() == {
-        "moves": [],
+    assert response.data == {
+        "moves": [{"fen": "START_FEN", "gives_check": False, "legal_moves": {}}],
         "players": [
             {"name": game.red_player.username, "color": "red"},
             {"name": game.black_player.username, "color": "black"},

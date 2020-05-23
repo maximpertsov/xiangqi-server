@@ -15,23 +15,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework_jwt.views import obtain_jwt_token
 
 from xiangqi import views
 
 urlpatterns = [
-    path(
-        "api/token/obtain",
-        views.TokenCookieObtainPairView.as_view(),
-        name="token_create",
-    ),
+    path("api/token/obtain", obtain_jwt_token, name="token_create"),
     path(
         "api/token/refresh",
-        views.TokenCookieRefreshView.as_view(),
+        views.RefreshJSONWebTokenFromCookie.as_view(),
         name="token_refresh",
     ),
-    path("api/fen", views.FenMoveView.as_view()),
+    path("api/position", views.PositionView.as_view()),
+    path("api/starting-position", views.StartingPositionView.as_view()),
     path("api/player/<str:username>/games", views.GameListView.as_view()),
-    path("api/game/<str:slug>/events", views.GameEventView.as_view()),
+    path("api/game/events", views.GameEventView.as_view()),
     path("api/game/<str:slug>/poll", views.PollView.as_view()),
     path("api/game/<str:slug>", views.GameView.as_view()),
     path("admin/", admin.site.urls),
