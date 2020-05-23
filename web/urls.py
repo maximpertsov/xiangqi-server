@@ -26,7 +26,11 @@ urlpatterns = [
         views.RefreshJSONWebTokenFromCookie.as_view(),
         name="token_refresh",
     ),
-    path("api/fen", views.FenMoveView.as_view()),
+
+    # path("api/fen", views.FenMoveView.as_view()),
+    # TODO: rename url
+    path("api/fen", views.PositionView.as_view()),
+
     path("api/player/<str:username>/games", views.GameListView.as_view()),
     path("api/game/events", views.GameEventView.as_view()),
     path("api/game/<str:slug>/poll", views.PollView.as_view()),
