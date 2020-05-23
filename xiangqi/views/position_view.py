@@ -7,18 +7,20 @@ from xiangqi.serializers.move_serializer import PositionSerializer
 
 
 class PositionView(GenericAPIView):
+    authentication_classes = []
+    permission_classes = []
+
     serializer_class = PositionSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data, status=status.HTTP_201_CREATED, headers=headers
-        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class StartingPositionView(PositionView):
     def get_serializer(self, *args, **kwargs):
-        kwargs.update(fen=xiangqi.start_fen())
+        data = kwargs["data"].copy()
+        data.update(fen=xiangqi.start_fen())
+        kwargs.update(data=data)
         return super().get_serializer(*args, **kwargs)
