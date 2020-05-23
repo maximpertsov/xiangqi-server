@@ -6,7 +6,7 @@ from lib.pyffish import xiangqi
 from xiangqi.models import Game
 from xiangqi.models.color import Color
 from xiangqi.queries.legal_moves import LegalMoves
-from xiangqi.serializers.move_serializer import MoveSerializer
+from xiangqi.serializers.move_serializer import MoveSerializer, PositionSerializer
 from xiangqi.serializers.player_serializer import PlayerSerializer
 
 
@@ -30,13 +30,9 @@ class GameSerializer(serializers.ModelSerializer):
 
     def _transform_moves(self, result):
         # TODO: this should be it's own serializer and collocated with the move serialier
-        start_fen = xiangqi.start_fen()
-        start_position = OrderedDict(
-            fen=start_fen,
-            gives_check=xiangqi.gives_check(start_fen, []),
-            legal_moves=LegalMoves(fen=start_fen),
-        )
-        result["moves"] = [start_position] + result["moves"]
+        start_position = PositionSerializer(data={"fen": xiangqi.start_fen()})
+        start_position.is_valid(raise_exception=True)
+        result["moves"] = [start_position.data] + result["moves"]
 
     class Meta:
         model = Game

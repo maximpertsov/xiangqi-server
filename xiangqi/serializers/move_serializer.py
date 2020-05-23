@@ -5,7 +5,23 @@ from xiangqi.models import Game, Move, Player
 from xiangqi.queries.legal_moves import LegalMoves
 
 
+class PositionSerializer(serializers.Serializer):
+    fen = serializers.CharField()
+
+    def to_representation(self, instance):
+        result = super().to_representation(instance)
+        result.update(
+            gives_check=xiangqi.gives_check(result["fen"], []),
+            legal_moves=LegalMoves(fen=result["fen"]).result(),
+        )
+        return result
+
+
 class MoveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Move
+        fields = ["fan", "fen", "game", "player"]
+
     game = serializers.SlugRelatedField(
         "slug", write_only=True, queryset=Game.objects.all()
     )
@@ -13,12 +29,7 @@ class MoveSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         result = super().to_representation(instance)
-        result.update(
-            gives_check=xiangqi.gives_check(instance.fen, []),
-            legal_moves=LegalMoves(fen=instance.fen).result(),
-        )
+        position = PositionSerializer(data={"fen": instance.fen})
+        position.is_valid(raise_exception=True)
+        result.update(position.data)
         return result
-
-    class Meta:
-        model = Move
-        fields = ["fan", "fen", "game", "player"]
