@@ -20,7 +20,7 @@ class PositionSerializer(serializers.Serializer):
 class MoveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Move
-        fields = ["fan", "fen", "game", "player"]
+        fields = ["uci", "fen", "game", "player"]
 
     game = serializers.SlugRelatedField(
         "slug", write_only=True, queryset=Game.objects.all()

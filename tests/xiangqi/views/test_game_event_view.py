@@ -11,7 +11,7 @@ def payload(game):
     return {
         "game": game.slug,
         "name": "move",
-        "payload": {"fan": "a1a2", "fen": "FEN", "player": game.red_player.username},
+        "payload": {"uci": "a1a2", "fen": "FEN", "player": game.red_player.username},
     }
 
 

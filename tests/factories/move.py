@@ -11,5 +11,5 @@ class MoveFactory(DjangoModelFactory):
         model = Move
 
     game = SubFactory(GameFactory)
-    fan = "a10a9"
+    uci = "a10a9"
     player = SubFactory(PlayerFactory)
