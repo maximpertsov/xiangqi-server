@@ -12,7 +12,7 @@ class PositionSerializer(serializers.Serializer):
         result = super().to_representation(instance)
         result.update(
             gives_check=xiangqi.gives_check(result["fen"], []),
-            legal_moves=LegalMoves(fen=result["fen"]).result(),
+            legal_moves=LegalMoves(fen=result["fen"]).result,
         )
         return result
 

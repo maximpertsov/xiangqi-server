@@ -7,6 +7,7 @@ from lib.pyffish import xiangqi
 class LegalMoves:
     _fen = attr.ib()
 
+    @property
     def result(self):
         return {move: xiangqi.get_fen(self._fen, [move]) for move in self._legal_moves}
 
