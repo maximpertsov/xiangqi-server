@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from lib.pyffish import xiangqi
@@ -7,6 +8,7 @@ from xiangqi.serializers.move_serializer import PositionSerializer
 
 
 class PositionView(GenericAPIView):
+    permission_classes = [AllowAny]
     serializer_class = PositionSerializer
 
     def post(self, request, *args, **kwargs):
