@@ -6,7 +6,13 @@ import pyffish
 
 VARIANT = "xiangqi"
 
-export_functions = ["get_fen", "gives_check", "legal_moves", "start_fen"]
+export_functions = [
+    "get_fen",
+    "gives_check",
+    "has_insufficient_material",
+    "legal_moves",
+    "start_fen",
+]
 
 
 class XiangqiError(Exception):
