@@ -1,15 +1,22 @@
 import pytest
 
+from xiangqi.queries.game_result import GameResult
+from xiangqi.queries.legal_moves import LegalMoves
 from xiangqi.views import PositionView, StartingPositionView
 
 
 @pytest.fixture
-def mock_pyffish(mocker):
-    return mocker.patch.multiple(
+def mocks(mocker):
+    mocker.patch.object(
+        GameResult, "result", new_callable=mocker.PropertyMock, return_value=[0, 0]
+    )
+    mocker.patch.object(
+        LegalMoves, "result", new_callable=mocker.PropertyMock, return_value={}
+    )
+    mocker.patch.multiple(
         "lib.pyffish.xiangqi",
         get_fen=mocker.MagicMock(return_value="FEN"),
         gives_check=mocker.MagicMock(return_value=False),
-        legal_moves=mocker.MagicMock(return_value=[]),
         start_fen=mocker.MagicMock(return_value="START_FEN"),
     )
 
@@ -27,18 +34,24 @@ def post(rf, player):
 
 
 @pytest.mark.django_db
-def test_position_view(post, mock_pyffish):
+def test_position_view(post, mocks):
     response = post("/api/position", data={"fen": "FEN"})
     assert response.status_code == 200
-    assert response.data == {"fen": "FEN", "legal_moves": {}, "gives_check": False}
+    assert response.data == {
+        "fen": "FEN",
+        "legal_moves": {},
+        "gives_check": False,
+        "game_result": [0, 0],
+    }
 
 
 @pytest.mark.django_db
-def test_starting_position_view(post, mock_pyffish):
+def test_starting_position_view(post, mocks):
     response = post("/api/starting-position")
     assert response.status_code == 200
     assert response.data == {
         "fen": "START_FEN",
         "legal_moves": {},
         "gives_check": False,
+        "game_result": [0, 0],
     }

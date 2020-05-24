@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from lib.pyffish import xiangqi
 from xiangqi.models import Game, Move, Player
+from xiangqi.queries.game_result import GameResult
 from xiangqi.queries.legal_moves import LegalMoves
 
 
@@ -13,6 +14,7 @@ class PositionSerializer(serializers.Serializer):
         result.update(
             gives_check=xiangqi.gives_check(result["fen"], []),
             legal_moves=LegalMoves(fen=result["fen"]).result,
+            game_result=GameResult(fen=result["fen"]).result,
         )
         return result
 
