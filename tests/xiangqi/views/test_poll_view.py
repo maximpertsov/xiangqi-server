@@ -11,7 +11,7 @@ def payload(game):
     return {
         "game": game.slug,
         "name": "move",
-        "payload": {"fan": "a1a2", "fen": "FEN", "player": game.red_player.username},
+        "payload": {"uci": "a1a2", "fen": "FEN", "player": game.red_player.username},
     }
 
 
@@ -25,7 +25,7 @@ def poll(client, game):
 
 @fixture
 def make_move(rf, payload):
-    def wrapped(fan, player):
+    def wrapped(uci, player):
         request = rf.post(
             "/api/game/events",
             data=json.dumps(payload),
