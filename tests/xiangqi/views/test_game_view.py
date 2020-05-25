@@ -37,6 +37,7 @@ def test_get_game_200(get, game, mock_pyffish):
     assert response.status_code == 200
 
     assert response.data == {
+        "slug": game.slug,
         "moves": [
             {
                 "fen": "START_FEN",
