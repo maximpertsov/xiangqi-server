@@ -17,7 +17,6 @@ class GameResult:
 
     @property
     def _score(self):
-        # import pdb; pdb.set_trace()
         if self._has_legal_moves:
             return [0.5, 0.5] if self._is_draw else [0, 0]
         if self._color == "w":
