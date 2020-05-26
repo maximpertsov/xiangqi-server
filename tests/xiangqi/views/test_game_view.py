@@ -50,4 +50,5 @@ def test_get_game_200(get, game, mock_pyffish):
             {"name": game.red_player.username, "color": "red"},
             {"name": game.black_player.username, "color": "black"},
         ],
+        "current_move_fen": "START_FEN",
     }
