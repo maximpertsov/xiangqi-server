@@ -19,10 +19,6 @@ class Fen:
             return Color.BLACK.value
         return self.Error("Cannot determine color")
 
-    @property
-    def fullmoves(self):
-        return int(self._properties["fullmoves"])
-
     @cached_property
     def _properties(self):
         return dict(zip(self._fields, self._fen.split()))
