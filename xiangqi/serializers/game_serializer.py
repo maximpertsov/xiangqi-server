@@ -26,7 +26,6 @@ class GameSerializer(serializers.ModelSerializer):
         result["players"] = [result.pop("red_player"), result.pop("black_player")]
 
     def _transform_moves(self, result):
-        # TODO: this should be it's own serializer and collocated with the move serialier
         start_position = PositionSerializer(data={"fen": xiangqi.start_fen()})
         start_position.is_valid(raise_exception=True)
         result["moves"] = [start_position.data] + result["moves"]
