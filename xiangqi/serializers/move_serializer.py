@@ -4,6 +4,7 @@ from lib.pyffish import xiangqi
 from xiangqi.models import Game, Move, Player
 from xiangqi.queries.game_result import GameResult
 from xiangqi.queries.legal_moves import LegalMoves
+from xiangqi.queries.move_order import MoveOrder
 
 
 class PositionSerializer(serializers.Serializer):
@@ -15,6 +16,7 @@ class PositionSerializer(serializers.Serializer):
             gives_check=xiangqi.gives_check(result["fen"], []),
             legal_moves=LegalMoves(fen=result["fen"]).result,
             game_result=GameResult(fen=result["fen"]).result,
+            order=MoveOrder(fen=result['fen']).result
         )
         return result
 

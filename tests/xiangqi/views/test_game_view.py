@@ -3,6 +3,7 @@ from rest_framework.test import force_authenticate
 
 from xiangqi.queries.game_result import GameResult
 from xiangqi.queries.legal_moves import LegalMoves
+from xiangqi.queries.move_order import MoveOrder
 from xiangqi.views import GameView
 
 
@@ -13,6 +14,9 @@ def mock_pyffish(mocker):
     )
     mocker.patch.object(
         LegalMoves, "result", new_callable=mocker.PropertyMock, return_value={}
+    )
+    mocker.patch.object(
+        MoveOrder, "result", new_callable=mocker.PropertyMock, return_value=1
     )
     mocker.patch.multiple(
         "lib.pyffish.xiangqi",
@@ -44,6 +48,7 @@ def test_get_game_200(get, game, mock_pyffish):
                 "gives_check": False,
                 "legal_moves": {},
                 "game_result": [0, 0],
+                "order": 1,
             }
         ],
         "players": [

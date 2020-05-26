@@ -2,6 +2,7 @@ import pytest
 
 from xiangqi.queries.game_result import GameResult
 from xiangqi.queries.legal_moves import LegalMoves
+from xiangqi.queries.move_order import MoveOrder
 from xiangqi.views import PositionView, StartingPositionView
 
 
@@ -12,6 +13,9 @@ def mocks(mocker):
     )
     mocker.patch.object(
         LegalMoves, "result", new_callable=mocker.PropertyMock, return_value={}
+    )
+    mocker.patch.object(
+        MoveOrder, "result", new_callable=mocker.PropertyMock, return_value=1
     )
     mocker.patch.multiple(
         "lib.pyffish.xiangqi",
@@ -42,6 +46,7 @@ def test_position_view(post, mocks):
         "legal_moves": {},
         "gives_check": False,
         "game_result": [0, 0],
+        "order": 1,
     }
 
 
@@ -54,4 +59,5 @@ def test_starting_position_view(post, mocks):
         "legal_moves": {},
         "gives_check": False,
         "game_result": [0, 0],
+        "order": 1,
     }
