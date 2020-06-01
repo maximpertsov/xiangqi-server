@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from lib.pyffish import xiangqi
 from xiangqi.models import Game
-from xiangqi.models.color import Color
 from xiangqi.queries.current_move_fen import CurrentMoveFen
 from xiangqi.serializers.move_serializer import MoveSerializer, PositionSerializer
 from xiangqi.serializers.player_serializer import PlayerSerializer
@@ -23,16 +22,8 @@ class GameSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         result = super().to_representation(instance)
-        self._transform_players(result)
         self._transform_moves(result)
         return result
-
-    def _transform_players(self, result):
-        # TODO: update client expect `.red_player` and `.black_player` keys,
-        # instance of a list of players
-        result["red_player"].update(color=Color.RED.value)
-        result["black_player"].update(color=Color.BLACK.value)
-        result["players"] = [result.pop("red_player"), result.pop("black_player")]
 
     def _transform_moves(self, result):
         start_position = PositionSerializer(data={"fen": xiangqi.start_fen()})
