@@ -46,8 +46,6 @@ def test_get_game_200(get, game, mock_pyffish):
                 "game_result": [0, 0],
             }
         ],
-        "players": [
-            {"name": game.red_player.username, "color": "red"},
-            {"name": game.black_player.username, "color": "black"},
-        ],
+        "red_player": {"name": game.red_player.username},
+        "black_player": {"name": game.black_player.username},
     }
