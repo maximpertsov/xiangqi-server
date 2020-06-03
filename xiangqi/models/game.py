@@ -28,7 +28,10 @@ class Game(models.Model):
 
     slug = models.CharField(max_length=64, unique=True, editable=False)
     red_player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="+")
+    red_score = models.DecimalField(max_digits=2, decimal_places=1, default=0)
     black_player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="+")
+    black_score = models.DecimalField(max_digits=2, decimal_places=1, default=0)
+    finished_at = models.DateTimeField(null=True)
 
     def natural_key(self):
         return self.slug
