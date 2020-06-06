@@ -31,7 +31,7 @@ class MoveSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         result = super().to_representation(instance)
-        position = PositionSerializer(data={"fen": instance.data["fen"]})
+        position = PositionSerializer(data={"fen": instance.fen})
         position.is_valid(raise_exception=True)
         result.update(position.data)
         return result
