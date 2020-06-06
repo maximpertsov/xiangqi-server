@@ -4,7 +4,7 @@ from rest_framework.exceptions import ValidationError
 from xiangqi.models import Game, GameEvent
 from xiangqi.operations.create_move import CreateMove
 
-EVENT_HANDLER_CLASSES = {"move": CreateMove}
+EVENT_HANDLER_CLASSES = {"move": CreateMove, "offer_draw": None}
 
 
 class GameEventSerializer(serializers.ModelSerializer):
@@ -22,6 +22,7 @@ class GameEventSerializer(serializers.ModelSerializer):
     def _handle_event(self, event):
         try:
             handler = EVENT_HANDLER_CLASSES[event.name]
-            handler(event=event).perform()
+            if handler:
+                handler(event=event).perform()
         except KeyError as event_name:
             raise ValidationError(["Unknown event {}".format(event_name)])
