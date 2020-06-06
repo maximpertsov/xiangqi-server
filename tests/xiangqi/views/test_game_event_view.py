@@ -15,17 +15,8 @@ def mocks(mocker):
 
 
 @pytest.fixture
-def payload(game):
-    return {
-        "game": game.slug,
-        "name": "move",
-        "payload": {"uci": "a1a2", "fen": "FEN", "player": game.red_player.username},
-    }
-
-
-@pytest.fixture
-def post(rf, payload):
-    def wrapped(user):
+def post(rf):
+    def wrapped(user, payload):
         request = rf.post(
             "/api/game/events",
             data=json.dumps(payload),
@@ -39,12 +30,31 @@ def post(rf, payload):
 
 @pytest.mark.django_db
 def test_create_move(mocks, post, game):
-    assert game.move_set.count() == 0
-    assert game.event_set.filter(name="move").count() == 0
+    event_name = "move"
 
-    response = post(user=game.red_player)
+    assert game.move_set.count() == 0
+    assert game.event_set.filter(name=event_name).count() == 0
+
+    payload = {
+        "game": game.slug,
+        "name": event_name,
+        "payload": {"uci": "a1a2", "fen": "FEN", "player": game.red_player.username},
+    }
+    response = post(user=game.red_player, payload=payload)
     assert response.status_code == 201
 
-    game.refresh_from_db()
     assert game.move_set.count() == 1
-    assert game.event_set.filter(name="move").count() == 1
+    assert game.event_set.filter(name=event_name).count() == 1
+
+
+@pytest.mark.django_db
+def test_offer_draw(post, game):
+    event_name = "offer_draw"
+
+    assert game.event_set.filter(name=event_name).count() == 0
+
+    payload = {"game": game.slug, "name": event_name, "payload": {}}
+    response = post(user=game.red_player, payload=payload)
+    assert response.status_code == 201
+
+    assert game.event_set.filter(name=event_name).count() == 1
