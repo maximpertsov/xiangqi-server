@@ -9,7 +9,8 @@ from xiangqi.queries.game_result import GameResult
 def mock_game_continues(mocker):
     mocker.patch.object(
         GameResult, "result", new_callable=mocker.PropertyMock, return_value=[0, 0]
-    ) 
+    )
+
 
 @pytest.fixture
 def red_player(player_factory):
