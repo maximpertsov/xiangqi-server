@@ -1,6 +1,7 @@
 import pytest
 from rest_framework.test import force_authenticate
 
+from xiangqi.models.color import Color
 from xiangqi.queries.game_result import GameResult
 from xiangqi.queries.legal_moves import LegalMoves
 from xiangqi.views import GameView
@@ -46,6 +47,11 @@ def test_get_game_200(get, game, mock_pyffish):
                 "game_result": [0, 0],
             }
         ],
-        "red_player": {"name": game.red_player.username},
-        "black_player": {"name": game.black_player.username},
+        "red_player": {"name": game.red_player.username, "color": Color.RED.value},
+        "red_score": game.red_score,
+        "black_player": {
+            "name": game.black_player.username,
+            "color": Color.BLACK.value,
+        },
+        "black_score": game.black_score,
     }
