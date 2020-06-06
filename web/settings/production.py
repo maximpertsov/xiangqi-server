@@ -14,7 +14,12 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 DATABASES = {"default": dj_database_url.config(conn_max_age=600)}
 
 # Cache
-CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}}
+CACHES = {
+    "default": {
+        "BACKEND": "redis_cache.RedisCache",
+        "LOCATION": os.environ["REDISCLOUD_URL"],
+    }
+}
 
 # CORS configuration
 CLIENT_DOMAIN = os.environ["CLIENT_DOMAIN"]
