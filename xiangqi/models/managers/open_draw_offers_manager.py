@@ -2,6 +2,9 @@ from django.db import models
 
 
 class OpenDrawOffersManager(models.Manager):
+    class Failed(Exception):
+        pass
+
     def get_queryset(self):
         return (
             super()
@@ -22,5 +25,22 @@ class OpenDrawOffersManager(models.Manager):
             .filter(name__in=["accepted_draw", "rejected_draw"])
             .values("name")
             .annotate(models.Max("created_at"))
-            .values("created_at__max")[:1]
+            .values("created_at__max")
+        )
+
+    # TODO use this instead
+    def _get_queryset(self):
+        return (
+            super()
+            .get_queryset()
+            .filter(name__contains="draw")
+            .annotate(
+                latest_created_at=models.Window(
+                    expression=models.Max(
+                        "created_at",
+                        filter=models.Q(name__in=["accepted_draw", "rejected_draw"]),
+                    ),
+                    partition_by=[models.F("game")],
+                )
+            )
         )
