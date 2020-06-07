@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import datetime
 
 
 class OpenDrawOffersManager(models.Manager):
@@ -23,9 +24,15 @@ class OpenDrawOffersManager(models.Manager):
             .get_queryset()
             .filter(
                 game=models.OuterRef("game"),
-                name__in=["accepted_draw", "rejected_draw"],
+                name__in=["offered_draw", "accepted_draw", "rejected_draw"],
             )
-            .values("name")
-            .annotate(models.Max("created_at"))
-            .values("created_at__max")[:1]
+            .annotate(
+                _created_at=models.Case(
+                    models.When(name="offered_draw", then=datetime.min),
+                    default=models.F("created_at"),
+                )
+            )
+            .values("game")
+            .annotate(_created_at__max=models.Max("_created_at"))
+            .values("_created_at__max")[:1]
         )
