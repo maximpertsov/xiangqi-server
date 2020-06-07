@@ -54,4 +54,21 @@ def test_get_game_200(get, game, mock_pyffish):
             "color": Color.BLACK.value,
         },
         "black_score": game.black_score,
+        "open_draw_offer": None,
     }
+
+
+# @pytest.mark.django_db
+# def test_get_game_with_draw_offer(get, game, game_event_factory, mock_pyffish):
+#     # red and black players offer draw
+#     game_event_factory(
+#         game=game, name="offered_draw", payload={"color": Color.BLACK.value}
+#     )
+#     game_event_factory(
+#         game=game, name="offered_draw", payload={"color": Color.BLACK.value}
+#     )
+#
+#     response = get()
+#     assert response.status_code == 200
+#
+#     assert response.data["open_draw_offer"] == Color.RED.value
