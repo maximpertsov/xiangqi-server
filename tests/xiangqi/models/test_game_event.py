@@ -36,7 +36,5 @@ def draw_events_multiple_games(game_factory, game_event_factory):
 
 @pytest.mark.django_db
 def test_open_draw_offers_multiple_games(draw_events_multiple_games):
-    # import pdb; pdb.set_trace()
     for game, events in draw_events_multiple_games.items():
-        # import pdb; pdb.set_trace()
         assert set(GameEvent.open_draw_offers.filter(game=game)) == set([events[-1]])
