@@ -48,4 +48,4 @@ class GameSerializer(serializers.ModelSerializer):
             .first()
         )
         if first_open_draw_offer:
-            result["open_draw_offer"] = first_open_draw_offer.payload["color"]
+            result["open_draw_offer"] = first_open_draw_offer.payload["username"]
