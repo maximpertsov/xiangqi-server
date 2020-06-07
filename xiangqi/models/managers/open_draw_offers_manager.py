@@ -22,10 +22,7 @@ class OpenDrawOffersManager(models.Manager):
         return (
             super()
             .get_queryset()
-            .filter(
-                game=models.OuterRef("game"),
-                name__in=["offered_draw", "accepted_draw", "rejected_draw"],
-            )
+            .filter(game=models.OuterRef("game"), name__endswith="draw")
             .annotate(
                 _created_at=models.Case(
                     models.When(name="offered_draw", then=datetime.min),
