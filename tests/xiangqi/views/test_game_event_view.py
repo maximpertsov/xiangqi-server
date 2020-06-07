@@ -49,7 +49,7 @@ def test_create_move(mocks, post, game):
 
 @pytest.mark.django_db
 def test_offer_draw(post, game):
-    event_name = "offer_draw"
+    event_name = "offered_draw"
 
     assert game.event_set.filter(name=event_name).count() == 0
 

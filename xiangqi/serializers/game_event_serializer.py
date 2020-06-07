@@ -4,7 +4,7 @@ from rest_framework.exceptions import ValidationError
 from xiangqi.models import Game, GameEvent
 from xiangqi.operations.create_move import CreateMove
 
-EVENT_HANDLER_CLASSES = {"move": CreateMove, "offer_draw": None}
+EVENT_HANDLER_CLASSES = {"move": CreateMove, "offered_draw": None}
 
 
 class GameEventSerializer(serializers.ModelSerializer):
