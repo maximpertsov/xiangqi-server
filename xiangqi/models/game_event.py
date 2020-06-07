@@ -32,10 +32,13 @@ class GameEventManager(models.Manager):
 
 
 class GameEvent(models.Model):
+    class Meta:
+        indexes = [models.Index(fields=["name", "created_at"])]
+
     objects = GameEventManager()
     open_draw_offers = OpenDrawOffersManager()
 
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    name = models.CharField(max_length=128, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=128)
     game = models.ForeignKey("game", related_name="event_set", on_delete=models.CASCADE)
     payload = JSONField()
