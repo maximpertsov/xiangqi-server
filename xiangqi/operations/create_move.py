@@ -18,7 +18,7 @@ class CreateMove:
 
     @cached_property
     def _game_result(self):
-        return GameResult(fen=self._persisted_move.fen).result
+        return GameResult().result(move=self._persisted_move)
 
     @cached_property
     def _persisted_move(self):

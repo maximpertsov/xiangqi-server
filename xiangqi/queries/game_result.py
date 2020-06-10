@@ -1,4 +1,3 @@
-import attr
 from django.utils.functional import cached_property
 
 from lib.pyffish import xiangqi
@@ -7,15 +6,13 @@ from xiangqi.models.draw_event import DrawEventTypes
 from xiangqi.models.fen import Fen
 
 
-@attr.s(kw_only=True)
 class GameResult:
     class Error(Exception):
         pass
 
-    _move = attr.ib()
+    def result(self, move):
+        self._move = move
 
-    @property
-    def result(self):
         return self._score
 
     @property

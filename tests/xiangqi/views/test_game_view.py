@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 import pytest
 from rest_framework.test import force_authenticate
 
@@ -8,17 +10,17 @@ from xiangqi.views import GameView
 
 
 @pytest.fixture
-def mock_pyffish(mocker):
-    mocker.patch.object(
-        GameResult, "result", new_callable=mocker.PropertyMock, return_value=[0, 0]
-    )
-    mocker.patch.object(
-        LegalMoves, "result", new_callable=mocker.PropertyMock, return_value={}
-    )
-    mocker.patch.multiple(
-        "lib.pyffish.xiangqi",
-        gives_check=mocker.MagicMock(return_value=False),
-        start_fen=mocker.MagicMock(return_value="START_FEN"),
+def mocks(mocker):
+    return SimpleNamespace(
+        GameResult=mocker.patch.object(GameResult, "result", return_value=[0, 0]),
+        LegalMoves=mocker.patch.object(
+            LegalMoves, "result", new_callable=mocker.PropertyMock, return_value={}
+        ),
+        xiangqi=mocker.patch.multiple(
+            "lib.pyffish.xiangqi",
+            gives_check=mocker.MagicMock(return_value=False),
+            start_fen=mocker.MagicMock(return_value="START_FEN"),
+        ),
     )
 
 
@@ -33,7 +35,7 @@ def get(rf, game, player):
 
 
 @pytest.mark.django_db
-def test_get_game_200(get, game, mock_pyffish):
+def test_get_game_200(get, game, mocks):
     response = get()
     assert response.status_code == 200
 
@@ -56,10 +58,11 @@ def test_get_game_200(get, game, mock_pyffish):
         "black_score": game.black_score,
         "open_draw_offer": None,
     }
+    assert mocks.GameResult.called_once_with(move=game.move_set.first())
 
 
 @pytest.mark.django_db
-def test_get_game_with_draw_offer(get, game, game_event_factory, mock_pyffish):
+def test_get_game_with_draw_offer(get, game, game_event_factory, mocks):
     game_event_factory(
         game=game, name="offered_draw", payload={"username": game.red_player.username}
     )
@@ -71,3 +74,4 @@ def test_get_game_with_draw_offer(get, game, game_event_factory, mock_pyffish):
     assert response.status_code == 200
 
     assert response.data["open_draw_offer"] == game.red_player.username
+    assert mocks.GameResult.called_once_with(move=game.move_set.first())

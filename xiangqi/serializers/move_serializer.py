@@ -14,7 +14,7 @@ class PositionSerializer(serializers.Serializer):
         result.update(
             gives_check=xiangqi.gives_check(result["fen"], []),
             legal_moves=LegalMoves(fen=result["fen"]).result,
-            game_result=GameResult(fen=result["fen"]).result,
+            game_result=GameResult().result(move=instance),
         )
         return result
 
