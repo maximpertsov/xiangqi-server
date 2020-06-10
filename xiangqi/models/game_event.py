@@ -2,8 +2,6 @@ from django.contrib.postgres.fields.jsonb import JSONField
 from django.core.cache import cache
 from django.db import models
 
-from xiangqi.models.managers.open_draw_offers_manager import OpenDrawOffersManager
-
 CACHE_TTL = 3600
 
 
@@ -36,7 +34,6 @@ class GameEvent(models.Model):
         indexes = [models.Index(fields=["name", "created_at"])]
 
     objects = GameEventManager()
-    open_draw_offers = OpenDrawOffersManager()
 
     created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=128)

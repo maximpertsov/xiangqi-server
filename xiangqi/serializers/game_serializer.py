@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from lib.pyffish import xiangqi
-from xiangqi.models import Game, GameEvent
+from xiangqi.models import DrawEvent, Game
 from xiangqi.models.color import Color
 from xiangqi.serializers.move_serializer import MoveSerializer, PositionSerializer
 from xiangqi.serializers.player_serializer import PlayerSerializer
@@ -43,9 +43,7 @@ class GameSerializer(serializers.ModelSerializer):
         result["open_draw_offer"] = None
 
         first_open_draw_offer = (
-            GameEvent.open_draw_offers.filter(game=instance)
-            .order_by("created_at")
-            .first()
+            DrawEvent.open_offers.filter(game=instance).order_by("created_at").first()
         )
         if first_open_draw_offer:
             result["open_draw_offer"] = first_open_draw_offer.payload["username"]
