@@ -39,7 +39,7 @@ def event(game_with_players, payload, game_event_factory):
 def test_create_move(mock_game_continues, event):
     assert event.game.move_set.count() == 0
 
-    CreateMove(event=event).perform()
+    CreateMove().perform(event=event)
     assert mock_game_continues.called_once_with(move=event.game.move_set.first())
     assert event.game.move_set.first().uci == "b10c8"
     assert event.game.move_set.count() == 1
@@ -58,7 +58,7 @@ def test_create_move_game_over(mock_game_over, event):
     assert event.game.black_score == 0.0
     assert not event.game.finished_at
 
-    CreateMove(event=event).perform()
+    CreateMove().perform(event=event)
     assert mock_game_over.called_once_with(move=event.game.move_set.first())
     assert event.game.move_set.first().uci == "b10c8"
     assert event.game.move_set.count() == 1
@@ -80,4 +80,4 @@ def event_with_non_player(
 @pytest.mark.xfail
 def test_create_move_non_participant(event_with_non_player):
     with pytest.raises(ValidationError):
-        CreateMove(event=event_with_non_player).perform()
+        CreateMove().perform(event=event_with_non_player)

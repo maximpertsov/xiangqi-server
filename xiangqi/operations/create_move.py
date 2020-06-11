@@ -6,10 +6,11 @@ from xiangqi.serializers.move_serializer import MoveSerializer
 
 
 class CreateMove:
-    def __init__(self, event):
+    def perform(self, event):
         self._event = event
+        self._set_game_result()
 
-    def perform(self):
+    def _set_game_result(self):
         scores = self._game_result
         if sum(scores):
             self._game.red_score, self._game.black_score = scores
