@@ -4,6 +4,7 @@ from types import SimpleNamespace
 import pytest
 from rest_framework.test import force_authenticate
 
+from xiangqi.models.draw_event import DrawEventTypes
 from xiangqi.queries.game_result import GameResult
 from xiangqi.views import GameEventView
 
@@ -51,7 +52,7 @@ def test_create_move(mocks, post, game):
 
 @pytest.mark.django_db
 def test_offer_draw(post, game):
-    event_name = "offered_draw"
+    event_name = DrawEventTypes.OFFERED_DRAW.value
 
     assert game.event_set.filter(name=event_name).count() == 0
 
@@ -60,3 +61,21 @@ def test_offer_draw(post, game):
     assert response.status_code == 201
 
     assert game.event_set.filter(name=event_name).count() == 1
+
+
+@pytest.mark.django_db
+def test_accepted_draw(post, game):
+    event_name = DrawEventTypes.ACCEPTED_DRAW.value
+
+    assert game.event_set.filter(name=event_name).count() == 0
+
+    payload = {"game": game.slug, "name": event_name, "payload": {}}
+    response = post(user=game.red_player, payload=payload)
+    assert response.status_code == 201
+
+    assert game.event_set.filter(name=event_name).count() == 1
+
+    game.refresh_from_db()
+    assert game.red_score == 0.5
+    assert game.black_score == 0.5
+    assert game.finished_at
