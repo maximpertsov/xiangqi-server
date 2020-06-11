@@ -26,6 +26,6 @@ class GameEventSerializer(serializers.ModelSerializer):
     def _handle_event(self, event):
         try:
             handler = EVENT_HANDLER_CLASSES[event.name]
-            handler(event=event).perform()
+            handler().perform(event=event)
         except KeyError:
             return
