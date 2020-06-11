@@ -11,9 +11,7 @@ from xiangqi.views import GameView
 @pytest.fixture
 def mocks(mocker):
     return SimpleNamespace(
-        LegalMoves=mocker.patch.object(
-            LegalMoves, "result", new_callable=mocker.PropertyMock, return_value={}
-        ),
+        LegalMoves=mocker.patch.object(LegalMoves, "result", return_value={}),
         xiangqi=mocker.patch.multiple(
             "lib.pyffish.xiangqi",
             gives_check=mocker.MagicMock(return_value=False),
@@ -35,8 +33,8 @@ def get(rf, game, player):
 @pytest.mark.django_db
 def test_get_game_200(get, game, mocks):
     response = get()
+    assert mocks.LegalMoves.called_once_with(fen="START_FEN")
     assert response.status_code == 200
-
     assert response.data == {
         "slug": game.slug,
         "moves": [{"fen": "START_FEN", "gives_check": False, "legal_moves": {}}],

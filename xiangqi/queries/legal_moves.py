@@ -1,14 +1,9 @@
-import attr
-
 from lib.pyffish import xiangqi
 
 
-@attr.s(kw_only=True)
 class LegalMoves:
-    _fen = attr.ib()
-
-    @property
-    def result(self):
+    def result(self, fen):
+        self._fen = fen
         return {move: xiangqi.get_fen(self._fen, [move]) for move in self._legal_moves}
 
     @property
