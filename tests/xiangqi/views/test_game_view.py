@@ -4,7 +4,6 @@ import pytest
 from rest_framework.test import force_authenticate
 
 from xiangqi.models.color import Color
-from xiangqi.queries.game_result import GameResult
 from xiangqi.queries.legal_moves import LegalMoves
 from xiangqi.views import GameView
 
@@ -12,7 +11,6 @@ from xiangqi.views import GameView
 @pytest.fixture
 def mocks(mocker):
     return SimpleNamespace(
-        GameResult=mocker.patch.object(GameResult, "result", return_value=[0, 0]),
         LegalMoves=mocker.patch.object(
             LegalMoves, "result", new_callable=mocker.PropertyMock, return_value={}
         ),
@@ -41,14 +39,7 @@ def test_get_game_200(get, game, mocks):
 
     assert response.data == {
         "slug": game.slug,
-        "moves": [
-            {
-                "fen": "START_FEN",
-                "gives_check": False,
-                "legal_moves": {},
-                "game_result": [0, 0],
-            }
-        ],
+        "moves": [{"fen": "START_FEN", "gives_check": False, "legal_moves": {}}],
         "red_player": {"name": game.red_player.username, "color": Color.RED.value},
         "red_score": game.red_score,
         "black_player": {
@@ -58,7 +49,6 @@ def test_get_game_200(get, game, mocks):
         "black_score": game.black_score,
         "open_draw_offer": None,
     }
-    assert mocks.GameResult.called_once_with(move=game.move_set.first())
 
 
 @pytest.mark.django_db
@@ -72,6 +62,4 @@ def test_get_game_with_draw_offer(get, game, game_event_factory, mocks):
 
     response = get()
     assert response.status_code == 200
-
     assert response.data["open_draw_offer"] == game.red_player.username
-    assert mocks.GameResult.called_once_with(move=game.move_set.first())

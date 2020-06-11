@@ -1,13 +1,11 @@
 import pytest
 
-from xiangqi.queries.game_result import GameResult
 from xiangqi.queries.legal_moves import LegalMoves
 from xiangqi.views import PositionView, StartingPositionView
 
 
 @pytest.fixture
 def mocks(mocker):
-    mocker.patch.object(GameResult, "result", return_value=[0, 0])
     mocker.patch.object(
         LegalMoves, "result", new_callable=mocker.PropertyMock, return_value={}
     )
@@ -35,12 +33,7 @@ def post(rf, player):
 def test_position_view(post, mocks):
     response = post("/api/position", data={"fen": "FEN"})
     assert response.status_code == 200
-    assert response.data == {
-        "fen": "FEN",
-        "legal_moves": {},
-        "gives_check": False,
-        "game_result": [0, 0],
-    }
+    assert response.data == {"fen": "FEN", "legal_moves": {}, "gives_check": False}
 
 
 @pytest.mark.django_db
@@ -51,5 +44,4 @@ def test_starting_position_view(post, mocks):
         "fen": "START_FEN",
         "legal_moves": {},
         "gives_check": False,
-        "game_result": [0, 0],
     }
