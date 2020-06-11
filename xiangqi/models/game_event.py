@@ -30,6 +30,9 @@ class GameEventManager(models.Manager):
 
 
 class GameEvent(models.Model):
+    class Meta:
+        indexes = [models.Index(fields=["name", "created_at"])]
+
     objects = GameEventManager()
 
     created_at = models.DateTimeField(auto_now_add=True)

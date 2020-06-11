@@ -124,11 +124,13 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
     ),
+    "COERCE_DECIMAL_TO_STRING": False,
 }
 
 JWT_AUTH = {
+    # TODO: refresh this more often?
     "JWT_EXPIRATION_DELTA": timedelta(minutes=5),
     "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=1),
-    'JWT_ALLOW_REFRESH': True,
+    "JWT_ALLOW_REFRESH": True,
     "JWT_AUTH_COOKIE": "token",
 }

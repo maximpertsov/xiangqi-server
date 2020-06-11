@@ -2,6 +2,12 @@ import pytest
 from rest_framework.exceptions import ValidationError
 
 from xiangqi.operations.create_move import CreateMove
+from xiangqi.queries.game_result import GameResult
+
+
+@pytest.fixture
+def mock_game_continues(mocker):
+    return mocker.patch.object(GameResult, "result", return_value=[0, 0])
 
 
 @pytest.fixture
@@ -30,12 +36,36 @@ def event(game_with_players, payload, game_event_factory):
 
 
 @pytest.mark.django_db
-def test_create_move(event):
+def test_create_move(mock_game_continues, event):
     assert event.game.move_set.count() == 0
 
     CreateMove(event=event).perform()
+    assert mock_game_continues.called_once_with(move=event.game.move_set.first())
     assert event.game.move_set.first().uci == "b10c8"
     assert event.game.move_set.count() == 1
+
+
+@pytest.fixture
+def mock_game_over(mocker):
+    return mocker.patch.object(GameResult, "result", return_value=[0.5, 0.5])
+
+
+@pytest.mark.django_db
+def test_create_move_game_over(mock_game_over, event):
+    assert event.game.move_set.count() == 0
+
+    assert event.game.red_score == 0.0
+    assert event.game.black_score == 0.0
+    assert not event.game.finished_at
+
+    CreateMove(event=event).perform()
+    assert mock_game_over.called_once_with(move=event.game.move_set.first())
+    assert event.game.move_set.first().uci == "b10c8"
+    assert event.game.move_set.count() == 1
+
+    assert event.game.red_score == 0.5
+    assert event.game.black_score == 0.5
+    assert event.game.finished_at
 
 
 @pytest.fixture
