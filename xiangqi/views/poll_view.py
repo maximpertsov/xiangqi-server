@@ -4,6 +4,7 @@ from django.views.generic.detail import View
 from xiangqi.views.game_mixin import GameMixin
 
 
+# TODO: add authentication class
 class PollView(GameMixin, View):
     def get(self, request, slug):
         return JsonResponse({"update_count": self._event_count}, status=200)
