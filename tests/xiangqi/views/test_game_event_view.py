@@ -1,4 +1,5 @@
 import json
+from types import SimpleNamespace
 
 import pytest
 from rest_framework.test import force_authenticate
@@ -9,8 +10,8 @@ from xiangqi.views import GameEventView
 
 @pytest.fixture
 def mocks(mocker):
-    mocker.patch.object(
-        GameResult, "result", new_callable=mocker.PropertyMock, return_value=[0, 0]
+    return SimpleNamespace(
+        GameResult=mocker.patch.object(GameResult, "result", return_value=[0, 0])
     )
 
 
@@ -43,6 +44,7 @@ def test_create_move(mocks, post, game):
     response = post(user=game.red_player, payload=payload)
     assert response.status_code == 201
 
+    assert mocks.GameResult.called_once_with(move=game.move_set.first())
     assert game.move_set.count() == 1
     assert game.event_set.filter(name=event_name).count() == 1
 

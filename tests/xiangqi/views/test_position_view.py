@@ -7,9 +7,7 @@ from xiangqi.views import PositionView, StartingPositionView
 
 @pytest.fixture
 def mocks(mocker):
-    mocker.patch.object(
-        GameResult, "result", new_callable=mocker.PropertyMock, return_value=[0, 0]
-    )
+    mocker.patch.object(GameResult, "result", return_value=[0, 0])
     mocker.patch.object(
         LegalMoves, "result", new_callable=mocker.PropertyMock, return_value={}
     )
