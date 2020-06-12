@@ -13,4 +13,4 @@ psycopg2-binary==2.8.4
 pyffish==0.0.46
 pytz==2018.9
 sqlparse==0.3.0
-whitenoise-5.1.0
+whitenoise==5.1.0
