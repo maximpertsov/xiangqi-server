@@ -1,13 +1,18 @@
-from django.http import JsonResponse
-from django.views.generic.detail import View
+from rest_framework.generics import RetrieveAPIView
+from rest_framework.response import Response
 
-from xiangqi.views.game_mixin import GameMixin
+from xiangqi.models import Game
 
 
-class PollView(GameMixin, View):
-    def get(self, request, slug):
-        return JsonResponse({"update_count": self._event_count}, status=200)
+class PollView(RetrieveAPIView):
+    queryset = Game.objects.all()
+    lookup_field = "slug"
 
-    @property
-    def _event_count(self):
-        return self.game.event_set.cached_count()
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        return Response({"update_count": instance.event_set.cached_count()})
+
+    # def retrieve(self, request, *args, **kwargs):
+    #     instance = self.get_object()
+    #     serializer = self.get_serializer(instance)
+    #     return Response(serializer.data)

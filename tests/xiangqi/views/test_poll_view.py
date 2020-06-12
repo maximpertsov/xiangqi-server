@@ -3,7 +3,17 @@ import json
 from pytest import fixture, mark
 from rest_framework.test import force_authenticate
 
-from xiangqi.views import GameEventView
+from xiangqi.views import GameEventView, PollView
+
+
+@fixture
+def poll(rf, game):
+    def wrapped():
+        request = rf.get("/api/game/{}/poll".format(game.slug))
+        force_authenticate(request, user=game.red_player)
+        return PollView.as_view()(request, slug=game.slug)
+
+    return wrapped
 
 
 @fixture
@@ -13,14 +23,6 @@ def payload(game):
         "name": "move",
         "payload": {"uci": "a1a2", "fen": "FEN", "player": game.red_player.username},
     }
-
-
-@fixture
-def poll(client, game):
-    def wrapped():
-        return client.get("/api/game/{}/poll".format(game.slug))
-
-    return wrapped
 
 
 @fixture
@@ -41,14 +43,14 @@ def make_move(rf, payload):
 def test_successful_response(poll, make_move, game):
     response = poll()
     assert response.status_code == 200
-    assert response.json() == {"update_count": 0}
+    assert response.data == {"update_count": 0}
 
     make_move("a1a3", game.red_player)
     response = poll()
     assert response.status_code == 200
-    assert response.json() == {"update_count": 1}
+    assert response.data == {"update_count": 1}
 
     make_move("a10a9", game.black_player)
     response = poll()
     assert response.status_code == 200
-    assert response.json() == {"update_count": 2}
+    assert response.data == {"update_count": 2}
