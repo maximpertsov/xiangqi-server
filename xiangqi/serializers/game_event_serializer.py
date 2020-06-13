@@ -4,10 +4,12 @@ from xiangqi.models import Game, GameEvent
 from xiangqi.models.draw_event import DrawEventTypes
 from xiangqi.operations.create_move import CreateMove
 from xiangqi.operations.handle_accepted_draw import HandleAcceptedDraw
+from xiangqi.operations.handle_resigned import HandleResigned
 
 EVENT_HANDLER_CLASSES = {
     "move": CreateMove,
     DrawEventTypes.ACCEPTED_DRAW.value: HandleAcceptedDraw,
+    "resigned": HandleResigned,
 }
 
 
