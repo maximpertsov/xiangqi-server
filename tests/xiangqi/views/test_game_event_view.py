@@ -69,7 +69,11 @@ def test_accepted_draw(post, game):
 
     assert game.event_set.filter(name=event_name).count() == 0
 
-    payload = {"game": game.slug, "name": event_name, "payload": {}}
+    payload = {
+        "game": game.slug,
+        "name": event_name,
+        "payload": {"username": game.red_player.username},
+    }
     response = post(user=game.red_player, payload=payload)
     assert response.status_code == 201
 
@@ -78,4 +82,26 @@ def test_accepted_draw(post, game):
     game.refresh_from_db()
     assert game.red_score == 0.5
     assert game.black_score == 0.5
+    assert game.finished_at
+
+
+@pytest.mark.django_db
+def test_resigned(post, game):
+    event_name = "resigned"
+
+    assert game.event_set.filter(name=event_name).count() == 0
+
+    payload = {
+        "game": game.slug,
+        "name": event_name,
+        "payload": {"username": game.red_player.username},
+    }
+    response = post(user=game.red_player, payload=payload)
+    assert response.status_code == 201
+
+    assert game.event_set.filter(name=event_name).count() == 1
+
+    game.refresh_from_db()
+    assert game.red_score == 0.0
+    assert game.black_score == 1.0
     assert game.finished_at
