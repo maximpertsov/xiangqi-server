@@ -121,6 +121,26 @@ def test_resigned(event_name, around, post, game):
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize("event_name", [TakebackEventTypes.OFFERED_TAKEBACK.value])
+def test_takeback_offered(event_name, around, post, game, move_factory):
+    move_factory(game=game, player=game.red_player)
+    move_to_take_back = move_factory(game=game, player=game.black_player)
+    assert move_to_take_back.event_set.count() == 0
+
+    post(
+        user=game.red_player,
+        payload={
+            "game": game.slug,
+            "name": event_name,
+            "payload": {"username": game.black_player.username},
+        },
+    )
+
+    assert move_to_take_back.event_set.count() == 1
+
+
+@pytest.mark.skip
+@pytest.mark.django_db
 @pytest.mark.parametrize("event_name", [TakebackEventTypes.ACCEPTED_TAKEBACK.value])
 def test_takeback_accepted(
     event_name, around, post, game, move_factory, game_event_factory
