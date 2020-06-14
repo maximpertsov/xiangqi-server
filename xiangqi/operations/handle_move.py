@@ -5,7 +5,7 @@ from xiangqi.queries.game_result import GameResult
 from xiangqi.serializers.move_serializer import MoveSerializer
 
 
-class CreateMove:
+class HandleMove:
     def perform(self, event):
         self._event = event
         self._set_game_result()

@@ -3,6 +3,7 @@ import json
 from pytest import fixture, mark
 from rest_framework.test import force_authenticate
 
+from xiangqi.queries.game_result import GameResult
 from xiangqi.views import GameEventView, PollView
 
 
@@ -26,7 +27,9 @@ def payload(game):
 
 
 @fixture
-def make_move(rf, payload):
+def make_move(rf, mocker, payload):
+    mocker.patch.object(GameResult, "result", return_value=[0, 0])
+
     def wrapped(uci, player):
         request = rf.post(
             "/api/game/events",
