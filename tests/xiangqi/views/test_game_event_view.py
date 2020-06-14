@@ -6,6 +6,7 @@ from rest_framework.test import force_authenticate
 
 from xiangqi.models import DrawEvent
 from xiangqi.models.draw_event import DrawEventTypes
+from xiangqi.models.takeback_event import TakebackEventTypes
 from xiangqi.queries.game_result import GameResult
 from xiangqi.views import GameEventView
 
@@ -117,3 +118,30 @@ def test_resigned(event_name, around, post, game):
     assert game.red_score == 0.0
     assert game.black_score == 1.0
     assert game.finished_at
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("event_name", [TakebackEventTypes.ACCEPTED_TAKEBACK.value])
+def test_takeback_accepted(
+    event_name, around, post, game, move_factory, game_event_factory
+):
+    move1 = move_factory(game=game, player=game.red_player)
+    move2 = move_factory(game=game, player=game.black_player)
+    game_event_factory(
+        game=game,
+        name=TakebackEventTypes.OFFERED_TAKEBACK.value,
+        payload={"username": game.black_player.username},
+    )
+    move3 = move_factory(game=game, player=game.red_player)
+    assert set(game.move_set.all()) == ([move1, move2, move3])
+
+    post(
+        user=game.red_player,
+        payload={
+            "game": game.slug,
+            "name": event_name,
+            "payload": {"username": game.red_player.username},
+        },
+    )
+
+    assert set(game.move_set.all()) == ([move1])
