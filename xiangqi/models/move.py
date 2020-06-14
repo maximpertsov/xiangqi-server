@@ -11,3 +11,4 @@ class Move(models.Model):
     game = models.ForeignKey("game", on_delete=models.CASCADE)
     uci = models.CharField(max_length=10)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    event_set = models.ManyToManyField("gameevent", related_name="move_set")

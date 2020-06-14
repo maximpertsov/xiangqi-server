@@ -46,6 +46,7 @@ def test_get_game_200(get, game, mocks):
         },
         "black_score": game.black_score,
         "open_draw_offer": None,
+        "open_takeback_offer": None,
     }
 
 
@@ -61,3 +62,16 @@ def test_get_game_with_draw_offer(get, game, game_event_factory, mocks):
     response = get()
     assert response.status_code == 200
     assert response.data["open_draw_offer"] == game.red_player.username
+
+
+@pytest.mark.django_db
+def test_get_game_with_takeback_offer(get, game, game_event_factory, mocks):
+    game_event_factory(
+        game=game,
+        name="offered_takeback",
+        payload={"username": game.red_player.username},
+    )
+
+    response = get()
+    assert response.status_code == 200
+    assert response.data["open_takeback_offer"] == game.red_player.username
