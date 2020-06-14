@@ -28,7 +28,7 @@ class OpenTakebackOffersManager(TakebackEventManager):
             super()
             .get_queryset()
             .filter(
-                name=TakebackEventTypes.OFFERED_DRAW.value,
+                name=TakebackEventTypes.OFFERED_TAKEBACK.value,
                 created_at__gt=models.Subquery(
                     self._last_responses_to_takeback_offer_datetime()
                 ),
@@ -43,7 +43,7 @@ class OpenTakebackOffersManager(TakebackEventManager):
             .annotate(
                 _created_at=models.Case(
                     models.When(
-                        name=TakebackEventTypes.OFFERED_DRAW.value, then=datetime.min
+                        name=TakebackEventTypes.OFFERED_TAKEBACK.value, then=datetime.min
                     ),
                     default=models.F("created_at"),
                 )
