@@ -139,21 +139,21 @@ def test_takeback_offered(event_name, around, post, game, move_factory):
     assert move_to_take_back.event_set.count() == 1
 
 
-@pytest.mark.skip
 @pytest.mark.django_db
 @pytest.mark.parametrize("event_name", [TakebackEventTypes.ACCEPTED_TAKEBACK.value])
-def test_takeback_accepted(
-    event_name, around, post, game, move_factory, game_event_factory
-):
+def test_takeback_accepted(event_name, post, game, move_factory, game_event_factory):
     move1 = move_factory(game=game, player=game.red_player)
     move2 = move_factory(game=game, player=game.black_player)
-    game_event_factory(
-        game=game,
-        name=TakebackEventTypes.OFFERED_TAKEBACK.value,
-        payload={"username": game.black_player.username},
+    post(
+        user=game.red_player,
+        payload={
+            "game": game.slug,
+            "name": TakebackEventTypes.OFFERED_TAKEBACK.value,
+            "payload": {"username": game.black_player.username},
+        },
     )
     move3 = move_factory(game=game, player=game.red_player)
-    assert set(game.move_set.all()) == ([move1, move2, move3])
+    assert set(game.move_set.all()) == set([move1, move2, move3])
 
     post(
         user=game.red_player,
@@ -164,4 +164,4 @@ def test_takeback_accepted(
         },
     )
 
-    assert set(game.move_set.all()) == ([move1])
+    assert set(game.move_set.all()) == set([move1])

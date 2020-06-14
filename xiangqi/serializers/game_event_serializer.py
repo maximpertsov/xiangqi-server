@@ -6,12 +6,14 @@ from xiangqi.models.takeback_event import TakebackEventTypes
 from xiangqi.operations.create_move import CreateMove
 from xiangqi.operations.handle_accepted_draw import HandleAcceptedDraw
 from xiangqi.operations.handle_offered_takeback import HandleOfferedTakeback
+from xiangqi.operations.handle_accepted_takeback import HandleAcceptedTakeback
 from xiangqi.operations.handle_resigned import HandleResigned
 
 EVENT_HANDLER_CLASSES = {
     "move": CreateMove,
     DrawEventTypes.ACCEPTED_DRAW.value: HandleAcceptedDraw,
     TakebackEventTypes.OFFERED_TAKEBACK.value: HandleOfferedTakeback,
+    TakebackEventTypes.ACCEPTED_TAKEBACK.value: HandleAcceptedTakeback,
     "resigned": HandleResigned,
 }
 
