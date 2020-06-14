@@ -19,7 +19,7 @@ class HandleAcceptedTakeback:
             pk__gte=models.Subquery(
                 self._events_since_last_offer.filter(
                     name=TakebackEventTypes.OFFERED_TAKEBACK.value
-                ).values("move_set__pk")[0:]
+                ).values("move_set__pk")[:1]
             )
         ).delete()
 
@@ -46,6 +46,6 @@ class HandleAcceptedTakeback:
                     name=TakebackEventTypes.OFFERED_TAKEBACK.value,
                 )
                 .order_by("-created_at")
-                .values("created_at")[0:]
+                .values("created_at")[:1]
             ),
         )
