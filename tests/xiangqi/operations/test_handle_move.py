@@ -40,7 +40,7 @@ def test_create_move(mock_game_continues, event):
     assert event.game.move_set.count() == 0
 
     HandleMove().perform(event=event)
-    assert mock_game_continues.called_once_with(move=event.game.move_set.first())
+    mock_game_continues.assert_called_once_with(move=event.game.move_set.first())
     assert event.game.move_set.first().uci == "b10c8"
     assert event.game.move_set.count() == 1
 
@@ -59,7 +59,7 @@ def test_create_move_game_over(mock_game_over, event):
     assert not event.game.finished_at
 
     HandleMove().perform(event=event)
-    assert mock_game_over.called_once_with(move=event.game.move_set.first())
+    mock_game_over.assert_called_once_with(move=event.game.move_set.first())
     assert event.game.move_set.first().uci == "b10c8"
     assert event.game.move_set.count() == 1
 

@@ -60,7 +60,7 @@ def test_create_move(event_name, around, mocks, post, game):
     )
 
     assert game.move_set.count() == 1
-    assert mocks.GameResult.called_once_with(move=game.move_set.first())
+    mocks.GameResult.assert_called_once_with(move=game.move_set.first())
 
 
 @pytest.mark.django_db

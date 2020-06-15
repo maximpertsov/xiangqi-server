@@ -34,7 +34,7 @@ def post(rf, player):
 @pytest.mark.django_db
 def test_position_view(post, mocks):
     response = post("/api/position", data={"fen": "FEN"})
-    assert mocks.LegalMoves.called_once_with(fen="FEN")
+    mocks.LegalMoves.assert_called_once_with(fen="FEN")
     assert response.status_code == 200
     assert response.data == {"fen": "FEN", "legal_moves": {}, "gives_check": False}
 
@@ -42,7 +42,7 @@ def test_position_view(post, mocks):
 @pytest.mark.django_db
 def test_starting_position_view(post, mocks):
     response = post("/api/starting-position")
-    assert mocks.LegalMoves.called_once_with(fen="START_FEN")
+    mocks.LegalMoves.assert_called_once_with(fen="START_FEN")
     assert response.status_code == 200
     assert response.data == {
         "fen": "START_FEN",

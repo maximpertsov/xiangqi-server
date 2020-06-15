@@ -33,7 +33,7 @@ def get(rf, game, player):
 @pytest.mark.django_db
 def test_get_game_200(get, game, mocks):
     response = get()
-    assert mocks.LegalMoves.called_once_with(fen="START_FEN")
+    mocks.LegalMoves.assert_called_once_with(fen="START_FEN")
     assert response.status_code == 200
     assert response.data == {
         "slug": game.slug,
