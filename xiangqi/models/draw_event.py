@@ -1,6 +1,9 @@
 from enum import Enum
 
-from xiangqi.models.game_event import GameEvent, GameEventManager, UnresolvedEventQuerySet
+from django.db import models
+from django.utils.timezone import datetime
+
+from xiangqi.models.game_event import GameEvent, GameEventManager
 
 
 class DrawEventTypes(Enum):
@@ -21,15 +24,33 @@ class DrawEventManager(GameEventManager):
 
 class OpenDrawOffersManager(DrawEventManager):
     def get_queryset(self):
-        return UnresolvedEventQuerySet(
-            self.model,
-            using=self._db,
-            open_events=[DrawEventTypes.OFFERED_DRAW.value],
-            close_events=[
-                DrawEventTypes.ACCEPTED_DRAW.value,
-                DrawEventTypes.CANCELED_DRAW.value,
-                DrawEventTypes.REJECTED_DRAW.value,
-            ],
+        return (
+            super()
+            .get_queryset()
+            .filter(
+                name=DrawEventTypes.OFFERED_DRAW.value,
+                created_at__gt=models.Subquery(
+                    self._last_responses_to_draw_offer_datetime()
+                ),
+            )
+        )
+
+    def _last_responses_to_draw_offer_datetime(self):
+        return (
+            super()
+            .get_queryset()
+            .filter(game=models.OuterRef("game"), name__in=DrawEventTypes.values())
+            .annotate(
+                _created_at=models.Case(
+                    models.When(
+                        name=DrawEventTypes.OFFERED_DRAW.value, then=datetime.min
+                    ),
+                    default=models.F("created_at"),
+                )
+            )
+            .values("game")
+            .annotate(result=models.Max("_created_at"))
+            .values("result")[:1]
         )
 
 
