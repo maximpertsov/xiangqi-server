@@ -3,7 +3,7 @@ from types import SimpleNamespace
 import pytest
 from rest_framework.test import force_authenticate
 
-from xiangqi.models.color import Color
+from xiangqi.models.team import Team
 from xiangqi.queries.legal_moves import LegalMoves
 from xiangqi.views import GameView
 
@@ -38,11 +38,18 @@ def test_get_game_200(get, game, mocks):
     assert response.data == {
         "slug": game.slug,
         "moves": [{"fen": "START_FEN", "gives_check": False, "legal_moves": {}}],
-        "red_player": {"name": game.red_player.username, "color": Color.RED.value},
+        "red_player": {
+            "name": game.red_player.username,
+            # TODO: remove
+            "color": Team.RED.value,
+            "team": Team.RED.value,
+        },
         "red_score": game.red_score,
         "black_player": {
             "name": game.black_player.username,
-            "color": Color.BLACK.value,
+            # TODO: remove
+            "color": Team.BLACK.value,
+            "team": Team.BLACK.value,
         },
         "black_score": game.black_score,
         "open_draw_offer": None,

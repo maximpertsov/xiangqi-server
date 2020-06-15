@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Color(Enum):
+class Team(Enum):
     RED = 'red'
     BLACK = 'black'
 
