@@ -4,7 +4,6 @@ attrs==19.1.0
 dj-database-url==0.5.0
 django-clear-cache==0.3
 django-cors-headers==3.3.0
-django-fsm==2.7.0
 djangorestframework-jwt==1.11.0
 djangorestframework==3.11.0
 gunicorn==19.9.0

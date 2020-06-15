@@ -1,7 +1,7 @@
 import attr
 from django.utils.functional import cached_property
 
-from xiangqi.models.color import Color
+from xiangqi.models.team import Team
 
 
 @attr.s(kw_only=True)
@@ -12,12 +12,12 @@ class Fen:
     _fen = attr.ib()
 
     @property
-    def active_color(self):
-        if self._properties["active_color"] == "w":
-            return Color.RED.value
-        if self._properties["active_color"] == "b":
-            return Color.BLACK.value
-        return self.Error("Cannot determine color")
+    def active_team(self):
+        if self._properties["active_team"] == "w":
+            return Team.RED.value
+        if self._properties["active_team"] == "b":
+            return Team.BLACK.value
+        return self.Error("Cannot determine team")
 
     @cached_property
     def _properties(self):
@@ -27,7 +27,7 @@ class Fen:
     def _fields(self):
         return [
             "placement",
-            "active_color",
+            "active_team",
             "castling",
             "en_passant",
             "halfmoves",

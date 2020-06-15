@@ -1,7 +1,6 @@
 import pytest
 
 from lib.pyffish import xiangqi
-from xiangqi.models.draw_event import DrawEventTypes
 from xiangqi.queries.game_result import GameResult
 
 
@@ -26,11 +25,4 @@ def test_black_wins(move_factory):
 @pytest.mark.django_db
 def test_draw_by_insufficient_material(move_factory):
     move = move_factory(fen="3k5/9/9/9/9/9/9/9/9/5K3 w")
-    assert GameResult().result(move=move) == [0.5, 0.5]
-
-
-@pytest.mark.django_db
-def test_draw_by_accepted_draw(game_event_factory, move_factory):
-    move = move_factory(fen=xiangqi.start_fen())
-    game_event_factory(game=move.game, name=DrawEventTypes.ACCEPTED_DRAW.value)
     assert GameResult().result(move=move) == [0.5, 0.5]

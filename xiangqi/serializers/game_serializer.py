@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from lib.pyffish import xiangqi
 from xiangqi.models import DrawEvent, Game, TakebackEvent
-from xiangqi.models.color import Color
+from xiangqi.models.team import Team
 from xiangqi.serializers.move_serializer import MoveSerializer, PositionSerializer
 from xiangqi.serializers.player_serializer import PlayerSerializer
 
@@ -37,8 +37,8 @@ class GameSerializer(serializers.ModelSerializer):
         result["moves"] = [start_position.data] + result["moves"]
 
     def _transform_players(self, result):
-        result["red_player"]["color"] = Color.RED.value
-        result["black_player"]["color"] = Color.BLACK.value
+        result["red_player"]["team"] = Team.RED.value
+        result["black_player"]["team"] = Team.BLACK.value
 
     def _add_open_draw_offer(self, result, instance):
         result["open_draw_offer"] = None

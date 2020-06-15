@@ -3,7 +3,7 @@ from types import SimpleNamespace
 import pytest
 from rest_framework.test import force_authenticate
 
-from xiangqi.models.color import Color
+from xiangqi.models.team import Team
 from xiangqi.queries.legal_moves import LegalMoves
 from xiangqi.views import GameView
 
@@ -33,16 +33,19 @@ def get(rf, game, player):
 @pytest.mark.django_db
 def test_get_game_200(get, game, mocks):
     response = get()
-    assert mocks.LegalMoves.called_once_with(fen="START_FEN")
+    mocks.LegalMoves.assert_called_once_with(fen="START_FEN")
     assert response.status_code == 200
     assert response.data == {
         "slug": game.slug,
         "moves": [{"fen": "START_FEN", "gives_check": False, "legal_moves": {}}],
-        "red_player": {"name": game.red_player.username, "color": Color.RED.value},
+        "red_player": {
+            "name": game.red_player.username,
+            "team": Team.RED.value,
+        },
         "red_score": game.red_score,
         "black_player": {
             "name": game.black_player.username,
-            "color": Color.BLACK.value,
+            "team": Team.BLACK.value,
         },
         "black_score": game.black_score,
         "open_draw_offer": None,
