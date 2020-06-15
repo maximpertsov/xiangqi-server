@@ -1,6 +1,7 @@
 from django.contrib.postgres.fields.jsonb import JSONField
 from django.core.cache import cache
 from django.db import models
+from django.utils.timezone import datetime
 
 CACHE_TTL = 3600
 
@@ -27,6 +28,36 @@ class GameEventManager(models.Manager):
             cache.set(cache_key, result, timeout=CACHE_TTL)
 
         return result
+
+
+class UnresolvedEventQuerySet(models.QuerySet):
+    def __init__(self, *args, open_events=None, close_events=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._open_events = open_events or []
+        self._close_events = close_events or []
+
+    def open(self):
+        return self.filter(
+            name__in=self._open_events,
+            created_at__gt=models.Subquery(self._last_close_event_datetime()),
+        )
+
+    def _last_close_event_datetime(self):
+        return (
+            self.filter(game=models.OuterRef("game"), name__in=self._all_events())
+            .annotate(
+                _created_at=models.Case(
+                    models.When(name__in=self._open_events, then=datetime.min),
+                    default=models.F("created_at"),
+                )
+            )
+            .values("game")
+            .annotate(result=models.Max("_created_at"))
+            .values("result")[:1]
+        )
+
+    def _all_events(self):
+        return self._open_events + self._close_events
 
 
 class GameEvent(models.Model):
