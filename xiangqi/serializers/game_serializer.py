@@ -37,11 +37,7 @@ class GameSerializer(serializers.ModelSerializer):
         result["moves"] = [start_position.data] + result["moves"]
 
     def _transform_players(self, result):
-        # TODO remove
-        result["red_player"]["color"] = Team.RED.value
         result["red_player"]["team"] = Team.RED.value
-        # TODO remove
-        result["black_player"]["color"] = Team.BLACK.value
         result["black_player"]["team"] = Team.BLACK.value
 
     def _add_open_draw_offer(self, result, instance):

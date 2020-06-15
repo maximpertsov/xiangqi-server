@@ -40,15 +40,11 @@ def test_get_game_200(get, game, mocks):
         "moves": [{"fen": "START_FEN", "gives_check": False, "legal_moves": {}}],
         "red_player": {
             "name": game.red_player.username,
-            # TODO: remove
-            "color": Team.RED.value,
             "team": Team.RED.value,
         },
         "red_score": game.red_score,
         "black_player": {
             "name": game.black_player.username,
-            # TODO: remove
-            "color": Team.BLACK.value,
             "team": Team.BLACK.value,
         },
         "black_score": game.black_score,
