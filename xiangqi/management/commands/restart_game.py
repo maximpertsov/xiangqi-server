@@ -22,8 +22,8 @@ class Command(BaseCommand):
     def reset_game(self, game):
         game.move_set.all().delete()
         game.event_set.all().delete()
-        game.red_score = 0
-        game.black_score = 0
+        game.score1 = 0
+        game.score2 = 0
 
         game.save()
 

@@ -14,9 +14,9 @@ class GameSerializer(serializers.ModelSerializer):
             "slug",
             "moves",
             "player1",
-            "red_score",
+            "score1",
             "player2",
-            "black_score",
+            "score2",
         ]
 
     moves = MoveSerializer(source="move_set", many=True, read_only=True)

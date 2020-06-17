@@ -10,7 +10,7 @@ class HandleResigned:
 
     def _set_game_result(self):
         if sum(self._scores):
-            self._game.red_score, self._game.black_score = self._scores
+            self._game.score1, self._game.score2 = self._scores
             self._game.finished_at = timezone.now()
             self._game.save()
 
