@@ -8,11 +8,11 @@ from tests.factories.player import PlayerFactory
 register(GameEventFactory)
 register(MoveFactory)
 register(PlayerFactory)
-register(PlayerFactory, "red_player", username="rosie")
-register(PlayerFactory, "black_player", username="bob")
+register(PlayerFactory, "player1", username="rosie")
+register(PlayerFactory, "player2", username="bob")
 register(
     GameFactory,
     slug="ABC123",
-    red_player=LazyFixture("red_player"),
-    black_player=LazyFixture("black_player"),
+    player1=LazyFixture("player1"),
+    player2=LazyFixture("player2"),
 )

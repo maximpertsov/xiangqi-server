@@ -16,9 +16,9 @@ class HandleResigned:
 
     @cached_property
     def _scores(self):
-        if self._payload["username"] == self._game.red_player.username:
+        if self._payload["username"] == self._game.player1.username:
             return [0.0, 1.0]
-        if self._payload["username"] == self._game.black_player.username:
+        if self._payload["username"] == self._game.player2.username:
             return [1.0, 0.0]
         return [0.0, 0.0]
 

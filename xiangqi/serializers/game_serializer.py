@@ -13,15 +13,15 @@ class GameSerializer(serializers.ModelSerializer):
         fields = [
             "slug",
             "moves",
-            "red_player",
+            "player1",
             "red_score",
-            "black_player",
+            "player2",
             "black_score",
         ]
 
     moves = MoveSerializer(source="move_set", many=True, read_only=True)
-    red_player = PlayerSerializer(read_only=True)
-    black_player = PlayerSerializer(read_only=True)
+    player1 = PlayerSerializer(read_only=True)
+    player2 = PlayerSerializer(read_only=True)
 
     def to_representation(self, instance):
         result = super().to_representation(instance)
@@ -37,8 +37,8 @@ class GameSerializer(serializers.ModelSerializer):
         result["moves"] = [start_position.data] + result["moves"]
 
     def _transform_players(self, result):
-        result["red_player"]["team"] = Team.RED.value
-        result["black_player"]["team"] = Team.BLACK.value
+        result["player1"]["team"] = Team.RED.value
+        result["player2"]["team"] = Team.BLACK.value
 
     def _add_open_draw_offer(self, result, instance):
         result["open_draw_offer"] = None

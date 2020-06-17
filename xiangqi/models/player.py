@@ -9,6 +9,6 @@ class Player(User):
     def games(self):
         from xiangqi.models import Game
 
-        return Game.objects.filter(red_player=self).union(
-            Game.objects.filter(black_player=self)
+        return Game.objects.filter(player1=self).union(
+            Game.objects.filter(player2=self)
         )

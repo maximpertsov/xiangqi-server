@@ -11,23 +11,23 @@ def mock_game_continues(mocker):
 
 
 @pytest.fixture
-def red_player(player_factory):
+def player1(player_factory):
     return player_factory()
 
 
 @pytest.fixture
-def black_player(player_factory):
+def player2(player_factory):
     return player_factory()
 
 
 @pytest.fixture
-def game_with_players(game_factory, red_player, black_player):
-    return game_factory(red_player=red_player, black_player=black_player)
+def game_with_players(game_factory, player1, player2):
+    return game_factory(player1=player1, player2=player2)
 
 
 @pytest.fixture
-def payload(red_player):
-    return {"uci": "b10c8", "fen": "FEN", "player": red_player.username}
+def payload(player1):
+    return {"uci": "b10c8", "fen": "FEN", "player": player1.username}
 
 
 @pytest.fixture

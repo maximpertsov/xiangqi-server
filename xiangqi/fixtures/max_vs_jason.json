@@ -24,10 +24,10 @@
     "pk": 2,
     "fields": {
       "slug": "ABC123",
-      "red_player": [
+      "player1": [
         "bycepto"
       ],
-      "black_player": [
+      "player2": [
         "jkalltheway"
       ]
     }

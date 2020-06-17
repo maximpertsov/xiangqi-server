@@ -13,7 +13,7 @@ def test_get_games_for_non_player(client, player_factory):
 
 @mark.django_db
 def test_get_games_for_player(client, game):
-    url = "/api/player/{}/games".format(game.red_player.username)
+    url = "/api/player/{}/games".format(game.player1.username)
     response = client.get(url)
     assert response.status_code == 200
 

@@ -47,14 +47,14 @@ def test_create_move(event_name, around, mocks, post, game):
     assert game.move_set.count() == 0
 
     post(
-        user=game.red_player,
+        user=game.player1,
         payload={
             "game": game.slug,
             "name": event_name,
             "payload": {
                 "uci": "a1a2",
                 "fen": "FEN",
-                "player": game.red_player.username,
+                "player": game.player1.username,
             },
         },
     )
@@ -69,7 +69,7 @@ def test_offer_draw(event_name, around, post, game):
     DrawEvent.open_offers.filter(game=game).count == 0
 
     post(
-        user=game.red_player,
+        user=game.player1,
         payload={"game": game.slug, "name": event_name, "payload": {}},
     )
 
@@ -84,11 +84,11 @@ def test_accepted_draw(event_name, around, post, game):
     assert not game.finished_at
 
     post(
-        user=game.red_player,
+        user=game.player1,
         payload={
             "game": game.slug,
             "name": event_name,
-            "payload": {"username": game.red_player.username},
+            "payload": {"username": game.player1.username},
         },
     )
 
@@ -106,11 +106,11 @@ def test_resigned(event_name, around, post, game):
     assert not game.finished_at
 
     post(
-        user=game.red_player,
+        user=game.player1,
         payload={
             "game": game.slug,
             "name": event_name,
-            "payload": {"username": game.red_player.username},
+            "payload": {"username": game.player1.username},
         },
     )
 
@@ -123,16 +123,16 @@ def test_resigned(event_name, around, post, game):
 @pytest.mark.django_db
 @pytest.mark.parametrize("event_name", [TakebackEventTypes.OFFERED_TAKEBACK.value])
 def test_takeback_offered(event_name, around, post, game, move_factory):
-    move_factory(game=game, player=game.red_player)
-    move_to_take_back = move_factory(game=game, player=game.black_player)
+    move_factory(game=game, player=game.player1)
+    move_to_take_back = move_factory(game=game, player=game.player2)
     assert move_to_take_back.event_set.count() == 0
 
     post(
-        user=game.red_player,
+        user=game.player1,
         payload={
             "game": game.slug,
             "name": event_name,
-            "payload": {"username": game.black_player.username},
+            "payload": {"username": game.player2.username},
         },
     )
 
@@ -142,25 +142,25 @@ def test_takeback_offered(event_name, around, post, game, move_factory):
 @pytest.mark.django_db
 @pytest.mark.parametrize("event_name", [TakebackEventTypes.ACCEPTED_TAKEBACK.value])
 def test_takeback_accepted(event_name, post, game, move_factory, game_event_factory):
-    move1 = move_factory(game=game, player=game.red_player)
-    move2 = move_factory(game=game, player=game.black_player)
+    move1 = move_factory(game=game, player=game.player1)
+    move2 = move_factory(game=game, player=game.player2)
     post(
-        user=game.red_player,
+        user=game.player1,
         payload={
             "game": game.slug,
             "name": TakebackEventTypes.OFFERED_TAKEBACK.value,
-            "payload": {"username": game.black_player.username},
+            "payload": {"username": game.player2.username},
         },
     )
-    move3 = move_factory(game=game, player=game.red_player)
+    move3 = move_factory(game=game, player=game.player1)
     assert set(game.move_set.all()) == set([move1, move2, move3])
 
     post(
-        user=game.red_player,
+        user=game.player1,
         payload={
             "game": game.slug,
             "name": event_name,
-            "payload": {"username": game.red_player.username},
+            "payload": {"username": game.player1.username},
         },
     )
 

@@ -10,5 +10,5 @@ class GameFactory(DjangoModelFactory):
         django_get_or_create = ("slug",)
 
     slug = Sequence(lambda n: "GAME{}".format(n))
-    red_player = SubFactory(PlayerFactory)
-    black_player = SubFactory(PlayerFactory)
+    player1 = SubFactory(PlayerFactory)
+    player2 = SubFactory(PlayerFactory)
