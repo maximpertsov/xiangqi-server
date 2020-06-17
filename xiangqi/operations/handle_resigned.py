@@ -10,15 +10,15 @@ class HandleResigned:
 
     def _set_game_result(self):
         if sum(self._scores):
-            self._game.red_score, self._game.black_score = self._scores
+            self._game.score1, self._game.score2 = self._scores
             self._game.finished_at = timezone.now()
             self._game.save()
 
     @cached_property
     def _scores(self):
-        if self._payload["username"] == self._game.red_player.username:
+        if self._payload["username"] == self._game.player1.username:
             return [0.0, 1.0]
-        if self._payload["username"] == self._game.black_player.username:
+        if self._payload["username"] == self._game.player2.username:
             return [1.0, 0.0]
         return [0.0, 0.0]
 

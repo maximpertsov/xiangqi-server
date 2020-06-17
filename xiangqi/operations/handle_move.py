@@ -13,7 +13,7 @@ class HandleMove:
     def _set_game_result(self):
         scores = self._game_result
         if sum(scores):
-            self._game.red_score, self._game.black_score = scores
+            self._game.score1, self._game.score2 = scores
             self._game.finished_at = timezone.now()
             self._game.save()
 

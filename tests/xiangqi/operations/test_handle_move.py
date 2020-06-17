@@ -11,23 +11,23 @@ def mock_game_continues(mocker):
 
 
 @pytest.fixture
-def red_player(player_factory):
+def player1(player_factory):
     return player_factory()
 
 
 @pytest.fixture
-def black_player(player_factory):
+def player2(player_factory):
     return player_factory()
 
 
 @pytest.fixture
-def game_with_players(game_factory, red_player, black_player):
-    return game_factory(red_player=red_player, black_player=black_player)
+def game_with_players(game_factory, player1, player2):
+    return game_factory(player1=player1, player2=player2)
 
 
 @pytest.fixture
-def payload(red_player):
-    return {"uci": "b10c8", "fen": "FEN", "player": red_player.username}
+def payload(player1):
+    return {"uci": "b10c8", "fen": "FEN", "player": player1.username}
 
 
 @pytest.fixture
@@ -54,8 +54,8 @@ def mock_game_over(mocker):
 def test_create_move_game_over(mock_game_over, event):
     assert event.game.move_set.count() == 0
 
-    assert event.game.red_score == 0.0
-    assert event.game.black_score == 0.0
+    assert event.game.score1 == 0.0
+    assert event.game.score2 == 0.0
     assert not event.game.finished_at
 
     HandleMove().perform(event=event)
@@ -63,8 +63,8 @@ def test_create_move_game_over(mock_game_over, event):
     assert event.game.move_set.first().uci == "b10c8"
     assert event.game.move_set.count() == 1
 
-    assert event.game.red_score == 0.5
-    assert event.game.black_score == 0.5
+    assert event.game.score1 == 0.5
+    assert event.game.score2 == 0.5
     assert event.game.finished_at
 
 

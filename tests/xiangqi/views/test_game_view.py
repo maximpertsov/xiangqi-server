@@ -38,16 +38,16 @@ def test_get_game_200(get, game, mocks):
     assert response.data == {
         "slug": game.slug,
         "moves": [{"fen": "START_FEN", "gives_check": False, "legal_moves": {}}],
-        "red_player": {
-            "name": game.red_player.username,
+        "player1": {
+            "name": game.player1.username,
             "team": Team.RED.value,
         },
-        "red_score": game.red_score,
-        "black_player": {
-            "name": game.black_player.username,
+        "score1": game.score1,
+        "player2": {
+            "name": game.player2.username,
             "team": Team.BLACK.value,
         },
-        "black_score": game.black_score,
+        "score2": game.score2,
         "open_draw_offer": None,
         "open_takeback_offer": None,
     }
@@ -56,15 +56,15 @@ def test_get_game_200(get, game, mocks):
 @pytest.mark.django_db
 def test_get_game_with_draw_offer(get, game, game_event_factory, mocks):
     game_event_factory(
-        game=game, name="offered_draw", payload={"username": game.red_player.username}
+        game=game, name="offered_draw", payload={"username": game.player1.username}
     )
     game_event_factory(
-        game=game, name="offered_draw", payload={"username": game.black_player.username}
+        game=game, name="offered_draw", payload={"username": game.player2.username}
     )
 
     response = get()
     assert response.status_code == 200
-    assert response.data["open_draw_offer"] == game.red_player.username
+    assert response.data["open_draw_offer"] == game.player1.username
 
 
 @pytest.mark.django_db
@@ -72,9 +72,9 @@ def test_get_game_with_takeback_offer(get, game, game_event_factory, mocks):
     game_event_factory(
         game=game,
         name="offered_takeback",
-        payload={"username": game.red_player.username},
+        payload={"username": game.player1.username},
     )
 
     response = get()
     assert response.status_code == 200
-    assert response.data["open_takeback_offer"] == game.red_player.username
+    assert response.data["open_takeback_offer"] == game.player1.username

@@ -27,10 +27,10 @@ class Game(models.Model):
     objects = GameManager()
 
     slug = models.CharField(max_length=64, unique=True, editable=False)
-    red_player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="+")
-    red_score = models.DecimalField(max_digits=2, decimal_places=1, default=0)
-    black_player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="+")
-    black_score = models.DecimalField(max_digits=2, decimal_places=1, default=0)
+    player1 = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="+")
+    score1 = models.DecimalField(max_digits=2, decimal_places=1, default=0)
+    player2 = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="+")
+    score2 = models.DecimalField(max_digits=2, decimal_places=1, default=0)
     finished_at = models.DateTimeField(null=True)
 
     def natural_key(self):
@@ -40,5 +40,5 @@ class Game(models.Model):
         return self.slug
 
     def clean(self):
-        if self.red_player == self.black_player:
+        if self.player1 == self.player2:
             raise ValidationError("Red and black players cannot be the same")
