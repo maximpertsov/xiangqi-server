@@ -79,8 +79,8 @@ def test_offer_draw(event_name, around, post, game):
 @pytest.mark.django_db
 @pytest.mark.parametrize("event_name", [DrawEventTypes.ACCEPTED_DRAW.value])
 def test_accepted_draw(event_name, around, post, game):
-    assert game.red_score == 0.0
-    assert game.black_score == 0.0
+    assert game.score1 == 0.0
+    assert game.score2 == 0.0
     assert not game.finished_at
 
     post(
@@ -93,16 +93,16 @@ def test_accepted_draw(event_name, around, post, game):
     )
 
     game.refresh_from_db()
-    assert game.red_score == 0.5
-    assert game.black_score == 0.5
+    assert game.score1 == 0.5
+    assert game.score2 == 0.5
     assert game.finished_at
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("event_name", ["resigned"])
 def test_resigned(event_name, around, post, game):
-    assert game.red_score == 0.0
-    assert game.black_score == 0.0
+    assert game.score1 == 0.0
+    assert game.score2 == 0.0
     assert not game.finished_at
 
     post(
@@ -115,8 +115,8 @@ def test_resigned(event_name, around, post, game):
     )
 
     game.refresh_from_db()
-    assert game.red_score == 0.0
-    assert game.black_score == 1.0
+    assert game.score1 == 0.0
+    assert game.score2 == 1.0
     assert game.finished_at
 
 

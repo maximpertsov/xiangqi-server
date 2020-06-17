@@ -42,12 +42,12 @@ def test_get_game_200(get, game, mocks):
             "name": game.player1.username,
             "team": Team.RED.value,
         },
-        "red_score": game.red_score,
+        "score1": game.score1,
         "player2": {
             "name": game.player2.username,
             "team": Team.BLACK.value,
         },
-        "black_score": game.black_score,
+        "score2": game.score2,
         "open_draw_offer": None,
         "open_takeback_offer": None,
     }

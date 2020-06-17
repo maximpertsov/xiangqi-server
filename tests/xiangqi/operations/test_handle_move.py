@@ -54,8 +54,8 @@ def mock_game_over(mocker):
 def test_create_move_game_over(mock_game_over, event):
     assert event.game.move_set.count() == 0
 
-    assert event.game.red_score == 0.0
-    assert event.game.black_score == 0.0
+    assert event.game.score1 == 0.0
+    assert event.game.score2 == 0.0
     assert not event.game.finished_at
 
     HandleMove().perform(event=event)
@@ -63,8 +63,8 @@ def test_create_move_game_over(mock_game_over, event):
     assert event.game.move_set.first().uci == "b10c8"
     assert event.game.move_set.count() == 1
 
-    assert event.game.red_score == 0.5
-    assert event.game.black_score == 0.5
+    assert event.game.score1 == 0.5
+    assert event.game.score2 == 0.5
     assert event.game.finished_at
 
 
