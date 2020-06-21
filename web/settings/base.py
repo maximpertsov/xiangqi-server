@@ -128,8 +128,8 @@ REST_FRAMEWORK = {
 
 JWT_AUTH = {
     # TODO: refresh this more often?
-    "JWT_EXPIRATION_DELTA": timedelta(minutes=5),
-    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=1),
+    "JWT_EXPIRATION_DELTA": timedelta(days=1),
+    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=5),
     "JWT_ALLOW_REFRESH": True,
     "JWT_AUTH_COOKIE": "token",
 }
