@@ -1,11 +1,13 @@
+import json
 from types import SimpleNamespace
 
 import pytest
 from rest_framework.test import force_authenticate
 
+from xiangqi.models import Game
 from xiangqi.models.team import Team
 from xiangqi.queries.legal_moves import LegalMoves
-from xiangqi.views import GameView
+from xiangqi.views import CreateGameView, GameView
 
 
 @pytest.fixture
@@ -38,15 +40,9 @@ def test_get_game_200(get, game, mocks):
     assert response.data == {
         "slug": game.slug,
         "moves": [{"fen": "START_FEN", "gives_check": False, "legal_moves": {}}],
-        "player1": {
-            "name": game.player1.username,
-            "team": Team.RED.value,
-        },
+        "player1": {"name": game.player1.username, "team": Team.RED.value},
         "score1": game.score1,
-        "player2": {
-            "name": game.player2.username,
-            "team": Team.BLACK.value,
-        },
+        "player2": {"name": game.player2.username, "team": Team.BLACK.value},
         "score2": game.score2,
         "open_draw_offer": None,
         "open_takeback_offer": None,
@@ -70,11 +66,30 @@ def test_get_game_with_draw_offer(get, game, game_event_factory, mocks):
 @pytest.mark.django_db
 def test_get_game_with_takeback_offer(get, game, game_event_factory, mocks):
     game_event_factory(
-        game=game,
-        name="offered_takeback",
-        payload={"username": game.player1.username},
+        game=game, name="offered_takeback", payload={"username": game.player1.username}
     )
 
     response = get()
     assert response.status_code == 200
     assert response.data["open_takeback_offer"] == game.player1.username
+
+
+@pytest.fixture
+def post(rf, player, player_factory):
+    def wrapped():
+        payload = {"player1": player.username, "player2": player_factory().username}
+        request = rf.post(
+            "/api/game", data=json.dumps(payload), content_type="application/json"
+        )
+        force_authenticate(request, user=player)
+        return CreateGameView.as_view()(request)
+
+    return wrapped
+
+
+@pytest.mark.django_db
+def test_create_game_201(mocks, post):
+    assert Game.objects.count() == 0
+    response = post()
+    assert response.status_code == 201
+    assert Game.objects.count() == 1
