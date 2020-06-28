@@ -77,7 +77,9 @@ def test_get_game_with_takeback_offer(get, game, game_event_factory, mocks):
 @pytest.fixture
 def post(rf, player, player_factory):
     def wrapped():
-        payload = {"player1": player.username, "player2": player_factory().username}
+        # HACK: fails unless there is another player to choice from
+        player_factory()
+        payload = {"player1": player.username}
         request = rf.post(
             "/api/game", data=json.dumps(payload), content_type="application/json"
         )

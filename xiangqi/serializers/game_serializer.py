@@ -1,3 +1,5 @@
+from random import choice
+
 from rest_framework import serializers
 
 from lib.pyffish import xiangqi
@@ -14,7 +16,20 @@ class GameSerializer(serializers.ModelSerializer):
 
     moves = MoveSerializer(source="move_set", many=True, read_only=True)
     player1 = serializers.SlugRelatedField("username", queryset=Player.objects.all())
-    player2 = serializers.SlugRelatedField("username", queryset=Player.objects.all())
+    player2 = serializers.SlugRelatedField(
+        "username", queryset=Player.objects.all(), required=False
+    )
+
+    def validate(self, attrs):
+        # HACK: pick a random player if the other is missing
+        # TODO: instead, allow an extra parameter that determines how
+        # game roles should be assigned
+        if "player1" in attrs and "player2" not in attrs:
+            attrs["player2"] = self._random_other_player(attrs["player1"])
+        return super().validate(attrs)
+
+    def _random_other_player(self, player):
+        return choice(Player.objects.exclude(username=player.username))
 
     def to_representation(self, instance):
         result = super().to_representation(instance)
