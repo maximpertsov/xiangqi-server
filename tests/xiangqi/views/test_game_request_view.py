@@ -3,7 +3,7 @@ import json
 import pytest
 from rest_framework.test import APIClient
 
-from xiangqi.models import GameRequest
+from xiangqi.models import Game, GameRequest
 
 
 @pytest.fixture
@@ -16,7 +16,7 @@ def api_client(player):
 @pytest.fixture
 def post(api_client, player):
     def wrapped():
-        payload = {"players": [player.username], "parameters": {}}
+        payload = {"player1": player.username, "parameters": {}}
         return api_client.post(
             "/api/game/requests",
             data=json.dumps(payload),
@@ -37,9 +37,9 @@ def test_create_game_request_201(post):
 @pytest.fixture
 def patch(api_client, player_factory):
     def wrapped(game_request):
-        payload = {"player": player_factory().username}
+        payload = {"player2": player_factory().username}
         return api_client.patch(
-            "/api/game/requests/{}/join".format(game_request.pk),
+            "/api/game/requests/{}".format(game_request.pk),
             data=json.dumps(payload),
             content_type="application/json",
         )
@@ -47,11 +47,15 @@ def patch(api_client, player_factory):
     return wrapped
 
 
-# TODO: post to through table
 @pytest.mark.django_db
 def test_update_game_request_201(post, patch):
     post()
     game_request = GameRequest.objects.first()
+
+    assert game_request.player2 is None
+    assert Game.objects.count() == 0
     response = patch(game_request)
     assert response.status_code == 200
-    assert game_request.player_set.count() == 2
+    game_request.refresh_from_db()
+    assert game_request.player2 is not None
+    assert Game.objects.count() == 1
