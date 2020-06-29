@@ -1,4 +1,4 @@
-from random import choice
+from random import choice, sample
 
 from rest_framework import serializers
 
@@ -26,10 +26,19 @@ class GameSerializer(serializers.ModelSerializer):
         # game roles should be assigned
         if "player1" in attrs and "player2" not in attrs:
             attrs["player2"] = self._random_other_player(attrs["player1"])
+
+        # HACK: randomize team
+        self._randomize_team(attrs)
+
         return super().validate(attrs)
 
     def _random_other_player(self, player):
         return choice(Player.objects.exclude(username=player.username))
+
+    def _randomize_team(self, attrs):
+        attrs["player1"], attrs["player2"] = sample(
+            [attrs["player1"], attrs["player2"]], 2
+        )
 
     def to_representation(self, instance):
         result = super().to_representation(instance)
