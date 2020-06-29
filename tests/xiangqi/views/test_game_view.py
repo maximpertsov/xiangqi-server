@@ -79,6 +79,7 @@ def post(rf, player, player_factory):
     def wrapped():
         # HACK: fails unless there is another player to choice from
         player_factory()
+        # TODO: test random team
         payload = {"player1": player.username, "team": "red"}
         request = rf.post(
             "/api/game", data=json.dumps(payload), content_type="application/json"

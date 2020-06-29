@@ -36,12 +36,12 @@ class GameSerializer(serializers.ModelSerializer):
         return choice(Player.objects.exclude(username=player.username))
 
     def _set_teams(self, attrs):
-        if self.initial_data["team"] == Team.RED.value:
+        if self.initial_data.get("team") == Team.RED.value:
             return
 
         players = [attrs["player1"], attrs["player2"]]
 
-        if self.initial_data["team"] == Team.BLACK.value:
+        if self.initial_data.get("team") == Team.BLACK.value:
             attrs["player1"], attrs["player2"] = reversed(players)
 
         attrs["player1"], attrs["player2"] = sample(players, 2)
