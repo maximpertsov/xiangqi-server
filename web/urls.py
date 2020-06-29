@@ -30,6 +30,7 @@ urlpatterns = [
     path("api/starting-position", views.StartingPositionView.as_view()),
     path("api/player/<str:username>/games", views.GameListView.as_view()),
     path("api/game/events", views.GameEventView.as_view()),
+    path("api/game/requests", views.GameRequestView.as_view()),
     path("api/game/<str:slug>/poll", views.PollView.as_view()),
     path("api/game/<str:slug>", views.GameView.as_view()),
     path("api/game", views.CreateGameView.as_view()),
