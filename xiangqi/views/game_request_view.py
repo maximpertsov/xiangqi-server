@@ -1,12 +1,11 @@
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, UpdateAPIView
 
-from xiangqi.serializers.game_request_serializer import (GameRequestPlayerSerializer,
-                                                         GameRequestSerializer)
+from xiangqi.serializers.game_request_serializer import GameRequestSerializer
 
 
 class GameRequestView(CreateAPIView):
     serializer_class = GameRequestSerializer
 
 
-class GameRequestPlayerView(CreateAPIView):
-    serializer_class = GameRequestPlayerSerializer
+class JoinGameRequestView(UpdateAPIView):
+    serializer_class = GameRequestSerializer
