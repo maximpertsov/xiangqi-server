@@ -13,6 +13,7 @@ class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
         fields = ["slug", "moves", "player1", "score1", "player2", "score2"]
+        extra_kwargs = {"team": {"write_only": True}}
 
     moves = MoveSerializer(source="move_set", many=True, read_only=True)
     player1 = serializers.SlugRelatedField("username", queryset=Player.objects.all())
@@ -27,18 +28,23 @@ class GameSerializer(serializers.ModelSerializer):
         if "player1" in attrs and "player2" not in attrs:
             attrs["player2"] = self._random_other_player(attrs["player1"])
 
-        # HACK: randomize team
-        self._randomize_team(attrs)
+        self._set_teams(attrs)
 
         return super().validate(attrs)
 
     def _random_other_player(self, player):
         return choice(Player.objects.exclude(username=player.username))
 
-    def _randomize_team(self, attrs):
-        attrs["player1"], attrs["player2"] = sample(
-            [attrs["player1"], attrs["player2"]], 2
-        )
+    def _set_teams(self, attrs):
+        if self.initial_data["team"] == Team.RED.value:
+            return
+
+        players = [attrs["player1"], attrs["player2"]]
+
+        if self.initial_data["team"] == Team.BLACK.value:
+            attrs["player1"], attrs["player2"] = reversed(players)
+
+        attrs["player1"], attrs["player2"] = sample(players, 2)
 
     def to_representation(self, instance):
         result = super().to_representation(instance)
