@@ -4,10 +4,11 @@ from xiangqi.models import GameRequest, Player
 
 
 class GameRequestSerializer(serializers.ModelSerializer):
-    player = serializers.SlugRelatedField(
-        "username", queryset=Player.objects.all(), many=True
+    player1 = serializers.SlugRelatedField("username", queryset=Player.objects.all())
+    player2 = serializers.SlugRelatedField(
+        "username", queryset=Player.objects.all(), required=False
     )
 
     class Meta:
         model = GameRequest
-        fields = ["player", "parameters", "closed_at"]
+        fields = ["player1", "player2", "parameters"]
