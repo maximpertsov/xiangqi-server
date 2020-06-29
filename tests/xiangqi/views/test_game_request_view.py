@@ -35,11 +35,11 @@ def test_create_game_request_201(post):
 
 
 @pytest.fixture
-def patch(api_client, player_factory):
+def join(api_client, player_factory):
     def wrapped(game_request):
-        payload = {"players": [player_factory().username]}
-        return api_client.patch(
-            "/api/game/requests/{}/join".format(game_request.pk),
+        payload = {"gamerequest": game_request.pk, "player": player_factory().username}
+        return api_client.post(
+            "/api/game/requests/player",
             data=json.dumps(payload),
             content_type="application/json",
         )
@@ -49,8 +49,9 @@ def patch(api_client, player_factory):
 
 # TODO: post to through table
 @pytest.mark.django_db
-def test_update_game_request_201(patch, player, game_request):
-    game_request.player_set.add(player)
-    response = patch(game_request)
-    assert response.status_code == 200
+def test_update_game_request_201(post, join):
+    post()
+    game_request = GameRequest.objects.first()
+    response = join(game_request)
+    assert response.status_code == 201
     assert game_request.player_set.count() == 2

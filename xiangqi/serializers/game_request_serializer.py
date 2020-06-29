@@ -16,3 +16,13 @@ class GameRequestSerializer(serializers.ModelSerializer):
         instance = super().create(validated_data)
         # create game if necessary
         return instance
+
+
+class GameRequestPlayerSerializer(serializers.ModelSerializer):
+    player = serializers.SlugRelatedField("username", queryset=Player.objects.all())
+    # TODO: don't expose pk
+    gamerequest = serializers.PrimaryKeyRelatedField(queryset=GameRequest.objects.all())
+
+    class Meta:
+        model = GameRequest.player_set.through
+        fields = ["gamerequest", "player"]
