@@ -5,6 +5,7 @@ from xiangqi.models import Player
 
 
 class GameRequest(models.Model):
-    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    # TODO: limit players to 2?
+    player_set = models.ManyToManyField(Player, related_name='game_request_set')
     parameters = JSONField()
     closed_at = models.DateTimeField(null=True)

@@ -4,8 +4,15 @@ from xiangqi.models import GameRequest, Player
 
 
 class GameRequestSerializer(serializers.ModelSerializer):
-    player = serializers.SlugRelatedField("username", queryset=Player.objects.all())
+    players = serializers.SlugRelatedField(
+        "username", source="player_set", queryset=Player.objects.all(), many=True
+    )
 
     class Meta:
         model = GameRequest
-        fields = ["player", "parameters", "closed_at"]
+        fields = ["players", "parameters", "closed_at"]
+
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        # create game if necessary
+        return instance
