@@ -6,6 +6,6 @@ from xiangqi.models import Player
 
 class GameRequest(models.Model):
     # TODO: limit players to 2?
-    players = models.ManyToManyField(Player)
+    player_set = models.ManyToManyField(Player)
     parameters = JSONField()
     closed_at = models.DateTimeField(null=True)
