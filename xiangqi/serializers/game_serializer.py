@@ -43,6 +43,7 @@ class GameSerializer(serializers.ModelSerializer):
 
         if self.initial_data.get("team") == Team.BLACK.value:
             attrs["player1"], attrs["player2"] = reversed(players)
+            return
 
         attrs["player1"], attrs["player2"] = sample(players, 2)
 
