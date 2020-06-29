@@ -33,6 +33,5 @@ urlpatterns = [
     path("api/game/requests", views.GameRequestView.as_view()),
     path("api/game/<str:slug>/poll", views.PollView.as_view()),
     path("api/game/<str:slug>", views.GameView.as_view()),
-    path("api/game", views.CreateGameView.as_view()),
     path("admin/", admin.site.urls),
 ]

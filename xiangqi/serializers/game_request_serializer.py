@@ -8,4 +8,4 @@ class GameRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GameRequest
-        fields = ["player", "parameters"]
+        fields = ["player", "parameters", "closed_at"]

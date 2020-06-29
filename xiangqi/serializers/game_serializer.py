@@ -17,9 +17,7 @@ class GameSerializer(serializers.ModelSerializer):
 
     moves = MoveSerializer(source="move_set", many=True, read_only=True)
     player1 = serializers.SlugRelatedField("username", queryset=Player.objects.all())
-    player2 = serializers.SlugRelatedField(
-        "username", queryset=Player.objects.all(), required=False
-    )
+    player2 = serializers.SlugRelatedField("username", queryset=Player.objects.all())
 
     def validate(self, attrs):
         # HACK: pick a random player if the other is missing

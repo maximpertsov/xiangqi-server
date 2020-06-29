@@ -1,13 +1,11 @@
-import json
 from types import SimpleNamespace
 
 import pytest
 from rest_framework.test import force_authenticate
 
-from xiangqi.models import Game
 from xiangqi.models.team import Team
 from xiangqi.queries.legal_moves import LegalMoves
-from xiangqi.views import CreateGameView, GameView
+from xiangqi.views import GameView
 
 
 @pytest.fixture
@@ -72,27 +70,3 @@ def test_get_game_with_takeback_offer(get, game, game_event_factory, mocks):
     response = get()
     assert response.status_code == 200
     assert response.data["open_takeback_offer"] == game.player1.username
-
-
-@pytest.fixture
-def post(rf, player, player_factory):
-    def wrapped():
-        # HACK: fails unless there is another player to choice from
-        player_factory()
-        # TODO: test random team
-        payload = {"player1": player.username, "team": "red"}
-        request = rf.post(
-            "/api/game", data=json.dumps(payload), content_type="application/json"
-        )
-        force_authenticate(request, user=player)
-        return CreateGameView.as_view()(request)
-
-    return wrapped
-
-
-@pytest.mark.django_db
-def test_create_game_201(mocks, post):
-    assert Game.objects.count() == 0
-    response = post()
-    assert response.status_code == 201
-    assert Game.objects.count() == 1
