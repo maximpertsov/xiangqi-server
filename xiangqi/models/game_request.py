@@ -1,4 +1,5 @@
 from django.contrib.postgres.fields.jsonb import JSONField
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from xiangqi.models import Player
@@ -12,3 +13,7 @@ class GameRequest(models.Model):
         Player, on_delete=models.CASCADE, null=True, related_name="+"
     )
     parameters = JSONField()
+
+    def clean(self):
+        if self.player1 == self.player2:
+            raise ValidationError("Red and black players cannot be the same")
