@@ -1,4 +1,5 @@
 import json
+from collections import OrderedDict
 
 import pytest
 from rest_framework.test import APIClient
@@ -82,11 +83,28 @@ def test_reject_game_request(players, game_request_factory, api_call):
     player1, player2 = players
     game_request = game_request_factory(player1=player1)
 
-    response = api_call(
-        "delete",
-        f"/api/game/request/{game_request.pk}",
-        user=player2,
-    )
+    response = api_call("delete", f"/api/game/request/{game_request.pk}", user=player2)
     assert response.status_code == 204
     with pytest.raises(GameRequest.DoesNotExist):
         game_request.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_list_game_requests(players, game_request_factory, api_call):
+    player1, player2 = players
+    open_game_request = game_request_factory(player1=player1)
+    game_request_factory(player1=player1, player2=player2)
+
+    response = api_call("get", "/api/game/request", user=player2)
+    assert response.status_code == 200
+
+    assert response.data == [
+        OrderedDict(
+            {
+                "id": open_game_request.pk,
+                "player1": player1.username,
+                "player2": None,  # TODO: remove this?
+                "parameters": open_game_request.parameters,
+            }
+        )
+    ]
