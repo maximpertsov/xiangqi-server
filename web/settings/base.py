@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "xiangqi",
+    "channels",
     "corsheaders",
     "clear_cache",
     "rest_framework",
@@ -133,3 +134,5 @@ JWT_AUTH = {
     "JWT_ALLOW_REFRESH": True,
     "JWT_AUTH_COOKIE": "token",
 }
+
+ASGI_APPLICATION = "web.routing.application"
