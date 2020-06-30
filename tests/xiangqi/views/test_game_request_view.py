@@ -18,7 +18,7 @@ def api_client(player):
 
 @pytest.fixture
 def api_call(api_client):
-    def wrapped(user, http_method, url, payload=None):
+    def wrapped(http_method, url, user=None, payload=None):
         api_client.force_authenticate(user)
 
         args = [url]
@@ -39,10 +39,10 @@ def test_create_game_request(players, api_call):
 
     player, _ = players
     response = api_call(
-        player,
         "post",
         "/api/game/request",
         payload={"player1": player.username, "parameters": {}},
+        user=player,
     )
     assert response.status_code == 201
 
@@ -52,29 +52,26 @@ def test_create_game_request(players, api_call):
     assert game_request.parameters == {}
 
 
-@pytest.fixture
-def patch(api_client, player_factory):
-    def wrapped(game_request):
-        payload = {"player2": player_factory().username}
-        return api_client.patch(
-            "/api/game/request/{}".format(game_request.pk),
-            data=json.dumps(payload),
-            content_type="application/json",
-        )
-
-    return wrapped
-
-
 @pytest.mark.django_db
-@pytest.mark.skip
-def test_update_game_request_201(post, patch):
-    post()
-    game_request = GameRequest.objects.first()
+def test_accept_game_request(players, game_request_factory, api_call):
+    player1, player2 = players
+    game_request = game_request_factory(player1=player1)
 
     assert game_request.player2 is None
     assert Game.objects.count() == 0
-    response = patch(game_request)
+
+    response = api_call(
+        "patch",
+        f"/api/game/request/{game_request.pk}",
+        payload={"player2": player2.username},
+        user=player2,
+    )
     assert response.status_code == 200
     game_request.refresh_from_db()
-    assert game_request.player2 is not None
+    assert game_request.player2 == player2
     assert Game.objects.count() == 1
+
+    # TODO: add logic for which side each player is on
+    # game = Game.objects.first()
+    # assert game.player1 == player1
+    # assert game.player2 == player2
