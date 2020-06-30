@@ -9,4 +9,5 @@ from .game_event import GameEvent
 from .draw_event import DrawEvent
 from .takeback_event import TakebackEvent
 from .game import Game
+from .game_request import GameRequest
 from .move import Move

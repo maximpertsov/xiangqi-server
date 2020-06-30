@@ -38,15 +38,9 @@ def test_get_game_200(get, game, mocks):
     assert response.data == {
         "slug": game.slug,
         "moves": [{"fen": "START_FEN", "gives_check": False, "legal_moves": {}}],
-        "player1": {
-            "name": game.player1.username,
-            "team": Team.RED.value,
-        },
+        "player1": {"name": game.player1.username, "team": Team.RED.value},
         "score1": game.score1,
-        "player2": {
-            "name": game.player2.username,
-            "team": Team.BLACK.value,
-        },
+        "player2": {"name": game.player2.username, "team": Team.BLACK.value},
         "score2": game.score2,
         "open_draw_offer": None,
         "open_takeback_offer": None,
@@ -70,9 +64,7 @@ def test_get_game_with_draw_offer(get, game, game_event_factory, mocks):
 @pytest.mark.django_db
 def test_get_game_with_takeback_offer(get, game, game_event_factory, mocks):
     game_event_factory(
-        game=game,
-        name="offered_takeback",
-        payload={"username": game.player1.username},
+        game=game, name="offered_takeback", payload={"username": game.player1.username}
     )
 
     response = get()
