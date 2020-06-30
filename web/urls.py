@@ -31,11 +31,11 @@ urlpatterns = [
     path("api/player/<str:username>/games", views.GameListView.as_view()),
     path("api/game/events", views.GameEventView.as_view()),
     path(
-        "api/game/requests/<int:pk>",
+        "api/game/request/<int:pk>",
         views.GameRequestView.as_view({"patch": "partial_update", "delete": "destroy"}),
     ),
     path(
-        "api/game/requests",
+        "api/game/request",
         views.GameRequestView.as_view({"get": "list", "post": "create"}),
     ),
     path("api/game/<str:slug>/poll", views.PollView.as_view()),
