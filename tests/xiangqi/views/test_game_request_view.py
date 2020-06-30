@@ -75,3 +75,18 @@ def test_accept_game_request(players, game_request_factory, api_call):
     # game = Game.objects.first()
     # assert game.player1 == player1
     # assert game.player2 == player2
+
+
+@pytest.mark.django_db
+def test_reject_game_request(players, game_request_factory, api_call):
+    player1, player2 = players
+    game_request = game_request_factory(player1=player1)
+
+    response = api_call(
+        "delete",
+        f"/api/game/request/{game_request.pk}",
+        user=player2,
+    )
+    assert response.status_code == 204
+    with pytest.raises(GameRequest.DoesNotExist):
+        game_request.refresh_from_db()
