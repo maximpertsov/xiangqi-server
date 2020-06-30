@@ -32,7 +32,7 @@ urlpatterns = [
     path("api/game/events", views.GameEventView.as_view()),
     path(
         "api/game/requests/<int:pk>",
-        views.GameRequestView.as_view({"patch": "partial_update"}),
+        views.GameRequestView.as_view({"patch": "partial_update", "delete": "destroy"}),
     ),
     path(
         "api/game/requests",
