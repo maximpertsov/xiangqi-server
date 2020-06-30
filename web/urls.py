@@ -34,7 +34,10 @@ urlpatterns = [
         "api/game/requests/<int:pk>",
         views.GameRequestView.as_view({"patch": "partial_update"}),
     ),
-    path("api/game/requests", views.GameRequestView.as_view({"post": "create"})),
+    path(
+        "api/game/requests",
+        views.GameRequestView.as_view({"get": "list", "post": "create"}),
+    ),
     path("api/game/<str:slug>/poll", views.PollView.as_view()),
     path("api/game/<str:slug>", views.GameView.as_view()),
     path("admin/", admin.site.urls),

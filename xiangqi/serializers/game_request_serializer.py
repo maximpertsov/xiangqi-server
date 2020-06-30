@@ -12,7 +12,7 @@ class GameRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GameRequest
-        fields = ["player1", "player2", "parameters"]
+        fields = ["id", "player1", "player2", "parameters"]
 
     def update(self, instance, validated_data):
         updated_instance = super().update(instance, validated_data)
