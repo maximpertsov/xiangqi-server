@@ -26,3 +26,4 @@ CSRF_TRUSTED_ORIGINS = [CLIENT_DOMAIN]
 
 # JWT
 JWT_AUTH["JWT_SECRET_KEY"] = os.environ["JWT_SECRET"]
+CHANNEL_LAYERS["default"]["CONFIG"] = {"hosts": [os.environ["REDISCLOUD_URL"]]}

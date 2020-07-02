@@ -24,9 +24,4 @@ CORS_ORIGIN_WHITELIST = [
 JWT_AUTH["JWT_SECRET_KEY"] = os.environ["JWT_SECRET"]
 
 # Channels
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {"hosts": [("127.0.0.1", 6379)]},
-    }
-}
+CHANNEL_LAYERS["default"]["CONFIG"] = {"hosts": [("127.0.0.1", 6379)]}
