@@ -1,7 +1,13 @@
+"""
+ASGI entrypoint. Configures Django and then runs the application
+defined in the ASGI_APPLICATION setting.
+"""
+
 import os
 
-import channels.asgi
+import django
+from channels.routing import get_default_application
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "web.settings.local")
-
-channel_layer = channels.asgi.get_channel_layer()
+django.setup()
+application = get_default_application()
