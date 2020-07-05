@@ -1,2 +1,2 @@
 release: python manage.py migrate --noinput
-web: gunicorn web.wsgi --log-file -
+web: bin/start-pgbouncer-stunnel gunicorn web.wsgi --log-file -
