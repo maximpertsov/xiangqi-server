@@ -1,4 +1,3 @@
-from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
 from xiangqi.models import Game
@@ -26,8 +25,6 @@ class Command(BaseCommand):
         game.score2 = 0
 
         game.save()
-
-        call_command("clear_cache")
 
     def write_success(self, message):
         self.stdout.write(self.style.SUCCESS(message))

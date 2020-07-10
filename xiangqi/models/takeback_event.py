@@ -3,7 +3,7 @@ from enum import Enum
 from django.db import models
 from django.utils.timezone import datetime
 
-from xiangqi.models.game_event import GameEvent, GameEventManager
+from xiangqi.models.game_event import GameEvent
 
 
 class TakebackEventTypes(Enum):
@@ -17,7 +17,7 @@ class TakebackEventTypes(Enum):
         return [tag.value for tag in cls]
 
 
-class TakebackEventManager(GameEventManager):
+class TakebackEventManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(name__in=TakebackEventTypes.values())
 
@@ -43,7 +43,8 @@ class OpenTakebackOffersManager(TakebackEventManager):
             .annotate(
                 _created_at=models.Case(
                     models.When(
-                        name=TakebackEventTypes.OFFERED_TAKEBACK.value, then=datetime.min
+                        name=TakebackEventTypes.OFFERED_TAKEBACK.value,
+                        then=datetime.min,
                     ),
                     default=models.F("created_at"),
                 )
