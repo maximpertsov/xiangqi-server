@@ -17,6 +17,17 @@ class GameRequestSerializer(serializers.ModelSerializer):
         model = GameRequest
         fields = ["id", "player1", "player2", "parameters"]
 
+    def to_representation(self, instance):
+        result = super().to_representation(instance)
+        self._add_game(result)
+        return result
+
+    def _add_game(self, result):
+        try:
+            result["game"] = self.context['game']
+        except KeyError:
+            return
+
     def update(self, instance, validated_data):
         updated_instance = super().update(instance, validated_data)
         if updated_instance.player1 and updated_instance.player2:
@@ -27,6 +38,8 @@ class GameRequestSerializer(serializers.ModelSerializer):
         game = GameSerializer(data=self._game_players(instance))
         game.is_valid(raise_exception=True)
         game.save()
+
+        self.context['game'] = game.data['slug']
 
     def _game_players(self, instance):
         players = [instance.player1, instance.player2]
