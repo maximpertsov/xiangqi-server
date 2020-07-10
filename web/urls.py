@@ -38,7 +38,6 @@ urlpatterns = [
         "api/game/request",
         views.GameRequestView.as_view({"get": "list", "post": "create"}),
     ),
-    path("api/game/<str:slug>/poll", views.PollView.as_view()),
     path("api/game/<str:slug>", views.GameView.as_view()),
     path("admin/", admin.site.urls),
 ]
