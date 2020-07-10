@@ -9,7 +9,5 @@ SECRET_KEY = "TEST"
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 DATABASES = {"default": dj_database_url.config(conn_max_age=600)}
 
-CACHES = {"default": {"BACKEND": "django.core.cache.backends.dummy.DummyCache"}}
-
 # JWT
 JWT_AUTH["JWT_SECRET_KEY"] = "TEST"
