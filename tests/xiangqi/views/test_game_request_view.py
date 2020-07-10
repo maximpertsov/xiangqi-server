@@ -71,7 +71,16 @@ def test_accept_game_request(players, game_request_factory, api_call):
         assert response.status_code == 200
         game_request.refresh_from_db()
         assert game_request.player2 == player2
-        assert Game.objects.count() == 1
+
+        Game.objects.count() == 1
+        game = Game.objects.first()
+        assert response.data == {
+            "id": game_request.pk,
+            "game": game.slug,
+            "parameters": parameters,
+            "player1": player1.username,
+            "player2": player2.username,
+        }
 
     return wrapped
 
