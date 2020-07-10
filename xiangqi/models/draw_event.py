@@ -3,7 +3,7 @@ from enum import Enum
 from django.db import models
 from django.utils.timezone import datetime
 
-from xiangqi.models.game_event import GameEvent, GameEventManager
+from xiangqi.models.game_event import GameEvent
 
 
 class DrawEventTypes(Enum):
@@ -17,7 +17,7 @@ class DrawEventTypes(Enum):
         return [tag.value for tag in cls]
 
 
-class DrawEventManager(GameEventManager):
+class DrawEventManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(name__in=DrawEventTypes.values())
 
