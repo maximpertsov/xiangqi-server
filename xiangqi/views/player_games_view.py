@@ -1,8 +1,3 @@
-from django.http import JsonResponse
-from django.utils.decorators import method_decorator
-from django.utils.functional import cached_property
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.generic.detail import SingleObjectMixin, View
 from rest_framework import serializers
 from rest_framework.generics import RetrieveAPIView
 
