@@ -20,7 +20,7 @@ class GameSerializer(game_serializer.GameSerializer):
         result["current_move"] = result.pop("moves")[-1]
 
 
-class GameListSerializer(serializers.ModelSerializer):
+class PlayerGamesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
         fields = ["games"]
@@ -28,9 +28,9 @@ class GameListSerializer(serializers.ModelSerializer):
     games = GameSerializer(many=True, read_only=True)
 
 
-class GameListView(RetrieveAPIView):
+class PlayerGamesView(RetrieveAPIView):
     permission_classes = []
 
-    serializer_class = GameListSerializer
+    serializer_class = PlayerGamesSerializer
     queryset = Player.objects.all()
     lookup_field = "username"
