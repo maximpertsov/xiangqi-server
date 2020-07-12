@@ -17,4 +17,5 @@ def test_get_games_for_player(client, game):
     response = client.get(url)
     assert response.status_code == 200
 
-    assert response.json() == {"games": [{"slug": game.slug}]}
+    data = response.json()
+    assert data["games"][0]["slug"] == game.slug
