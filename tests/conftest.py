@@ -34,7 +34,8 @@ def api_client(player):
 @pytest.fixture
 def call_api(api_client):
     def wrapped(http_method, url, user=None, payload=None):
-        api_client.force_authenticate(user)
+        if user:
+            api_client.force_authenticate(user)
 
         args = [url]
         kwargs = (

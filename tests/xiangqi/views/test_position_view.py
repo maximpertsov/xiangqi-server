@@ -3,7 +3,6 @@ from types import SimpleNamespace
 import pytest
 
 from xiangqi.queries.legal_moves import LegalMoves
-from xiangqi.views import PositionView, StartingPositionView
 
 
 @pytest.fixture
@@ -20,13 +19,9 @@ def mocks(mocker):
 
 
 @pytest.fixture
-def post(rf, player):
+def post(call_api):
     def wrapped(url, data=None):
-        request = rf.post(url, data=data, content_type="application/json")
-        if url == "/api/position":
-            return PositionView.as_view()(request)
-        if url == "/api/starting-position":
-            return StartingPositionView.as_view()(request)
+        return call_api("post", url, payload=data)
 
     return wrapped
 

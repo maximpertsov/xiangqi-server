@@ -1,14 +1,11 @@
-import json
 from types import SimpleNamespace
 
 import pytest
-from rest_framework.test import force_authenticate
 
 from xiangqi.models import DrawEvent
 from xiangqi.models.draw_event import DrawEventTypes
 from xiangqi.models.takeback_event import TakebackEventTypes
 from xiangqi.queries.game_result import GameResult
-from xiangqi.views import GameEventView
 
 
 @pytest.fixture
@@ -19,15 +16,9 @@ def mocks(mocker):
 
 
 @pytest.fixture
-def post(rf):
+def post(call_api):
     def wrapped(user, payload, expected_status_code=201):
-        request = rf.post(
-            "/api/game/events",
-            data=json.dumps(payload),
-            content_type="application/json",
-        )
-        force_authenticate(request, user)
-        response = GameEventView.as_view()(request)
+        response = call_api("post", "/api/game/events", payload=payload, user=user)
         assert response.status_code == expected_status_code
         return response
 
@@ -51,11 +42,7 @@ def test_create_move(event_name, around, mocks, post, game):
         payload={
             "game": game.slug,
             "name": event_name,
-            "payload": {
-                "uci": "a1a2",
-                "fen": "FEN",
-                "player": game.player1.username,
-            },
+            "payload": {"uci": "a1a2", "fen": "FEN", "player": game.player1.username},
         },
     )
 

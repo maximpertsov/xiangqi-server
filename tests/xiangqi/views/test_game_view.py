@@ -1,11 +1,9 @@
 from types import SimpleNamespace
 
 import pytest
-from rest_framework.test import force_authenticate
 
 from xiangqi.models.team import Team
 from xiangqi.queries.legal_moves import LegalMoves
-from xiangqi.views import GameView
 
 
 @pytest.fixture
@@ -21,11 +19,9 @@ def mocks(mocker):
 
 
 @pytest.fixture
-def get(rf, game, player):
+def get(call_api, game, player):
     def wrapped():
-        request = rf.get("/api/game")
-        force_authenticate(request, user=player)
-        return GameView.as_view()(request, slug=game.slug)
+        return call_api("get", f"/api/game/{game.slug}", user=player)
 
     return wrapped
 
