@@ -24,8 +24,6 @@ class PlayerGamesSerializer(serializers.ModelSerializer):
 
 
 class PlayerGamesView(RetrieveAPIView):
-    permission_classes = []
-
     serializer_class = PlayerGamesSerializer
     queryset = Player.objects.all()
     lookup_field = "username"
