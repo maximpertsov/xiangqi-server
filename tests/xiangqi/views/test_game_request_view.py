@@ -1,8 +1,6 @@
-import json
 from collections import OrderedDict
 
 import pytest
-from rest_framework.test import APIClient
 
 from xiangqi.models import Game, GameRequest
 from xiangqi.models.team import Team
@@ -11,28 +9,6 @@ from xiangqi.models.team import Team
 @pytest.fixture
 def players(player_factory):
     return player_factory.create_batch(2)
-
-
-@pytest.fixture
-def api_client(player):
-    return APIClient()
-
-
-@pytest.fixture
-def call_api(api_client):
-    def wrapped(http_method, url, user=None, payload=None):
-        api_client.force_authenticate(user)
-
-        args = [url]
-        kwargs = (
-            {"data": json.dumps(payload), "content_type": "application/json"}
-            if payload
-            else {}
-        )
-
-        return getattr(api_client, http_method)(*args, **kwargs)
-
-    return wrapped
 
 
 @pytest.mark.django_db
