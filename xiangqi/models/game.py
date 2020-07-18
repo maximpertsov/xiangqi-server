@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 from django.utils.crypto import get_random_string
 
 from xiangqi.models import Player
@@ -42,3 +43,8 @@ class Game(models.Model):
     def clean(self):
         if self.player1 == self.player2:
             raise ValidationError("Red and black players cannot be the same")
+
+    def finish(self, score1, score2):
+        self.score1, self.score2 = score1, score2
+        self.finished_at = timezone.now()
+        self.save()

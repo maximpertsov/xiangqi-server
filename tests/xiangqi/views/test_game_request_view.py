@@ -1,8 +1,6 @@
-import json
 from collections import OrderedDict
 
 import pytest
-from rest_framework.test import APIClient
 
 from xiangqi.models import Game, GameRequest
 from xiangqi.models.team import Team
@@ -13,34 +11,12 @@ def players(player_factory):
     return player_factory.create_batch(2)
 
 
-@pytest.fixture
-def api_client(player):
-    return APIClient()
-
-
-@pytest.fixture
-def api_call(api_client):
-    def wrapped(http_method, url, user=None, payload=None):
-        api_client.force_authenticate(user)
-
-        args = [url]
-        kwargs = (
-            {"data": json.dumps(payload), "content_type": "application/json"}
-            if payload
-            else {}
-        )
-
-        return getattr(api_client, http_method)(*args, **kwargs)
-
-    return wrapped
-
-
 @pytest.mark.django_db
-def test_create_game_request(players, api_call):
+def test_create_game_request(players, call_api):
     assert not GameRequest.objects.exists()
 
     player, _ = players
-    response = api_call(
+    response = call_api(
         "post",
         "/api/game/request",
         payload={"player1": player.username, "parameters": {}},
@@ -55,14 +31,14 @@ def test_create_game_request(players, api_call):
 
 
 @pytest.fixture
-def test_accept_game_request(players, game_request_factory, api_call):
+def test_accept_game_request(players, game_request_factory, call_api):
     def wrapped(player1, player2, parameters):
         game_request = game_request_factory(player1=player1, parameters=parameters)
 
         assert game_request.player2 is None
         assert Game.objects.count() == 0
 
-        response = api_call(
+        response = call_api(
             "patch",
             f"/api/game/request/{game_request.pk}",
             payload={"player2": player2.username},
@@ -116,23 +92,23 @@ def test_accept_game_request_p1_random(players, test_accept_game_request):
 
 
 @pytest.mark.django_db
-def test_reject_game_request(players, game_request_factory, api_call):
+def test_reject_game_request(players, game_request_factory, call_api):
     player1, player2 = players
     game_request = game_request_factory(player1=player1)
 
-    response = api_call("delete", f"/api/game/request/{game_request.pk}", user=player2)
+    response = call_api("delete", f"/api/game/request/{game_request.pk}", user=player2)
     assert response.status_code == 204
     with pytest.raises(GameRequest.DoesNotExist):
         game_request.refresh_from_db()
 
 
 @pytest.mark.django_db
-def test_list_game_requests(players, game_request_factory, api_call):
+def test_list_game_requests(players, game_request_factory, call_api):
     player1, player2 = players
     open_game_request = game_request_factory(player1=player1)
     game_request_factory(player1=player1, player2=player2)
 
-    response = api_call("get", "/api/game/request", user=player2)
+    response = call_api("get", "/api/game/request", user=player2)
     assert response.status_code == 200
 
     assert response.data == [

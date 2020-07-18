@@ -28,7 +28,7 @@ urlpatterns = [
     ),
     path("api/position", views.PositionView.as_view()),
     path("api/starting-position", views.StartingPositionView.as_view()),
-    path("api/player/<str:username>/games", views.GameListView.as_view()),
+    path("api/player/<str:username>/games", views.PlayerGamesView.as_view()),
     path("api/game/events", views.GameEventView.as_view()),
     path(
         "api/game/request/<int:pk>",
