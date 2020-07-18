@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.generics import RetrieveAPIView
 
-from xiangqi.models import Game, Player
+from xiangqi.models import Player
 from xiangqi.serializers import game_serializer
 
 
