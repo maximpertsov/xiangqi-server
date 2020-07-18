@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.generics import RetrieveAPIView
 
-from xiangqi.models import Player
+from xiangqi.models import Game, Player
 from xiangqi.serializers import game_serializer
 
 
@@ -20,7 +20,7 @@ class PlayerGamesSerializer(serializers.ModelSerializer):
         model = Player
         fields = ["games"]
 
-    games = GameSerializer(many=True, read_only=True)
+    games = GameSerializer(source="active_games", many=True, read_only=True)
 
 
 class PlayerGamesView(RetrieveAPIView):

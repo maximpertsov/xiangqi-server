@@ -5,10 +5,12 @@ class Player(User):
     class Meta:
         proxy = True
 
-    @property
-    def games(self):
+    def games(self, **filters):
         from xiangqi.models import Game
 
-        return Game.objects.filter(player1=self).union(
-            Game.objects.filter(player2=self)
+        return Game.objects.filter(player1=self, **filters).union(
+            Game.objects.filter(player2=self, **filters)
         )
+
+    def active_games(self):
+        return self.games(finished_at__isnull=True)

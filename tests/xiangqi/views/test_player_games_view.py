@@ -26,16 +26,6 @@ def call_api(api_client):
     return wrapped
 
 
-# @pytest.mark.django_db
-# def test_get_games_for_non_player(client, player_factory):
-#     non_player = player_factory(username="NON_ACTIVE_PLAYER")
-#     url = "/api/player/{}/games".format(non_player.username)
-#     response = client.get(url)
-#     assert response.status_code == 200
-#
-#     assert response.json() == {"games": []}
-
-
 @pytest.mark.django_db
 def test_get_games_for_player(call_api, game):
     url = "/api/player/{}/games".format(game.player1.username)
@@ -44,3 +34,12 @@ def test_get_games_for_player(call_api, game):
 
     data = response.json()
     assert data["games"][0]["slug"] == game.slug
+
+
+@pytest.mark.django_db
+def test_get_games_for_player_without_active_games(call_api, game):
+    game.finish(0.5, 0.5)
+    url = "/api/player/{}/games".format(game.player1.username)
+    response = call_api("get", url, user=game.player1)
+    assert response.status_code == 200
+    assert response.json() == {"games": []}

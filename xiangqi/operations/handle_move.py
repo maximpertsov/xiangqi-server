@@ -1,4 +1,3 @@
-from django.utils import timezone
 from django.utils.functional import cached_property
 
 from xiangqi.queries.game_result import GameResult
@@ -13,9 +12,7 @@ class HandleMove:
     def _set_game_result(self):
         scores = self._game_result
         if sum(scores):
-            self._game.score1, self._game.score2 = scores
-            self._game.finished_at = timezone.now()
-            self._game.save()
+            self._game.finish(*scores)
 
     @cached_property
     def _game_result(self):
