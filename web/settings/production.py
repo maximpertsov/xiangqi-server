@@ -3,7 +3,7 @@ import dj_database_url
 from web.settings.base import *
 
 DEBUG = False
-ALLOWED_HOSTS = ["api.xchi.online"]
+ALLOWED_HOSTS = ["api.xchi.online", "xchess.herokuapp.com"]
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
