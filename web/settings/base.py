@@ -113,6 +113,10 @@ CORS_ALLOW_HEADERS = default_headers + ("set-cookie",)
 
 # JWT configuration
 CLIENT_DOMAIN = None
+SIMPLE_JWT = {
+    "USER_ID_FIELD": "username",
+    "USER_ID_CLAIM": "user",
+}
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
