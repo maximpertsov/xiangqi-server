@@ -15,6 +15,3 @@ DATABASES = {"default": dj_database_url.config(conn_max_age=600)}
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:{}".format(port) for port in [3000, 3002, 5000]
 ]
-
-# JWT
-JWT_AUTH["JWT_SECRET_KEY"] = os.environ["JWT_SECRET"]

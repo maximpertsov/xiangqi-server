@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from datetime import timedelta
 
 from corsheaders.defaults import default_headers
 
@@ -114,21 +113,17 @@ CORS_ALLOW_HEADERS = default_headers + ("set-cookie",)
 
 # JWT configuration
 CLIENT_DOMAIN = None
+SIMPLE_JWT = {
+    "USER_ID_FIELD": "username",
+    "USER_ID_CLAIM": "user",
+}
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
     ),
     "COERCE_DECIMAL_TO_STRING": False,
-}
-
-JWT_AUTH = {
-    # TODO: refresh this more often?
-    "JWT_EXPIRATION_DELTA": timedelta(days=1),
-    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=5),
-    "JWT_ALLOW_REFRESH": True,
-    "JWT_AUTH_COOKIE": "token",
 }
