@@ -6,7 +6,7 @@ authors = ["Maxim Pertsov <maxim.pertsov@gmail.com>"]
 license = "GPL-3.0-only"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 attrs = "^20.3.0"
 Django = "^3.1.4"
 PyJWT = "^1.7.1"
