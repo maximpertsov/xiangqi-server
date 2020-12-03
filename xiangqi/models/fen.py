@@ -1,15 +1,14 @@
-import attr
 from django.utils.functional import cached_property
 
 from xiangqi.models.team import Team
 
 
-@attr.s(kw_only=True)
 class Fen:
     class Error(Exception):
         pass
 
-    _fen = attr.ib()
+    def __init__(self, *, fen):
+        self._fen = fen
 
     @property
     def active_team(self):
