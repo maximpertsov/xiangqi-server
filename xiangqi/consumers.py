@@ -16,5 +16,7 @@ class EventConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(self.group_name, event)
 
     async def game_event(self, event):
-        message = event.pop("message")
+        message = event.pop("message", None)
+        if not message:
+            return
         await self.send(text_data=message)
