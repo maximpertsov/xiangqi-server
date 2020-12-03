@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "xiangqi",
+    "channels",
     "corsheaders",
     "rest_framework",
 ]
@@ -72,7 +73,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "web.wsgi.application"
-
+ASGI_APPLICATION = "web.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [("127.0.0.1", 6379)]},
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -113,10 +120,7 @@ CORS_ALLOW_HEADERS = default_headers + ("set-cookie",)
 
 # JWT configuration
 CLIENT_DOMAIN = None
-SIMPLE_JWT = {
-    "USER_ID_FIELD": "username",
-    "USER_ID_CLAIM": "user",
-}
+SIMPLE_JWT = {"USER_ID_FIELD": "username", "USER_ID_CLAIM": "user"}
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
