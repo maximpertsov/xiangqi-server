@@ -351,15 +351,11 @@ category = "dev"
 description = "A versatile test fixtures replacement based on thoughtbot's factory_bot for Ruby."
 name = "factory-boy"
 optional = false
-python-versions = ">=3.5"
-version = "3.1.0"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "2.12.0"
 
 [package.dependencies]
 Faker = ">=0.7.0"
-
-[package.extras]
-dev = ["coverage", "django", "flake8", "isort", "pillow", "sqlalchemy", "mongoengine", "wheel (>=0.32.0)", "tox", "zest.releaser"]
-doc = ["sphinx", "sphinx-rtd-theme"]
 
 [[package]]
 category = "dev"
@@ -746,6 +742,14 @@ name = "pycparser"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "2.20"
+
+[[package]]
+category = "main"
+description = "Fairy-Stockfish Python wrapper"
+name = "pyffish"
+optional = false
+python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
+version = "0.0.52"
 
 [[package]]
 category = "dev"
@@ -1239,7 +1243,7 @@ test = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 
 [metadata]
-content-hash = "6e8381382ebadecf0b3e3faf87de4ed904f84d6b6807d3c652553fb42931daf1"
+content-hash = "08b8a161e7a3891ce5d07d4fc3359414e80552f8222cfcab08eed280af593f90"
 lock-version = "1.0"
 python-versions = "^3.8"
 
@@ -1443,8 +1447,8 @@ execnet = [
     {file = "execnet-1.7.1.tar.gz", hash = "sha256:cacb9df31c9680ec5f95553976c4da484d407e85e41c83cb812aa014f0eddc50"},
 ]
 factory-boy = [
-    {file = "factory_boy-3.1.0-py2.py3-none-any.whl", hash = "sha256:d8626622550c8ba31392f9e19fdbcef9f139cf1ad643c5923f20490a7b3e2e3d"},
-    {file = "factory_boy-3.1.0.tar.gz", hash = "sha256:ded73e49135c24bd4d3f45bf1eb168f8d290090f5cf4566b8df3698317dc9c08"},
+    {file = "factory_boy-2.12.0-py2.py3-none-any.whl", hash = "sha256:728df59b372c9588b83153facf26d3d28947fc750e8e3c95cefa9bed0e6394ee"},
+    {file = "factory_boy-2.12.0.tar.gz", hash = "sha256:faf48d608a1735f0d0a3c9cbf536d64f9132b547dae7ba452c4d99a79e84a370"},
 ]
 faker = [
     {file = "Faker-4.18.0-py3-none-any.whl", hash = "sha256:2ba20a4438429cb08d729175d7bb0435ef3c2c4cedc7b1ceb703ee6da8dad906"},
@@ -1707,6 +1711,12 @@ pycodestyle = [
 pycparser = [
     {file = "pycparser-2.20-py2.py3-none-any.whl", hash = "sha256:7582ad22678f0fcd81102833f60ef8d0e57288b6b5fb00323d101be910e35705"},
     {file = "pycparser-2.20.tar.gz", hash = "sha256:2d475327684562c3a96cc71adf7dc8c4f0565175cf86b6d7a404ff4c771f15f0"},
+]
+pyffish = [
+    {file = "pyffish-0.0.52-cp36-cp36m-win_amd64.whl", hash = "sha256:5251856ba2e5f3af0a629a18e0409b18deb0ffbe9d7779ccd668257df7581788"},
+    {file = "pyffish-0.0.52-cp37-cp37m-win_amd64.whl", hash = "sha256:a630c619e462faefc390e2d1b2e6e2073e445b1081073a06c2a75bd6c9324ca7"},
+    {file = "pyffish-0.0.52-cp38-cp38-win_amd64.whl", hash = "sha256:93a4a8d374be19a467e914158074ecc523e9d4ce69da78a5aa9ab0b61cacd15d"},
+    {file = "pyffish-0.0.52.tar.gz", hash = "sha256:f639295e42171fd222747851ec63ad5d57699dd59756f32bf82b8bd4ac264ac5"},
 ]
 pyflakes = [
     {file = "pyflakes-2.2.0-py2.py3-none-any.whl", hash = "sha256:0d94e0e05a19e57a99444b6ddcf9a6eb2e5c68d3ca1e98e90707af8152c90a92"},
