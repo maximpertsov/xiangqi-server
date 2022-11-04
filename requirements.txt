@@ -41,7 +41,7 @@ pyyaml==5.3.1
 service-identity==18.1.0
 six==1.15.0
 sqlparse==0.4.1
-twisted==20.3.0
+twisted==22.10.0
 txaio==20.4.1
 uvicorn==0.12.3
 uvloop==0.14.0; sys_platform != "win32" and sys_platform != "cygwin" and platform_python_implementation != "PyPy"
